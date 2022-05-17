@@ -15,7 +15,7 @@
     }
   }
   .question{
-    color: var(--color-text-placeholder);
+    color: $color-text-placeholder;
     font-size: var(--gutter_13-14);
   }
 
@@ -69,9 +69,9 @@
         }
         .desc{
           color: #999;
-          font-size: 14px;
+          font-size: .14rem;
           line-height: 1.5;
-          padding-bottom: 3px;
+          padding-bottom: .03rem;
           padding-top: 1px;
         }
       }
@@ -124,7 +124,7 @@
               position: absolute;
               color: #FF5533;
               font-weight: 300;
-              left: -8px;
+              left: -.08rem;
             }
 
           }
@@ -155,7 +155,7 @@
 
             .icon-back{
               position: absolute;
-              right: 1px;
+              right: .10rem;
               top: 50%;
               transform: translateY(-50%);
               cursor: pointer;
@@ -168,7 +168,7 @@
               width: auto;
             }
             .area-select{
-              margin: 0 0 1px 0;
+              margin: 0 0 .10rem 0;
               list-style: none;
               &:after{
                 clear: both;
@@ -177,15 +177,15 @@
               }
               .area-select-item{
                 margin: 0;
-                width: 90px;
-                height: 28px;
+                width: .9rem;
+                height: .28rem;
                 background-color: #fff;
                 border: 1px solid #d6d6d6;
                 color: #999;
                 float: left;
                 cursor: pointer;
-                font-size: 14px;
-                letter-spacing: 1px;
+                font-size: .14rem;
+                letter-spacing: .01rem;
                 &:disabled{
                   &.active{
                     background-color: #85b5f8;

@@ -7,7 +7,10 @@
     @include line
   }
   .block{
-    @include block-filter
+    backdrop-filter: var(--backdrop-filter);
+    z-index: 3;
+    position: absolute;
+    display: block;
   }
   .s-1 {
     .i-1 {

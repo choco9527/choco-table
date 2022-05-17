@@ -1,5 +1,5 @@
 import { has, isEmpty, clone } from 'xe-utils'
-import { JT } from '@/components/Global/form-types'
+import { JT } from '../form-types'
 import dayjs from '@/utils/dayjs'
 
 export default {

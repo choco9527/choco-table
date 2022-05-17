@@ -82,33 +82,42 @@ $border-white-1: $color-white-3; /*F0F3FA*/
 $border-white-2: $color-white-2; /*EBEEF5*/
 $border-white-3: $color-white-7; /*E1E4EB*/
 
-//:root{ // 定义css变量
-//  --backdrop-filter: blur(1.8px) brightness(0.9) saturate(0.92);
-//  --color-black: #{$color-black};
-//  --color-primary: #{$color-primary};
-//
-//  --lightest-blue: #{$lightest-blue}; // #6C63FF 8%
-//  --lighter-blue: #{$lighter-blue};
-//  --light-blue: #{$light-blue}; // #6C63FF 90%
-//
-//  // 字体
-//  --color-text-primary: #{ $color-text-primary};
-//  --color-text-regular: #{ $color-text-regular};
-//  --color-text-secondary:  #{ $color-text-secondary};
-//  --color-text-placeholder: #{ $color-text-placeholder};
-//
-//  --color-success: #{$color-success};
-//  --color-warning: #{$color-warning};
-//  --color-danger: #{$color-danger};
-//  --color-info: #{$color-info};
-//
-//  // 背景边框
-//  --bg-white-1:#{ $bg-white-1}; /*F5F7FA*/
-//  --bg-white-2:#{ $bg-white-2}; /*FAFCFF*/
-//  --border-white-1:#{ $border-white-1}; /*F0F3FA*/
-//  --border-white-2:#{ $border-white-2}; /*EBEEF5*/
-//  --border-white-3:#{ $border-white-3}; /*E1E4EB*/
-//  --color-white-4:#{ $color-white-4}; /*D0D3D9*/
-//}
+:root{ // 定义css变量
+  --backdrop-filter: blur(1.8px) brightness(0.9) saturate(0.92);
+  --color-black: #{$color-black};
+  --color-primary: #{$color-primary};
 
+  --lightest-blue: #{$lightest-blue}; // #6C63FF 8%
+  --lighter-blue: #{$lighter-blue};
+  --light-blue: #{$light-blue}; // #6C63FF 90%
 
+  // 字体
+  --color-text-primary: #{ $color-text-primary};
+  --color-text-regular: #{ $color-text-regular};
+  --color-text-secondary:  #{ $color-text-secondary};
+  --color-text-placeholder: #{ $color-text-placeholder};
+
+  --color-success: #{$color-success};
+  --color-warning: #{$color-warning};
+  --color-danger: #{$color-danger};
+  --color-info: #{$color-info};
+
+  // 背景边框
+  --bg-white-1:#{ $bg-white-1}; /*F5F7FA*/
+  --bg-white-2:#{ $bg-white-2}; /*FAFCFF*/
+  --border-white-1:#{ $border-white-1}; /*F0F3FA*/
+  --border-white-2:#{ $border-white-2}; /*EBEEF5*/
+  --border-white-3:#{ $border-white-3}; /*E1E4EB*/
+  --color-white-4:#{ $color-white-4}; /*D0D3D9*/
+}
+
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+}

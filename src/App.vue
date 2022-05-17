@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <global-table></global-table>
+    <global-table />
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'app',
-  data () {
+  name: 'App',
+  data() {
     return {
       msg: ''
     }

@@ -89,7 +89,7 @@ import tableColMixin from './mixins/table-clo-mixins'
 import { JT } from './form-types'
 import { isDevicePhone } from './assets/js/tools'
 
-import BeautyDialog from '../components/BeautyDialog/index'
+import BeautyDialog from '@/components/BeautyDialog/index'
 import GlobalForm from './global-form'
 
 import { isEmpty, clone } from 'xe-utils'

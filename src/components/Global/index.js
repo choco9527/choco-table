@@ -2,6 +2,9 @@
 import GlobalTable from './global-table'
 import RenderOptions from './RenderOptions/index'
 import RenderPopup from './RenderPopup/index'
+import ElementUI from 'element-ui'
+import '@/styles/theme/pure.css' // 引入自定义主题
+import '@/icons' // icon
 
 // Vxe-Table
 import 'xe-utils'
@@ -12,13 +15,8 @@ export default {
   install(Vue, options = {}) {
     Vue.use(VXETable) // need import vxe-table
 
-    // const { jsonEdit = false } = options
-    //
-    // if (jsonEdit) { // import json edit plugin
-    //   import('v-json-edit').then(VJsonEdit => {
-    //     Vue.use(VJsonEdit)
-    //   })
-    // }
+    Vue.use(ElementUI, { size: 'small' })
+
     Vue.component('global-table', GlobalTable)
     Vue.component('render-options', RenderOptions)
     Vue.component('render-popup', RenderPopup)

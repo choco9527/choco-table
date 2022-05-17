@@ -4,5 +4,5 @@ dependence:
   vxe-table
   icons/svg
   vuedraggable
-  @/components/BeautyDialog/index
+  /BeautyDialog/index
   ~@/styles/variables.scss

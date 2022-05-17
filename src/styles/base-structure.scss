@@ -1,7 +1,7 @@
 /*基础结构样式*/
 
 // 批量设置 margin padding fontSize !important
-@for $i from 0 through 100 {
+@for $i from 0 through 150 {
   .mb-#{$i} { margin-bottom: 1px * $i !important; }
   .mt-#{$i} { margin-top: 1px * $i !important; }
   .ml-#{$i} { margin-left: 1px * $i !important; }
@@ -25,6 +25,8 @@
   .lh-#{$i} { line-height: 1px * $i !important; }
 
   .fs-#{$i} {font-size: 1px * $i !important;}
+
+  .br-#{$i} {border-radius: 1px * $i !important;}
 
 }
 
@@ -69,8 +71,10 @@ html{
 }
 
 
+/* svg图标
+-------------------------- */
 .svg-wrap{
-  color: var(--color-text-secondary);
+  color: $color-text-secondary;
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -78,7 +82,7 @@ html{
 
   &.danger{
     &:hover{
-      color: var(--color-danger);
+      color: $color-danger;
     }
   }
 }
@@ -114,16 +118,55 @@ html{
   display: flex;
   align-items: center;
   &.jcc{
-    justify-content: center;
+    justify-content: center !important;
+    &-align{
+      align-items: center !important;
+    }
   }
   &.start{
-    justify-content: flex-start;
+    justify-content: flex-start !important;
+    &-align{
+      align-items: flex-start !important;
+    }
   }
   &.end{
-    justify-content: flex-end;
+    justify-content: flex-end !important;
+    &-align{
+      align-items: flex-end !important;
+    }
   }
   &.between{
-    justify-content: space-between;
+    justify-content: space-between !important;
+  }
+  &.column{
+    flex-direction: column !important;
+  }
+}
+.flex-1{
+  flex: 1;
+}
+
+
+/* color 文字颜色
+-------------------------- */
+.color{
+  &-primary{
+    color: $color-text-primary;
+  }
+  &-regular{
+    color: $color-text-regular;
+  }
+  &-secondary{
+    color: $color-text-secondary;
+  }
+  &-danger{
+    color: $color-danger;
+  }
+  &-white{
+    color: white;
+  }
+  &-blue{
+    color: $color-primary;
   }
 }
 
@@ -154,7 +197,7 @@ button{
   transition-delay: 0s, 0s, 0s, 0s;
 }
 a{
-  color: var(--color-primary);
+  color: $color-primary;
 }
 
 //自动移滚动条样式
@@ -192,29 +235,8 @@ a{
   }
 }
 
-.self-btn{
-  @include btn-type;
-  &.loading{
-    &.color{
-      @include loading-type(true);
-    }
-    @include loading-type;
-  }
-}
-
-// 页面 Layout
 .layout-container {
   @include layout;
 }
 
 
-/* 页面头部 */
-.page-header{
-  font-size: var(--gutter_20-24);
-  line-height: var(--gutter_28-32);
-  color: var(--color-text-primary);
-  margin-bottom: var(--gutter_12-16);
-  padding: 0;
-  font-weight: 400;
-  text-align: left;
-}

@@ -284,7 +284,7 @@ import filterQueryMixin from './mixins/filter-query-mixins'
 import filterOptionMixin from './RenderOptions/options-mixins'
 import DatePicker from './components/DatePicker'
 import NormalInput from './components/NormalInput'
-import BeautyDialog from '@/components/BeautyDialog/index'
+import BeautyDialog from '@/components/BeautyDialog'
 
 // 全局的表格筛选项渲染组件
 export default {

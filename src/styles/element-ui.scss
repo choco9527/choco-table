@@ -26,7 +26,7 @@
 }
 
 .el-dialog__wrapper {
-  backdrop-filter: saturate(180%) blur(0.99px);
+  backdrop-filter: var(--backdrop-filter, blur(1.8px) brightness(0.9) saturate(0.92));
 }
 
 // refine element ui upload
@@ -40,27 +40,6 @@
     }
   }
 }
-
-//// dropdown
-.el-dropdown-menu {
-  a {
-    display: block
-  }
-  .dropdown-menu_wrapper{ // 控制menu内部长度
-    max-height: calc(100vh - 80px);
-    overflow: auto;
-    .el-dropdown-menu__item{
-      font-size: var(--gutter_13-14);
-      padding: 0  var(--gutter_10-16);
-      &:hover{
-        color: $color-primary;
-        background-color: $bg-white-1;
-      }
-    }
-  }
-}
-
-
 
 //  el-button 按照设计规范重定义样式
 .el-button{
@@ -191,7 +170,7 @@
   transition: all .2s;
   top: 0;
   left: 0;
-  box-shadow: rgb(227 227 227) 0px 0px 0px 0.3px inset, rgba(0 0 0 / 15%) 0px 2px 6px 0px, rgb(0 0 0 / 15%) 0px 0px 1px 0px, rgb(0 0 0 / 5%) 0px 2px 1px 0px;
+  box-shadow: rgb(227 227 227) 0px 0px 0px 0.3px inset, rgb(0 0 0 / 15%) 0px 2px 6px 0px, rgb(0 0 0 / 15%) 0px 0px 1px 0px, rgb(0 0 0 / 5%) 0px 2px 1px 0px;
 }
 .el-switch.is-checked .el-switch__core::after{
   margin-left: -18px;
@@ -211,7 +190,36 @@
   }
 }
 
-// 下拉
+
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block
+  }
+  .dropdown-menu_wrapper{ // 控制menu内部长度
+    max-height: calc(100vh - 80px);
+    overflow: auto;
+    .el-dropdown-menu__item{
+      font-size: var(--gutter_13-14);
+      padding: 0  var(--gutter_10-16);
+      &:hover{
+        color: $color-primary;
+        background-color: $bg-white-1;
+      }
+    }
+  }
+}
+
+// Select下拉
 .el-select-dropdown__item{
   font-size: var(--gutter_13-14);
+  &:hover{
+    color: $color-primary;
+    background-color: $bg-white-1;
+  }
+}
+
+// message 确认窗口
+.umi-msg-box{
+ width: 320px;
 }
