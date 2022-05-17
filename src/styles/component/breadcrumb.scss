@@ -1,0 +1,24 @@
+// nav导航样式
+.asa-breadcrumb{
+  display: inline-block;
+  float: left;
+  height: 100%;
+  &.nav {
+    margin-left: 16px;
+
+    .nav-crumb{
+      font-size: 12px;
+      line-height: var(--gutter_30-32);
+
+      .nav-item{
+        cursor: pointer;
+        .active-nav{
+          color: var(--color-primary);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+

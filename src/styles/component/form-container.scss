@@ -1,0 +1,222 @@
+//编辑广告系列、广告组等页面样式
+.form-container{
+  h1,h2{
+    padding: 0 0 16px 0;
+    font-size: var(--gutter_22-24);
+    font-weight: 400;
+    color: $color-text-primary;
+    line-height: var(--gutter_30-32);
+
+    &.title-desc{
+      font-size: var(--gutter_13-14);
+      line-height: 1.3;
+      color: $color-text-regular;
+      font-weight: 500;
+    }
+  }
+  .question{
+    color: var(--color-text-placeholder);
+    font-size: var(--gutter_13-14);
+  }
+
+  .liner{
+    height: 1px;
+    width: 100%;
+    box-shadow: inset 0 -1px 0 0 #d6d6d6;
+    margin: 18px 0;
+  }
+  .outer-container{
+    background-color: $color-white;
+    border-radius: 4px;
+    border: 1px solid $border-white-1;
+
+    &+.outer-container{
+      margin-top: var(--gutter_10-12);
+    }
+    &:last-of-type{
+      border-bottom: none;
+    }
+
+    .inner-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      &.full{
+        .start>h2,.end{
+          width: 100%;
+        }
+        .start>h2{
+          padding: 0 16px;
+        }
+        .end{
+          padding: 12px 16px;
+        }
+      }
+
+      .start{
+        width: 100%;
+        border-bottom: 1px solid #F0F3FA;
+        >h2{
+          font-size: 16px;
+          font-weight: 400;
+          color: #303133;
+          line-height: 48px;
+          min-width: 610px;
+          width: 64%;
+          margin: 0 auto;
+          padding: 0;
+        }
+        .desc{
+          color: #999;
+          font-size: 14px;
+          line-height: 1.5;
+          padding-bottom: 3px;
+          padding-top: 1px;
+        }
+      }
+
+      .end{
+        width: 60%;
+        min-width: 600px;
+        padding: 32px 0;
+
+        .form-row{
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          >.form-item{
+            margin: 0 !important;
+          }
+        }
+
+        .form-col{
+          display: flex;
+          flex-direction: column;
+        }
+
+        .form-item{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          align-items: start;
+          margin-top: var(--gutter_22-24);
+          &:first-of-type{
+            margin-top: 0;
+          }
+          &:last-of-type{
+            margin-bottom: 16px;
+          }
+          .form-label{
+            position: relative;
+            font-size: var(--gutter_13-14);
+            font-weight: 400;
+            line-height: 22px;
+            color: $color-text-regular;
+            margin-bottom: 4px;
+            &.auto{
+              width: 100%;
+            }
+
+            &.required:before{
+              content: "*";
+              display: block;
+              position: absolute;
+              color: #FF5533;
+              font-weight: 300;
+              left: -8px;
+            }
+
+          }
+
+          .form-input{
+            position: relative;
+            font-size: var(--gutter_13-14);
+            color: $color-text-regular;
+
+            .el-switch{
+              .el-switch__core{
+                height:16px;
+                &::after{
+                  width:14px;
+                  height:14px;
+                  margin-top: 0;
+                }
+              }
+              &.is-checked .el-switch__core::after{
+                margin-left: -14px;
+              }
+            }
+
+            .el-select{
+              width: 50%;
+              min-width: 180px;
+            }
+
+            .icon-back{
+              position: absolute;
+              right: 1px;
+              top: 50%;
+              transform: translateY(-50%);
+              cursor: pointer;
+            }
+
+            &.max{
+              width: 100%;
+            }
+            &.auto{
+              width: auto;
+            }
+            .area-select{
+              margin: 0 0 1px 0;
+              list-style: none;
+              &:after{
+                clear: both;
+                display: block;
+                content: '';
+              }
+              .area-select-item{
+                margin: 0;
+                width: 90px;
+                height: 28px;
+                background-color: #fff;
+                border: 1px solid #d6d6d6;
+                color: #999;
+                float: left;
+                cursor: pointer;
+                font-size: 14px;
+                letter-spacing: 1px;
+                &:disabled{
+                  &.active{
+                    background-color: #85b5f8;
+                  }
+                  cursor: not-allowed;
+                  background-color: $bg-white-1;
+                  border-color: #E4E7ED;
+                }
+                &.active{
+                  background-color: $color-primary;
+                  border: none;
+                  color: #fff;
+                }
+                &:first-child:not(:last-child){ // 第一个但不是最后一个
+                  border-left: 1px solid #d6d6d6;
+                  border-radius: 4px 0 0 4px;
+                }
+                &:last-child:not(:first-child){ // 最后一个但不是第一个
+                  border-radius: 0 4px 4px 0;
+                  margin-left: -1px;
+                }
+                &:first-child:last-child{ // 第一个也是最后一个
+                  border-radius: 4px;
+                }
+              }
+            }
+
+          }
+        }
+
+      }
+    }
+  }
+}

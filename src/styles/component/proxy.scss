@@ -1,0 +1,30 @@
+
+.WordSection1{
+  margin: 0;
+  padding: 0 20px;
+  max-height: 80vh;
+  overflow: auto;
+  background-color: #fafafa;
+}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+{margin:0in;
+  text-align:justify;
+  text-justify:inter-ideograph;
+  font-size:10.5pt;}
+.MsoChpDefault
+{font-size:10.0pt;}
+/* Page Definitions */
+@page WordSection1
+{size:595.3pt 841.9pt;
+  margin:1.0in 1.25in 1.0in 1.25in;
+  layout-grid:15.6pt;}
+div.WordSection1
+{page:WordSection1;}
+/* List Definitions */
+ol
+{margin-bottom:0in;}
+ul
+{margin-bottom:0in;}
+
+

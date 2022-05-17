@@ -1,0 +1,61 @@
+.leave-footer{
+  display: flex;
+  justify-content: flex-end;
+  background: $bg-white-1;
+  backdrop-filter: blur(5px) saturate(0.2);
+  padding: 24px 0;
+  width: 100%;
+  &.white{
+    background: $color-white;
+  }
+  .wrap{
+    width: 60%;
+    min-width: 500px;
+    margin: 0 auto;
+  }
+  &.fix-bottom{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 8%);
+    z-index: 2022;
+    padding: 10px 5px 10px 0
+  }
+  .btn{
+    @include btn-type;
+
+    &.cancel{
+     @include cancel-type
+    }
+    &.confirm{
+      @include confirm-type
+    }
+    &.loading{
+     @include loading-type
+    }
+  }
+}
+
+.leave-dialog{
+  border-radius: .18rem;
+  padding: 0 .20rem;
+
+  .leave-dialog-footer{
+    display: flex;
+    justify-content: center;
+    .btn{
+      @include btn-type;
+
+      &.cancel{
+        @include cancel-type
+      }
+      &.confirm{
+        @include confirm-type
+      }
+      &.loading{
+        @include loading-type
+      }
+    }
+  }
+}

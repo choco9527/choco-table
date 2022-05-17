@@ -1,0 +1,151 @@
+@import "~@/styles/mixin.scss";
+
+@mixin menu-btn($city){
+  content: $city;
+  display: inline-block;
+  position: absolute;
+  left: 16px;
+  top: 13px;
+  font-size: var(--gutter_13-14);
+  line-height: 1;
+  color:$color-text-regular;
+}
+
+.u-self-selector{
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  .selector-head{
+    display: flex;
+    flex-direction: column;
+    .search-input{
+      margin-bottom: 12px;
+      //width: 168px;
+    }
+    .svg-wrap{
+      line-height: var(--gutter_28-32);
+      font-size: var(--gutter_14-16);
+    }
+    .selector-cascader{
+      flex: 1;
+    }
+
+    .add-btn{
+      background-color: $color-primary;
+      width: 100px;
+      height: 34px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+    }
+  }
+  .selector-body{
+    width: 151px;
+    border: 1px solid #F0F3FA;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-left: 12px;
+    color: $color-text-primary;
+
+    .list-header{
+      height: var(--gutter_34-38);
+      line-height: var(--gutter_34-38);
+      display: inline-block;
+      background-color: $bg-white-2;
+      width: 100%;
+      padding: 0 var(--gutter_14-16);
+      border: $border-white-1 1px solid;
+      border-radius: 4px 4px 0 0;
+      >p{
+        display: inline-block;
+        width: calc(100% - 28px);
+        vertical-align: middle;
+      }
+      .btn{
+        padding: 0;
+        vertical-align: middle;
+      }
+    }
+
+    .area-list{
+      width: 100%;
+      max-height: 300px;
+      overflow: auto;
+      padding: var(--gutter_14-16);
+      background-color: $color-white;
+      border: $border-white-1 1px solid;
+      border-radius:  0 0 4px 4px;
+      color: $color-text-primary;
+      border-top: none;
+      .area-list-item{
+        display: inline-block;
+        height: 24px;
+        line-height: 18px;
+        background: $bg-white-2;
+        border-radius: 4px;
+        border: 1px solid $border-white-2;
+        padding: 2px 8px;
+        font-size: 12px;
+
+        &:not(:last-child) {
+          margin-bottom: 5px;
+        }
+        .display-name{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: inline-block;
+          vertical-align: middle;
+          max-width: 70px;
+        }
+        .svg-wrap{
+          display: inline-block;
+          margin-left: 2px;
+          font-size: 14px;
+          color: #D0D3D9;
+          &:hover{
+            color: $color-danger;
+          }
+        }
+      }
+    }
+  }
+
+}
+.u-self-selector-cascader-pop {
+  &.el-cascader-panel,.el-cascader-panel{
+    height: calc(var(--gutter_34-38) + 270px);
+    .el-cascader-menu{
+      position: relative;
+      padding-top: 40px;
+      background-color: #FAFCFF;
+      width: 200px;
+      min-width: auto;
+
+      .self-btn{
+        position: absolute;
+        top: 5px;
+        @include normal-btn;
+        &.add{
+          right: 4px;
+        }
+        &.del{
+          right: 60px;
+        }
+      }
+    }
+    .el-cascader-menu__wrap {
+      overflow-x: hidden;
+      height: 100%;
+      background-color: $color-white;
+      border-top: $border-white-1 1px solid;
+
+      .content{
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}

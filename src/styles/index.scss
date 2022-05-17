@@ -1,0 +1,67 @@
+//全局样式初始化 全局变量 动画函数 cover element 侧边栏 底部按钮
+@import './mixin.scss';
+@import './transition.scss';
+@import './animation.scss';
+@import "./base-structure.scss";
+@import './element-ui.scss'; //  https://github.com/zhuxiwen/elementui-scss-theme-no-repeat
+@import './vxe-table.scss'; // 覆盖vxe-table变量
+@import './component/sidebar.scss';
+@import './component/leave-footer.scss';
+@import "./component/form-container.scss";
+
+body {
+  height: 100%;
+  min-width: 800px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  color: $color-text-regular;
+}
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+
+label {
+  font-weight: 500;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+  font-size: 16px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  //color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+
+
+

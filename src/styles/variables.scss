@@ -1,0 +1,114 @@
+/* Color
+-------------------------- */
+
+$color-white: #FFFFFF;
+$color-white-1: #FAFCFF;
+$color-white-2: #EBEEF5;
+$color-white-3: #F0F3FA;
+$color-white-4: #D0D3D9;
+$color-white-5: #F5F7FA;
+$color-white-6: #E5E5E5;
+$color-white-7: #E1E4EB;
+
+$color-black: #000000 !default;
+$color-primary: #6C63FF !default;
+
+$color-primary-light-08: mix( $color-primary,$color-white, 8%) !default; /*  #6C63FF 8% */
+$color-primary-light-1: mix( $color-primary,$color-white, 10%) !default; /* 53a8ff */
+$color-primary-light-2: mix( $color-primary,$color-white, 20%) !default; /* 66b1ff */
+$color-primary-light-3: mix( $color-primary,$color-white, 30%) !default; /* 79bbff */
+$color-primary-light-4: mix( $color-primary,$color-white, 40%) !default; /* 8cc5ff */
+$color-primary-light-5: mix( $color-primary,$color-white, 50%) !default; /* a0cfff */
+$color-primary-light-6: mix( $color-primary,$color-white, 60%) !default; /* b3d8ff */
+$color-primary-light-7: mix( $color-primary,$color-white, 70%) !default; /* c6e2ff */
+$color-primary-light-75: mix( $color-primary,$color-white, 75%) !default; /*  #6C63FF 75% */
+$color-primary-light-8: mix( $color-primary,$color-white, 80%) !default; /* d9ecff */
+$color-primary-light-9: mix( $color-primary,$color-white, 90%) !default; /* ecf5ff */
+
+$color-primary-dark-1: mix($color-primary,$color-black, 10%) !default;
+$color-primary-dark-2: mix($color-primary, $color-black, 20%) !default;
+$color-primary-dark-7: mix($color-primary, $color-black, 70%) !default;
+$color-primary-dark-8: mix($color-primary, $color-black, 80%) !default;
+
+$lightest-blue: $color-primary-light-08; // #6C63FF 8%
+$lighter-blue: $color-primary-light-75;
+$light-blue: $color-primary-light-9; // #6C63FF 90%
+
+// 字体
+/// color|1|Font Color|2
+$color-text-primary: #303133 !default;
+/// color|1|Font Color|2
+$color-text-regular: #606266 !default;
+/// color|1|Font Color|2
+$color-text-secondary: #909399 !default;
+/// color|1|Font Color|2
+$color-text-placeholder: #C0C4CC !default;
+
+/// color|1|Functional Color|1
+$color-success: #88CC00 !default;
+/// color|1|Functional Color|1
+$color-warning: #FF9933 !default;
+/// color|1|Functional Color|1
+$color-danger: #FF5533 !default;
+/// color|1|Functional Color|1
+$color-info: #909399 !default;
+
+/*-------------------------- */
+
+$menuText:#bfcbd9;
+$menuLogoText:#297ab9;
+$menuActiveText:$color-primary;
+$menuActiveBg: rgba(108, 99, 255, 0.08);
+$subMenuActiveText:$color-primary; //https://github.com/ElemeFE/element/issues/12951
+
+// 导航栏
+$navBarBg:#212329;
+
+$menuBg: hsla(0,0%,100%,0.72);
+$menuHover: transparent;
+//$menuHover: rgba(108, 99, 255, 0.08);
+$menuHoverText: $color-primary;
+
+$subMenuBg:#fafafa;
+$subMenuHover:#cdcdcd;
+
+$sideBarWidth: 180px;
+$hideSideBarWidth: 64px;
+$hideLeftWidth: calc( 100% - .55rem );
+
+$bg-white-1: $color-white-5; /*F5F7FA*/
+$bg-white-2: $color-white-1; /*FAFCFF*/
+$border-white-1: $color-white-3; /*F0F3FA*/
+$border-white-2: $color-white-2; /*EBEEF5*/
+$border-white-3: $color-white-7; /*E1E4EB*/
+
+//:root{ // 定义css变量
+//  --backdrop-filter: blur(1.8px) brightness(0.9) saturate(0.92);
+//  --color-black: #{$color-black};
+//  --color-primary: #{$color-primary};
+//
+//  --lightest-blue: #{$lightest-blue}; // #6C63FF 8%
+//  --lighter-blue: #{$lighter-blue};
+//  --light-blue: #{$light-blue}; // #6C63FF 90%
+//
+//  // 字体
+//  --color-text-primary: #{ $color-text-primary};
+//  --color-text-regular: #{ $color-text-regular};
+//  --color-text-secondary:  #{ $color-text-secondary};
+//  --color-text-placeholder: #{ $color-text-placeholder};
+//
+//  --color-success: #{$color-success};
+//  --color-warning: #{$color-warning};
+//  --color-danger: #{$color-danger};
+//  --color-info: #{$color-info};
+//
+//  // 背景边框
+//  --bg-white-1:#{ $bg-white-1}; /*F5F7FA*/
+//  --bg-white-2:#{ $bg-white-2}; /*FAFCFF*/
+//  --border-white-1:#{ $border-white-1}; /*F0F3FA*/
+//  --border-white-2:#{ $border-white-2}; /*EBEEF5*/
+//  --border-white-3:#{ $border-white-3}; /*E1E4EB*/
+//  --color-white-4:#{ $color-white-4}; /*D0D3D9*/
+//}
+
+

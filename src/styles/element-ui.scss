@@ -1,0 +1,217 @@
+/*覆盖element主题以外样式*/
+@import './component/budget-dialog.scss';
+
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+}
+
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+
+// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+.el-dialog__wrapper {
+  backdrop-filter: saturate(180%) blur(0.99px);
+}
+
+// refine element ui upload
+.upload-container {
+  .el-upload {
+    width: 100%;
+
+    .el-upload-dragger {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+
+//// dropdown
+.el-dropdown-menu {
+  a {
+    display: block
+  }
+  .dropdown-menu_wrapper{ // 控制menu内部长度
+    max-height: calc(100vh - 80px);
+    overflow: auto;
+    .el-dropdown-menu__item{
+      font-size: var(--gutter_13-14);
+      padding: 0  var(--gutter_10-16);
+      &:hover{
+        color: $color-primary;
+        background-color: $bg-white-1;
+      }
+    }
+  }
+}
+
+
+
+//  el-button 按照设计规范重定义样式
+.el-button{
+  &.el-button--mini,&.el-button--small,&.el-button-medium {
+    border-radius: 4px;
+  }
+  &.el-button--mini{
+    font-size: 13px;
+    height: 28px;
+    padding: 4px 8px;
+    input::placeholder,input::-webkit-input-placeholder,input::-ms-input-placeholder {
+      font-weight: 300;
+      font-size: 13px;
+    }
+  }
+  &.el-button--small{
+    font-size: 14px;
+    height: 32px;
+    padding: 5px 12px;
+    input::placeholder,input::-webkit-input-placeholder,input::-ms-input-placeholder {
+      font-weight: 300;
+      font-size: 14px;
+    }
+
+  }
+}
+
+
+// to fix el-date-picker css style
+.el-range-separator {
+  box-sizing: content-box;
+}
+
+.el-button {
+  transition: all .3s var(--color-transition-base);
+  > span {
+    transition: margin-left .3s var(--color-transition-base);
+  }
+}
+
+// full screen dialog modal
+.full-modal {
+  .ant-modal {
+    width: 100% !important;
+    height: 100%;
+    max-width: 100%;
+    top: 0;
+    margin: 0;
+
+    .ant-modal-content {
+      border-radius: 0;
+
+      .ant-modal-body {
+        padding: .4rem 0;
+        height: 100vh;
+      }
+    }
+  }
+}
+
+// el-pagination
+.el-pagination.is-background {
+  .btn-next, .btn-prev, .el-pager li {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all .2s var(--border-transition-base);
+    transition-property: border-color;
+    transition-duration: 0.2s;
+    transition-delay: 0s;
+    color: #606266;
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+
+    &:not([disabled]):hover {
+      text-decoration: none;
+      border-color: #d0d7de;
+      outline: 0;
+    }
+  }
+
+  .el-pager li {
+    &:not(.disabled,.active):hover {
+      color: #24292f;
+      transition-duration: .1s;
+    }
+
+    &:not(.disabled).active {
+      background-color: $lightest-blue;
+      color: $color-primary;
+      cursor: pointer;
+    }
+  }
+}
+
+// el-popconfirm
+.el-popconfirm .el-popconfirm__main{
+  margin-bottom: 6px;
+}
+
+
+// tooltip样式
+.el-tooltip__popper.is-light{
+  border-color: $border-white-3;
+  color: $color-text-primary;
+  &.el-tooltip__popper[x-placement^=right] .popper__arrow{
+    border-right-color: $border-white-3;
+  }
+  &.el-tooltip__popper[x-placement^=left] .popper__arrow{
+    border-left-color:  $border-white-3;
+  }
+  &.el-tooltip__popper[x-placement^=top] .popper__arrow{
+    border-top-color: $border-white-3;
+  }
+  &.el-tooltip__popper[x-placement^=bottom] .popper__arrow{
+    border-bottom-color: $border-white-3;
+  }
+}
+
+
+// el-switch
+.el-switch__core:after{
+  width: 18px;
+  height: 18px;
+  transition: all .2s;
+  top: 0;
+  left: 0;
+  box-shadow: rgb(227 227 227) 0px 0px 0px 0.3px inset, rgba(0 0 0 / 15%) 0px 2px 6px 0px, rgb(0 0 0 / 15%) 0px 0px 1px 0px, rgb(0 0 0 / 5%) 0px 2px 1px 0px;
+}
+.el-switch.is-checked .el-switch__core::after{
+  margin-left: -18px;
+}
+
+// 覆盖复选框
+.el-checkbox__inner::after {
+  //height: 9px;
+  //width: 4px;
+  border-width: 2px;
+  //top: -1px;
+}
+// el-autocomplete
+.el-autocomplete-suggestion{
+  li{
+    line-height: 40px;
+  }
+}
+
+// 下拉
+.el-select-dropdown__item{
+  font-size: var(--gutter_13-14);
+}

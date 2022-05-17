@@ -1,0 +1,59 @@
+.leave-dialog{
+  &.budget{
+    .el-dialog__header{
+      display: none;
+    }
+    .el-dialog__body{
+      padding: 20px 10px;
+    }
+    .title{
+      font-size: 26px;
+      color: $color-text-primary;
+      text-align: center;
+      padding: 15px 0;
+      position: relative;
+
+      &:after{
+        content: '';
+        display: block;
+        width: 100%;
+        height: 2px;
+        box-shadow: 0 1px 1px 0px #e0e0e0;
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+    h3,h4{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $color-text-primary;
+      margin: 4px 0;
+      &:last-child{
+        margin-bottom: 15px;
+      }
+
+      .label{
+        width: 50%;
+        color: #625b5b;
+        position: relative;
+        text-align: right;
+        padding-right: 15px;
+        &:after{
+          content: '：';
+          display: inline-block;
+          position: absolute;
+          right: 0;
+          color: #666;
+        }
+      }
+      .info{
+        flex: 1;
+        font-size: 15px;
+        color: black;
+      }
+    }
+  }
+}

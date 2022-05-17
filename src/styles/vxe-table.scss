@@ -1,0 +1,17 @@
+@import 'vxe-table/styles/variable.scss';
+
+/* 改变table主题色变量 */
+$vxe-primary-color: $color-primary;
+$vxe-table-border-color: $border-white-1;
+$vxe-table-border-radius: 4px;
+$vxe-table-header-background-color: $bg-white-2;
+$vxe-table-body-background-color: $color-white;
+$vxe-table-header-font-weight: 400;
+$vxe-table-header-font-color: $color-text-primary;
+
+@import 'vxe-table/styles/modules.scss';
+
+// 重置checkbox border宽度
+.vxe-custom--option .vxe-checkbox--icon:before, .vxe-table--render-default .vxe-cell--checkbox .vxe-checkbox--icon:before, .vxe-table--filter-option .vxe-checkbox--icon:before, .vxe-export--panel-column-option .vxe-checkbox--icon:before{
+  border-width: 1px;
+}
