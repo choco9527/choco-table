@@ -1,8 +1,9 @@
 {
-  "private": true,
-  "name": "table-test",
+  "name": "@youmi/choco-table-example",
   "description": "base on vxe table",
+  "main": "dist/choco-table.umd.js",
   "author": "choco9527",
+  "version": "1.0.5",
   "license": "ISC",
   "scripts": {
     "dev:local": "vue-cli-service serve --mode local --port 9527",
@@ -12,7 +13,7 @@
     "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table"
   },
   "dependencies": {
-    "@youmi/choco-table": "^1.0.3",
+    "@youmi/choco-table": "^1.0.5",
     "ant-design-vue": "^1.7.5",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
@@ -20,6 +21,7 @@
     "dayjs": "^1.10.6",
     "echarts": "^5.2.1",
     "element-ui": "2.15.6",
+    "heima-ui": "^0.1.0",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",

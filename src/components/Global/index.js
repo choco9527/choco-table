@@ -2,6 +2,7 @@
 import GlobalTable from './global-table'
 import RenderOptions from './RenderOptions/index'
 import RenderPopup from './RenderPopup/index'
+import BeautyDialog from '@/components/BeautyDialog/index'
 
 // Element
 import ElementUI from 'element-ui'
@@ -23,6 +24,7 @@ const install = function(Vue, options = {}) {
 
   setOptions(Vue, options)
 
+  Vue.component('BeautyDialog', BeautyDialog)
   Vue.component('global-table', GlobalTable)
   Vue.component('render-options', RenderOptions)
   Vue.component('render-popup', RenderPopup)

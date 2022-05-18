@@ -89,7 +89,6 @@ import tableColMixin from './mixins/table-clo-mixins'
 import { JT } from './form-types'
 import { isDevicePhone } from './assets/js/tools'
 
-import BeautyDialog from '@/components/BeautyDialog/index'
 import GlobalForm from './global-form'
 
 import { isEmpty, clone } from 'xe-utils'
@@ -101,7 +100,7 @@ import { isEmpty, clone } from 'xe-utils'
 */
 export default {
   name: 'GlobalTable',
-  components: { GlobalFilter, GlobalExport, GlobalForm, VxeScrollLoadTable, BeautyDialog },
+  components: { GlobalFilter, GlobalExport, GlobalForm, VxeScrollLoadTable },
   mixins: [tableColMixin, tableFilterMixin],
   props: {
     config: { // 表格配置
