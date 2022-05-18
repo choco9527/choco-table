@@ -1,23 +1,23 @@
 <template>
   <div id="app">
     <h2>APPs</h2>
-    <!--    <global-table-->
-    <!--      ref="globalTable"-->
-    <!--      show-context-menu-->
-    <!--      :show-setting-export="false"-->
-    <!--      :show-menu-edit="false"-->
-    <!--      :self-get-config="getConfig"-->
-    <!--      :self-get-list="getList"-->
-    <!--      :config="{tableId: 'self_application_list', isSelf:true}"-->
-    <!--      :self-cell-formats="selfCellFormats"-->
-    <!--      :col-config-map="colConfigMap"-->
-    <!--      :self-options="selfOptions"-->
-    <!--      el-size="mini"-->
-    <!--      table-size="small"-->
-    <!--    />-->
-    <beauty-dialog title="hello" :visible="true">
-      123
-    </beauty-dialog>
+    <global-table
+      ref="globalTable"
+      show-context-menu
+      :show-setting-export="false"
+      :show-menu-edit="false"
+      :self-get-config="getConfig"
+      :self-get-list="getList"
+      :config="{tableId: 'self_application_list', isSelf:true}"
+      :self-cell-formats="selfCellFormats"
+      :col-config-map="colConfigMap"
+      :self-options="selfOptions"
+      el-size="mini"
+      table-size="small"
+    />
+    <!--    <beauty-dialog title="hello" :visible="true">-->
+    <!--      123-->
+    <!--    </beauty-dialog>-->
   </div>
 </template>
 
