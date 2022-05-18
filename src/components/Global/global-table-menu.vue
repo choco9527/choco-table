@@ -1,7 +1,7 @@
 <template>
   <transition name="context-menu">
     <div v-show="show" class="menu-container" :style="menuStyle" :menu-id="menuId" @mousedown.stop @contextmenu.prevent>
-      <ul class="global-table-menu">
+      <ul class="choco-table-menu">
         <li v-for="menuItem in menuList" :key="menuItem.param" class="context-item" @click="menuClick(menuItem.param)">
           <div class="inner-item">
             {{ menuItem.title }}
@@ -88,7 +88,7 @@ export default {
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24);
-  .global-table-menu{
+  .choco-table-menu{
     font-size: 1.1em;
     width: 100%;
     height: auto;

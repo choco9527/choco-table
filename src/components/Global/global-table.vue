@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nothingWrong" class="global-table">
+  <div v-if="nothingWrong" class="choco-table">
     <global-filter
       ref="pageFilter"
       v-bind="$attrs"
@@ -490,7 +490,7 @@ export default {
 
 <style lang="scss">
 @import "./assets/table-base";
-.global-table {
+.choco-table {
   padding: 0;
 
   .svg-wrap {

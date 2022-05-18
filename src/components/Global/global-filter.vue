@@ -453,7 +453,7 @@ export default {
       this.$emit('handleSetCols', clone(this.columns, true))
     },
     autoSearch() { // 根据路由参数自动搜索
-      if (!this.$route.query || this.fromNest) return
+      if (!this.$route || !this.$route.query || this.fromNest) return
       objectEach(this.$route.query, (item, key) => {
         this.searchQuery.forEach(qItem => {
           if (qItem.key === key) qItem.value = item

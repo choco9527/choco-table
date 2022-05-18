@@ -1,16 +1,49 @@
 <template>
   <div id="app">
-    <global-table />
+    <global-table
+      ref="globalTable"
+      show-context-menu
+      :show-setting-export="false"
+      :show-menu-edit="false"
+      :self-get-config="getConfig"
+      :self-get-list="getList"
+      :config="{tableId: 'self_application_list', isSelf:true}"
+      :self-cell-formats="selfCellFormats"
+      :col-config-map="colConfigMap"
+      :self-options="selfOptions"
+      el-size="mini"
+      table-size="small"
+    />
   </div>
 </template>
 
 <script>
+import { getConfig, getList } from '@/mock-api/table'
 
 export default {
   name: 'App',
   data() {
     return {
-      msg: ''
+      msg: '',
+      getConfig: async() => {
+        try {
+          const config = await getConfig()
+          return { config }
+        } catch (e) {
+          console.log(e)
+        }
+      },
+      getList: async(data) => {
+        try {
+          const resData = await getList(data)
+          return { data: resData }
+        } catch (e) {
+          console.log(e)
+        }
+      },
+      selfCellFormats: {},
+      colConfigMap: {},
+      selfOptions: {}
     }
   }
 }
@@ -18,12 +51,9 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: var(--gutter_14-16) var(--gutter_24-48);
+  background: #fff;
+  min-height: calc(100vh - 180px);
 }
 
 </style>

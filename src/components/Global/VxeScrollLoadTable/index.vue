@@ -270,7 +270,7 @@ export default {
       })
     },
     handleInit() {
-      if (this.$route.query.expandSearch === '0') {
+      if (this.$route && this.$route.query.expandSearch === '0') {
         this.toggleRowExpand(this.data[this.$route.query.expandSearch])
       }
     },
