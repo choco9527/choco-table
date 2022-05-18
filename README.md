@@ -7,4 +7,7 @@
 
 ``` bash
 npm install choco-table
+
+import GloBalTable from '@youmi/choco-table'
+import '@youmi/choco-table/dist/choco-table.css'
 ```

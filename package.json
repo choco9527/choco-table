@@ -1,9 +1,9 @@
 {
-  "name": "@youmi/choco-table-x",
+  "name": "@youmi/choco-table",
   "description": "base on vxe table",
   "main": "dist/choco-table.umd.js",
   "author": "choco9527",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "ISC",
   "scripts": {
     "dev:local": "vue-cli-service serve --mode local --port 9527",
@@ -13,20 +13,16 @@
     "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table"
   },
   "dependencies": {
-    "@youmi/choco-table": "^1.1.0",
-    "ant-design-vue": "^1.7.5",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
     "core-js": "3.6.5",
     "dayjs": "^1.10.6",
-    "echarts": "^5.2.1",
     "element-ui": "2.15.6",
     "vue": "2.6.10",
     "vue-router": "3.0.6",
     "vuedraggable": "^2.24.3",
     "vxe-table": "^3.3.9",
     "xe-utils": "^3.3.0",
-    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.4.4",
@@ -45,7 +41,6 @@
     "eslint-plugin-vue": "6.2.2",
     "glob-all": "^3.3.0",
     "html-webpack-plugin": "^4.5.2",
-    "mockjs": "1.0.1-beta3",
     "path": "^0.12.7",
     "preload-webpack-plugin": "^2.3.0",
     "runjs": "4.3.2",
