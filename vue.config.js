@@ -10,7 +10,6 @@ const name = defaultSettings.title || '有量智投' // page title
 
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
-// All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
 
   publicPath: '/',
@@ -27,8 +26,6 @@ module.exports = {
     }
   },
   configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
     name: name,
     resolve: {
       alias: {
@@ -36,49 +33,24 @@ module.exports = {
       }
     },
     plugins: [
-      // new PurgecssPlugin({
-      //   paths: glob.sync([
-      //     path.join(__dirname, './index.html'),
-      //     path.join(__dirname, './**/*.vue'),
-      //     path.join(__dirname, './src/**/*.css')
-      //   ]),
-      //   defaultExtractor(content) {
-      //     const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '')
-      //     return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || []
-      //   }
-      // })
+
     ],
     module: {
       rules: [
-        // {
-        //   test: /\.css$/,
-        //   use: [
-        //     'style-loader',
-        //     'fast-css-loader' // 替换你原先的 css-loader
-        //   ]
-        // },
-        // {
-        //   test: /\.(sass|scss)$/,
-        //   use: [
-        //     'style-loader',
-        //     'fast-css-loader', // 替换你原先的 css-loader
-        //     'fast-sass-loader' // 替换你原先的 sass-loader
-        //   ]
-        // }
+
       ]
     }
   },
   chainWebpack(config) {
-    // it can improve the speed of the first screen, it is recommended to turn on preload
-    config.plugin('preload').tap(() => [
-      {
-        rel: 'preload',
-        // to ignore runtime.js
-        // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
-        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        include: 'initial'
-      }
-    ])
+    // config.plugin(`preload`)
+    //   .tap(() => [
+    //     {
+    //       rel: 'preload',
+    //       fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+    //       include: 'initial'
+    //     }
+    //   ])
+    config.plugins.delete('preload')
 
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')

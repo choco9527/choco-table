@@ -1,16 +1,21 @@
 {
-  "name": "choco-table",
+  "private": false,
+  "name": "@youmi/choco-table",
   "description": "base on vxe table",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "author": "choco9527",
-  "private": true,
+  "main": "dist/choco-table.umd.js",
+  "keywords": [ "vue", "table", "vxe-table", "element-table" ],
+  "license": "ISC",
   "scripts": {
     "dev:local": "vue-cli-service serve --mode local --port 9527",
     "build:test": "vue-cli-service build --mode development",
     "build:prod": "vue-cli-service build",
-    "build:stage": "vue-cli-service build --mode staging"
+    "build:stage": "vue-cli-service build --mode staging",
+    "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table"
   },
   "dependencies": {
+    "@youmi/choco-table": "^1.0.2",
     "ant-design-vue": "^1.7.5",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
@@ -47,9 +52,10 @@
     "eslint": "6.7.2",
     "eslint-plugin-vue": "6.2.2",
     "glob-all": "^3.3.0",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "^4.5.2",
     "mockjs": "1.0.1-beta3",
     "path": "^0.12.7",
+    "preload-webpack-plugin": "^2.3.0",
     "runjs": "4.3.2",
     "sass": "1.26.8",
     "sass-loader": "8.0.2",
@@ -59,13 +65,5 @@
     "svgo": "1.2.2",
     "vue-template-compiler": "2.6.10"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
-  "engines": {
-    "node": ">=8.9",
-    "npm": ">= 3.0.0"
-  },
-  "license": "MIT"
+
 }

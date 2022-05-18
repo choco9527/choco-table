@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h2>APP表格</h2>
+    <h2>APP表示例</h2>
     <global-table
       ref="globalTable"
       show-context-menu
@@ -65,7 +65,10 @@ export default {
   margin: var(--gutter_14-16) var(--gutter_24-48);
   background: #fff;
   min-height: calc(100vh - 180px);
-
+  >h2{
+    color: #3e3d3d;
+    margin: 10px 0;
+  }
   img{
     vertical-align: middle;
   }

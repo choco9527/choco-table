@@ -17,15 +17,22 @@ import '@/styles/index.scss' // global css 顺序必须在组件引入之后，�
 
 import { setOptions } from '@/components/Global/setOptions'
 
+const install = function(Vue, options = {}) {
+  Vue.use(VXETable) // need import vxe-table
+  Vue.use(ElementUI, { size: 'small' })
+
+  setOptions(Vue, options)
+
+  Vue.component('global-table', GlobalTable)
+  Vue.component('render-options', RenderOptions)
+  Vue.component('render-popup', RenderPopup)
+}
+
+if (typeof window !== 'undefined' && window.Vue) {
+  // 判断是否直接引入，如果是则可以跳过Vue.use()
+  install(window.Vue)
+}
+
 export default {
-  install(Vue, options = {}) {
-    Vue.use(VXETable) // need import vxe-table
-    Vue.use(ElementUI, { size: 'small' })
-
-    setOptions(Vue, options)
-
-    Vue.component('global-table', GlobalTable)
-    Vue.component('render-options', RenderOptions)
-    Vue.component('render-popup', RenderPopup)
-  }
+  install
 }
