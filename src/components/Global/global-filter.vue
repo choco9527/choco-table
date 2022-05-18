@@ -121,7 +121,8 @@
       <div v-if="selectable && openDeleteBatch" class="batch">
         <render-popup v-if="allowDeleteBatch" :handle-confirm="confirmDeleteRows" popup-title="确认批量删除？">
           <el-button slot="reference" :size="elSize" class="batch-item btn">批量删除
-          </el-button></render-popup>
+          </el-button>
+        </render-popup>
         <el-button v-else :size="elSize" disabled class="batch-item btn">批量删除</el-button>
       </div>
 
