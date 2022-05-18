@@ -1,11 +1,8 @@
 {
-  "private": false,
-  "name": "@youmi/choco-table",
+  "private": true,
+  "name": "table-test",
   "description": "base on vxe table",
-  "version": "1.0.3",
   "author": "choco9527",
-  "main": "dist/choco-table.umd.js",
-  "keywords": [ "vue", "table", "vxe-table", "element-table" ],
   "license": "ISC",
   "scripts": {
     "dev:local": "vue-cli-service serve --mode local --port 9527",
@@ -15,7 +12,7 @@
     "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table"
   },
   "dependencies": {
-    "@youmi/choco-table": "^1.0.2",
+    "@youmi/choco-table": "^1.0.3",
     "ant-design-vue": "^1.7.5",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
@@ -64,6 +61,5 @@
     "svg-sprite-loader": "4.1.3",
     "svgo": "1.2.2",
     "vue-template-compiler": "2.6.10"
-  },
-
+  }
 }

@@ -172,7 +172,9 @@ export function multiRequest(urls, maxNum = 1, request) {
   const ret = []
   let i = 0
   let resolve
-  const promise = new Promise(r => resolve = r)
+  const promise = new Promise(r => {
+    resolve = r
+  })
   const addTask = () => {
     if (i >= urls.length) {
       return resolve()
@@ -184,6 +186,7 @@ export function multiRequest(urls, maxNum = 1, request) {
     ret.push(task)
   }
 
+  // eslint-disable-next-line no-unmodified-loop-condition
   while (i < maxNum) {
     addTask()
   }
