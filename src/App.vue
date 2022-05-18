@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h2>APP表格</h2>
     <global-table
       ref="globalTable"
       show-context-menu
@@ -50,7 +51,8 @@ export default {
         }
       },
       colConfigMap: {
-        name: { minWidth: 120, align: 'left' }
+        name: { minWidth: 120, align: 'left' },
+        cp_id: { width: 120 }
       },
       selfOptions: {}
     }
