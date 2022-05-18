@@ -2,7 +2,7 @@ import { sleep } from '@/utils/tool'
 import { filters, columns, mockData } from '@/utils/tableData'
 
 export async function getConfig() {
-  await sleep()
+  await sleep(300)
   return {
     columns: columns,
     create_data_forms: null,

@@ -123,6 +123,7 @@ export default {
         font-weight: 400;
         color: #303133;
         line-height: 50px;
+        margin: 0;
       }
       .title-icon {
         float: right;

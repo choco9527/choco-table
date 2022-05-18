@@ -41,8 +41,17 @@ export default {
           console.log(e)
         }
       },
-      selfCellFormats: {},
-      colConfigMap: {},
+      selfCellFormats: {
+        name: ({ row }) => {
+          const name = row.name
+          const icon = row.icon
+          const img = <img class='br-4 mr-6' src={icon} alt={name} width='30' height='30'/>
+          return <span>{icon && img}{name}</span>
+        }
+      },
+      colConfigMap: {
+        name: { minWidth: 120, align: 'left' }
+      },
       selfOptions: {}
     }
   }
@@ -54,6 +63,10 @@ export default {
   margin: var(--gutter_14-16) var(--gutter_24-48);
   background: #fff;
   min-height: calc(100vh - 180px);
+
+  img{
+    vertical-align: middle;
+  }
 }
 
 </style>

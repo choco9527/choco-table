@@ -1,40 +1,41 @@
 /*基础结构样式*/
 
-// 批量设置 margin padding fontSize !important
+// 批量设置 margin padding fontSize
 @for $i from 0 through 150 {
-  .mb-#{$i} { margin-bottom: 1px * $i !important; }
-  .mt-#{$i} { margin-top: 1px * $i !important; }
-  .ml-#{$i} { margin-left: 1px * $i !important; }
-  .mr-#{$i} { margin-right: 1px * $i !important; }
-  .pb-#{$i} { padding-bottom: 1px * $i !important; }
-  .pt-#{$i} { padding-top: 1px * $i !important; }
-  .pl-#{$i} { padding-left: 1px * $i !important; }
-  .pr-#{$i} { padding-right: 1px * $i !important; }
+  .choco-table{
+    .mb-#{$i} { margin-bottom: 1px * $i !important; }
+    .mt-#{$i} { margin-top: 1px * $i !important; }
+    .ml-#{$i} { margin-left: 1px * $i !important; }
+    .mr-#{$i} { margin-right: 1px * $i !important; }
+    .pb-#{$i} { padding-bottom: 1px * $i !important; }
+    .pt-#{$i} { padding-top: 1px * $i !important; }
+    .pl-#{$i} { padding-left: 1px * $i !important; }
+    .pr-#{$i} { padding-right: 1px * $i !important; }
 
-  .mb--#{$i} { margin-bottom: -1px * $i !important; }
-  .mt--#{$i} { margin-top: -1px * $i !important; }
-  .ml--#{$i} { margin-left: -1px * $i !important; }
-  .mr--#{$i} { margin-right: -1px * $i !important; }
-  .pb--#{$i} { padding-bottom: -1px * $i !important; }
-  .pt--#{$i} { padding-top: -1px * $i !important; }
-  .pl--#{$i} { padding-left: -1px * $i !important; }
-  .pr--#{$i} { padding-right: -1px * $i !important; }
+    .mb--#{$i} { margin-bottom: -1px * $i !important; }
+    .mt--#{$i} { margin-top: -1px * $i !important; }
+    .ml--#{$i} { margin-left: -1px * $i !important; }
+    .mr--#{$i} { margin-right: -1px * $i !important; }
+    .pb--#{$i} { padding-bottom: -1px * $i !important; }
+    .pt--#{$i} { padding-top: -1px * $i !important; }
+    .pl--#{$i} { padding-left: -1px * $i !important; }
+    .pr--#{$i} { padding-right: -1px * $i !important; }
 
-  .w-#{$i} { width: 1px * $i !important; }
-  .h-#{$i} { height: 1px * $i !important; }
-  .lh-#{$i} { line-height: 1px * $i !important; }
+    .w-#{$i} { width: 1px * $i !important; }
+    .h-#{$i} { height: 1px * $i !important; }
+    .lh-#{$i} { line-height: 1px * $i !important; }
 
-  .fs-#{$i} {font-size: 1px * $i !important;}
+    .fs-#{$i} {font-size: 1px * $i !important;}
 
-  .br-#{$i} {border-radius: 1px * $i !important;}
-
+    .br-#{$i} {border-radius: 1px * $i !important;}
+  }
 }
 
 
 /* 响应式页面布局
 -------------------------- */
 
-:root{
+.choco-table{
   @for $i from 5 through 24 {
     @for $j from $i through 24{
       @if($i != $j){
@@ -44,16 +45,10 @@
   }
   --gutter_1-2: 1px; // 用于差距为1的计算
   --gutter_13-14: calc(var(--gutter_1-2) + 12px); // 用于字体
-
-}
-html{
-  /*可设置一些响应式js变量*/
-  --js_elSize: mini;
-  --js_tableSize: small;
 }
 
 @include respond-to('mg'){
-  :root{
+  .choco-table{
     @for $i from 5 through 24 {
       @for $j from $i through 24{
         @if($i != $j){
@@ -63,10 +58,6 @@ html{
     }
     --gutter_1-2: 2px; // 用于差距为1的计算
     --gutter_13-14: calc(var(--gutter_1-2) + 12px); // 用于字体
-  }
-  html{
-    --js_elSize: small;
-    --js_tableSize: medium;
   }
 }
 
@@ -87,14 +78,6 @@ html{
   }
 }
 
-/*浮动*/
-.f-left{
-  float: left !important;
-}
-.f-right{
-  float: right !important;
-}
-
 // 清除浮动
 .clearfix {
   &:after {
@@ -111,39 +94,6 @@ html{
 .over-hide{
   overflow: hidden;
   @include over-hide
-}
-
-/*flex布局*/
-.flex{
-  display: flex;
-  align-items: center;
-  &.jcc{
-    justify-content: center !important;
-    &-align{
-      align-items: center !important;
-    }
-  }
-  &.start{
-    justify-content: flex-start !important;
-    &-align{
-      align-items: flex-start !important;
-    }
-  }
-  &.end{
-    justify-content: flex-end !important;
-    &-align{
-      align-items: flex-end !important;
-    }
-  }
-  &.between{
-    justify-content: space-between !important;
-  }
-  &.column{
-    flex-direction: column !important;
-  }
-}
-.flex-1{
-  flex: 1;
 }
 
 
@@ -169,74 +119,3 @@ html{
     color: $color-primary;
   }
 }
-
-// main-container global css
-.app-container {
-  padding: .2rem;
-
-  .keyword-EXACT{
-    &:before,&:after{
-      color: #99a9bf;
-    }
-    &:before{
-      content: '[ ';
-    }
-    &:after{
-      content: ' ]';
-    }
-  }
-}
-
-
-//全局button样式
-button{
-  transition: background-color 100ms linear , border-color 100ms linear , color 100ms linear , box-shadow 100ms linear;
-  transition-property: background-color, border-color, color, box-shadow;
-  transition-duration: 100ms, 100ms, 100ms, 100ms;
-  transition-timing-function: linear, linear, linear, linear;
-  transition-delay: 0s, 0s, 0s, 0s;
-}
-a{
-  color: $color-primary;
-}
-
-//自动移滚动条样式
-::-webkit-scrollbar{
-  width: 6px;
-  height: 8px;
-}
-::-webkit-scrollbar-thumb{
-  border-radius: 1em;
-  background-color: rgba(50,50,50,.3);
-}
-::-webkit-scrollbar-track{
-  border-radius: 1em;
-  background-color: rgba(50,50,50,.1);
-}
-
-// antd 消失按钮
-.ant-message{
-  z-index: 2155 !important;
-}
-
-// cover el-tags
-.tags-wrapper {
-  max-height: 150px;
-  overflow: auto;
-  margin-top: 20px;
-
-  .tag {
-    margin-right: 4px;
-    margin-top: 4px;
-
-    &.el-tag.el-tag--info {
-      color: #5381bf;
-    }
-  }
-}
-
-.layout-container {
-  @include layout;
-}
-
-

@@ -242,7 +242,7 @@
             <div class="right">
               <div class="title">
                 <span class="w-100">已选</span>
-                <el-button type="text" class="ml-54 pr-0" size="small" @click="columns.forEach(item => item.open = false)">清空</el-button>
+                <el-button type="text" class="ml-54 pr-0" :size="elSize" @click="columns.forEach(item => item.open = false)">清空</el-button>
               </div>
               <draggable v-model="columns" class="column-edit">
                 <transition-group>
@@ -896,7 +896,7 @@ export default {
         .title{
           width: 100%;
           height: 38px;
-          line-height: 38px;
+          line-height: 34px;
           border-bottom: 1px solid $border-white-2;
           background: $bg-white-2;
           display: inline-block;

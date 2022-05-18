@@ -8,11 +8,44 @@
 
 /* choco-table样式初始化 */
 .choco-table{
+  h1,h2,h3,h4,h5,h6,ul,ol,li{
+    margin:0;
+    padding:0;
+    list-style: none;
+  }
+
   box-sizing: border-box;
   *,
   *:before,
   *:after {
     box-sizing: inherit;
+  }
+
+  //全局button样式
+  button{
+    transition: background-color 100ms linear , border-color 100ms linear , color 100ms linear , box-shadow 100ms linear;
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 100ms, 100ms, 100ms, 100ms;
+    transition-timing-function: linear, linear, linear, linear;
+    transition-delay: 0s, 0s, 0s, 0s;
+  }
+
+  a{
+    color: $color-primary;
+  }
+
+  //自动移滚动条样式
+  ::-webkit-scrollbar{
+    width: 6px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb{
+    border-radius: 1em;
+    background-color: rgba(50,50,50,.3);
+  }
+  ::-webkit-scrollbar-track{
+    border-radius: 1em;
+    background-color: rgba(50,50,50,.1);
   }
 
 }

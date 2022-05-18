@@ -55,34 +55,13 @@ $color-info: #909399 !default;
 
 /*-------------------------- */
 
-$menuText:#bfcbd9;
-$menuLogoText:#297ab9;
-$menuActiveText:$color-primary;
-$menuActiveBg: rgba(108, 99, 255, 0.08);
-$subMenuActiveText:$color-primary; //https://github.com/ElemeFE/element/issues/12951
-
-// 导航栏
-$navBarBg:#212329;
-
-$menuBg: hsla(0,0%,100%,0.72);
-$menuHover: transparent;
-//$menuHover: rgba(108, 99, 255, 0.08);
-$menuHoverText: $color-primary;
-
-$subMenuBg:#fafafa;
-$subMenuHover:#cdcdcd;
-
-$sideBarWidth: 180px;
-$hideSideBarWidth: 64px;
-$hideLeftWidth: calc( 100% - .55rem );
-
 $bg-white-1: $color-white-5; /*F5F7FA*/
 $bg-white-2: $color-white-1; /*FAFCFF*/
 $border-white-1: $color-white-3; /*F0F3FA*/
 $border-white-2: $color-white-2; /*EBEEF5*/
 $border-white-3: $color-white-7; /*E1E4EB*/
 
-:root{ // 定义css变量
+.choco-table{ // 定义css变量
   --backdrop-filter: blur(1.8px) brightness(0.9) saturate(0.92);
   --color-black: #{$color-black};
   --color-primary: #{$color-primary};
@@ -109,15 +88,4 @@ $border-white-3: $color-white-7; /*E1E4EB*/
   --border-white-2:#{ $border-white-2}; /*EBEEF5*/
   --border-white-3:#{ $border-white-3}; /*E1E4EB*/
   --color-white-4:#{ $color-white-4}; /*D0D3D9*/
-}
-
-:export {
-  menuText: $menuText;
-  menuActiveText: $menuActiveText;
-  subMenuActiveText: $subMenuActiveText;
-  menuBg: $menuBg;
-  menuHover: $menuHover;
-  subMenuBg: $subMenuBg;
-  subMenuHover: $subMenuHover;
-  sideBarWidth: $sideBarWidth;
 }
