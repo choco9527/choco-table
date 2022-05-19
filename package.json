@@ -1,7 +1,5 @@
 {
   "name": "table-test",
-  "description": "base on vxe table",
-  "author": "choco9527",
   "private": true,
   "scripts": {
     "dev:local": "vue-cli-service serve --mode local --port 9527",

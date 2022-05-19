@@ -5,12 +5,12 @@ import App from './App.vue'
 // import GlobalTable from './components/Global'
 
 // 在线使用
-// import GlobalTable from '@youmi/choco-table'
-// import '@youmi/choco-table/lib/choco-table.css'
+import GlobalTable from '@youmi/choco-table'
+import '@youmi/choco-table/lib/choco-table.css'
 
 // 本地使用打包dist
-import GlobalTable from '/dist/lib/choco-table.umd.min'
-import '/dist/lib/choco-table.css'
+// import GlobalTable from '/dist/lib/choco-table.umd.min'
+// import '/dist/lib/choco-table.css'
 
 /* 定义默认请求方法路径，如不使用自定义方法则会向该路径发起请求 */
 const config = {

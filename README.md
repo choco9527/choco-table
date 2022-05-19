@@ -13,7 +13,7 @@ npm install choco-table
 
 ``` bash
 // main.js
-import GloBalTable from '@youmi/choco-table'
+import GlobalTable from '@youmi/choco-table'
 import '@youmi/choco-table/lib/choco-table.css'
 
 /* 定义默认请求方法路径，如不使用自定义方法则会向该路径发起请求 */
