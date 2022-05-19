@@ -8,7 +8,7 @@ export function getTableConfig(params) {
     times: 0,
     delay: 500,
     args: {
-      url: this.$cTableGetConfigUrl || 'api/admin/globalTable/getTableConfig',
+      url: this.$cTableGetConfigUrl || 'api/globalTable/getTableConfig',
       method: 'get',
       params
     }
@@ -18,7 +18,7 @@ export function getTableConfig(params) {
 // 获取全局表格列表
 export function getTableList(data) {
   return request({
-    url: this.$cTableGetListUrl || 'api/admin/globalTable/getTableList',
+    url: this.$cTableGetListUrl || 'api/globalTable/getTableList',
     method: 'post',
     data
   })
@@ -27,7 +27,7 @@ export function getTableList(data) {
 // 搜索options
 export function searchPageOptions(params) {
   return request({
-    url: 'api/admin/globalTable/searchPageOptions',
+    url: this.$cTableSearchOptionsUrl || 'api/globalTable/searchPageOptions',
     method: 'get',
     params
   })
@@ -36,7 +36,7 @@ export function searchPageOptions(params) {
 // 导出表格
 export function exportTable(params) {
   return request({
-    url: this.$cTableExportUrl || 'api/admin/globalTable/exportTable',
+    url: this.$cTableExportUrl || 'api/globalTable/exportTable',
     method: 'get',
     params
   })
@@ -45,7 +45,7 @@ export function exportTable(params) {
 // 提交表单
 export function submitForm(data) {
   return request({
-    url: this.$cTableSubmitFormUrl || 'api/admin/globalTable/submitForm',
+    url: this.$cTableSubmitFormUrl || 'api/globalTable/submitForm',
     method: 'post',
     data
   })

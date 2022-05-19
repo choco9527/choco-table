@@ -294,7 +294,6 @@ export default {
   props: {
     showFilter: { type: Boolean, default: true }, // 显示表格顶部筛选项
     configId: { type: [Number, String], default: 0 }, // config->tableId
-    isSelf: { type: Boolean, default: false }, // 自定义，非标准global-table
     tableId: { type: String, default: '' },
     showSetting: { type: Boolean, default: true }, // 是否显示列设置
     showSettingExport: { type: Boolean, default: false }, // 是否显示前端导出按钮

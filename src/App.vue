@@ -8,16 +8,13 @@
       :show-menu-edit="false"
       :self-get-config="getConfig"
       :self-get-list="getList"
-      :config="{tableId: 'self_application_list', isSelf:true}"
+      :config="{tableId: 'self_application_list'}"
       :self-cell-formats="selfCellFormats"
       :col-config-map="colConfigMap"
       :self-options="selfOptions"
       el-size="mini"
       table-size="small"
     />
-    <!--    <beauty-dialog title="hello" :visible="true">-->
-    <!--      123-->
-    <!--    </beauty-dialog>-->
   </div>
 </template>
 

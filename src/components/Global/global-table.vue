@@ -6,7 +6,6 @@
       :show-setting="showSetting"
       :config-id="config.tableId"
       :table-id="tId"
-      :is-self="config.isSelf || false"
       :selectable="selectable"
       :delete-data-form="deleteDataForm"
       :from-nest="fromNest"
@@ -110,8 +109,7 @@ export default {
           tableId: 0, // 有其一
           pageNum: 25, // 默认表格请求页数
           tableToken: '', // 子表格需要
-          nestViewFilterDataToken: '', // 子表格需要
-          isSelf: false // 自兼容表格需要说明
+          nestViewFilterDataToken: '' // 子表格需要
         }
       }
     },
@@ -460,8 +458,6 @@ export default {
             this.search()
           })
           // await this.$refs[this.scrollTableName].refreshColumn()
-
-          // if (!this.config.isSelf) this.search()
         })
       } catch (e) {
         console.log(e)

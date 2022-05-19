@@ -9,7 +9,7 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
-import { setOptions, setElement } from '@/components/Global/setOptions'
+import { setOptions, setElement } from './setOptions'
 
 const install = function(Vue, options = {}) {
   Vue.use(VXETable) // need import vxe-table

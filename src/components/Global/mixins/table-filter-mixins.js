@@ -10,7 +10,7 @@ export default {
     * */
     filterMethod(isExport = false) { /* searchData -> filters */
       try {
-        if (this.listQuery.next_page_token && !isExport && !this.config.isSelf) return { next_page_token: this.listQuery.next_page_token } // 次页非导出直接传token
+        if (this.listQuery.next_page_token && !isExport) return { next_page_token: this.listQuery.next_page_token } // 次页非导出直接传token
         const cloneQuery = this.$refs['pageFilter'] ? this.$refs['pageFilter']._getSearchQuery() : []
         // const q = cloneQuery ? cloneQuery.filter(v => v.open) : []
         const filters = []
