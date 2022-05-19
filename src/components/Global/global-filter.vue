@@ -425,7 +425,7 @@ export default {
     getColumns(columns = null) {
       const localCols = localStorage.getItem(this.colKey) // 检查缓存
       if (!localCols) {
-        this.columns = columns.map(col => ({ key: col.key, column_type: col.column_type, label: col.label, open: !col.collapse_default }))
+        this.columns = columns.map(col => ({ key: col.key, column_type: col.column_type, label: col.label, open: col.open || !col.collapse_default }))
       } else {
         this.columns = JSON.parse(localCols)
       }
@@ -438,7 +438,7 @@ export default {
     },
     applySetting() { // 立即应用列设置
       if (this.columns.every(col => !col.open)) {
-        this.$msg.warning('请打开至少一个列')
+        this.$choco_msg.warning('请打开至少一个列')
         return
       }
       localStorage.setItem(this.reKey, this.rememberColumn)
@@ -476,7 +476,7 @@ export default {
       if (this.searchQuery && this.searchQuery.length > 0) {
         const q = this.searchQuery.map(item => ({ key: item.key, label: item.label, default: item.default, defaultSelectQueryType: item.defaultSelectQueryType, defaultOpen: item.defaultOpen }))
         localStorage.setItem(this.filterKey, JSON.stringify(q))
-        this.$msg.success('已设置')
+        this.$choco_msg.success('已设置')
       }
     },
     getInputType(valueType) {
@@ -840,9 +840,8 @@ export default {
         .default{
           flex: 1;
           margin: 0 10px;
-          .default-item{
-            display: flex;
-            justify-content: space-between;
+          .el-select{
+            width: 100%;
           }
         }
         .check-cell{

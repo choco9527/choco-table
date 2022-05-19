@@ -222,7 +222,7 @@ export default {
           this.$refs[this.scrollTableName].$reloadTable(() => {
             this.search()
           })
-          this.$msg.success('重置成功')
+          this.$choco_msg.success('重置成功')
         })
       }
       this.widthMap = {}
@@ -404,7 +404,7 @@ export default {
         } else if (submitType === 'delete') {
           submitForm(data).then(res => {
             if (res.status.code === 0) {
-              this.$msg.success('删除成功')
+              this.$choco_msg.success('删除成功')
               this.search()
               resolve({ code: 0 })
             }
@@ -451,7 +451,7 @@ export default {
     handleSetCols(columns) { // 自定义列
       try {
         if (!columns || isEmpty(columns)) return
-        this.$msg.success('设置成功')
+        this.$choco_msg.success('设置成功')
         this.sortListByArr(this.columnsConfig, columns)
         setTimeout(async() => {
           this.$refs[this.scrollTableName].$reloadTable(() => {
@@ -466,7 +466,7 @@ export default {
     setWidthMap(prop = '', width = '') { // 设置列宽
       this.widthMap[prop] = width
       localStorage.setItem(this.widthKey, JSON.stringify(this.widthMap))
-      // this.$msg.success('已记录当前列宽')
+      // this.$choco_msg.success('已记录当前列宽')
     },
 
     onOpenExport() {

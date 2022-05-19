@@ -104,7 +104,7 @@ export default {
           return await this.selfSubmit()
         } else {
           const res = await submitForm(data)
-          this.$msg.success('提交成功')
+          this.$choco_msg.success('提交成功')
           return { code: 0, res }
         }
       } catch (e) {

@@ -10,6 +10,35 @@ export const filters = [
     view_type: 2,
     default: 'lastWeek',
     clearable: false
+  }, {
+    key: 'name',
+    label: '名称',
+    option_type: 0,
+    query_type: [5],
+    tips: '输入应用名称',
+    value_type: 0,
+    view_type: 0,
+    default: ''
+  }, {
+    key: 'cp_id',
+    label: '应用id',
+    option_type: 0,
+    query_type: [0, 5],
+    tips: '输入应用id',
+    value_type: 0,
+    view_type: 0,
+    default: '',
+    open: false
+  }, {
+    key: 'num',
+    label: '数量',
+    option_type: 0,
+    query_type: [4],
+    tips: '输入应用数量',
+    value_type: 1,
+    view_type: 0,
+    default: { start: 1, end: 2 },
+    collapse_default: true // 和open意思相反，控制相同，优先级比open低
   }
 ]
 

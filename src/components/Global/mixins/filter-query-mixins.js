@@ -121,9 +121,16 @@ export default {
         const mq = JT.$getType(queryType, 'queryType') // match queryType
 
         let value = ''; let option_type = ''
+
+        const canOpen = filter => {
+          if (typeof filter.open === 'boolean') return filter.open // open优先级最高
+          if (typeof filter.collapse_default === 'boolean') return !filter.collapse_default // collapse折叠，展开即打开，与open相同意思，优先级更低
+          return true // 默认展开
+        }
+
         const sear = {
-          open: saveFilter ? saveFilter.defaultOpen : typeof filter.open === 'boolean' ? filter.open : true,
-          defaultOpen: saveFilter ? saveFilter.defaultOpen : typeof filter.open === 'boolean' ? filter.open : true,
+          open: saveFilter ? saveFilter.defaultOpen : canOpen(filter),
+          defaultOpen: saveFilter ? saveFilter.defaultOpen : canOpen(filter), // 浏览器缓存open，比open优先级更高
           key: filter.key,
           tips: filter.tips || filter.label,
           label: filter.label,
@@ -145,6 +152,7 @@ export default {
           default: '',
           options: null
         }
+
         if (mv('TIME') || mv('DATE')) { // 时间/日期
           if (saveFilter && saveFilter.default || filter.default) {
             const { start, end } = (saveFilter && saveFilter.default) ? this.getPickerTime(saveFilter.default) : this.getPickerTime(filter.default)
@@ -166,18 +174,20 @@ export default {
           }
         } else if (mv('NORMAL') || mv('CURRENCY_RMB')) { // 普通值 or RMB
           if (mq('RANGE')) {
-            value = (saveFilter && saveFilter.default) ? saveFilter.default : { start: '', end: '' }
+            value = (saveFilter && saveFilter.default) ? saveFilter.default
+              : filter.default ? { start: filter.default.start, end: filter.default.end } : { start: '', end: '' }
           } else {
-            value = (saveFilter && saveFilter.default) ? saveFilter.default : ''
+            value = (saveFilter && saveFilter.default) ? saveFilter.default : filter.default || ''
           }
-        }
-        const setOriDefault = (mq, mv) => { // 范围筛选中，非日期时间筛选置为空字符串即可
-          if (mv('DATE') || mv('TIME')) return ''
-          return mq('RANGE') ? { start: '', end: '' } : ''
         }
 
         sear.option_type = option_type
         sear.value = value
+
+        const setOriDefault = (mq, mv) => { // 范围筛选中，非日期时间筛选置为空字符串即可
+          if (mv('DATE') || mv('TIME')) return ''
+          return mq('RANGE') ? { start: '', end: '' } : ''
+        }
         /* localStorage读取default，无则读取filter，无则置空 */
         sear.default = (saveFilter && saveFilter.default) ? saveFilter.default : (filter.default || setOriDefault(mq, mv))
 

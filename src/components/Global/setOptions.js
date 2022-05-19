@@ -1,4 +1,4 @@
-import { Button, Select, Tooltip, Loading, SkeletonItem, Checkbox, Dialog, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
+import { Button, Select, Message, Tooltip, Loading, SkeletonItem, Checkbox, Dialog, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
 import '@/styles/theme/pure.css' // 引入自定义主题
 import '@/icons' // icon
 
@@ -41,5 +41,18 @@ export function setElement(Vue = null) {
     Vue.use(Divider)
     Vue.use(Loading)
     Vue.use(Checkbox)
+
+    const option = { customClass: 'choco-table-msg', duration: 3000 }
+    const msgList = ['success', 'warning', 'info', 'error']
+
+    msgList.forEach(type => {
+      if (!Vue.prototype.$choco_msg) Vue.prototype.$choco_msg = {}
+      Vue.prototype.$choco_msg[type] = function(msg) {
+        return Message[type]({
+          message: msg,
+          ...option
+        })
+      }
+    })
   }
 }

@@ -1,59 +1,11 @@
 // global transition css
 
-/* fade */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.1s;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-
-/* fade-transform */
-.fade-transform-leave-active,
-.fade-transform-enter-active {
-  transition: all .2s;
-}
-
-.fade-transform-enter {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-.fade-transform-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-/* breadcrumb transition */
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
-  transition: all .2s;
-}
-
-.breadcrumb-enter,
-.breadcrumb-leave-active {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.breadcrumb-move {
-  transition: all .2s;
-}
-
-.breadcrumb-leave-active {
-  position: absolute;
-}
-
-
-:root{
-  --ease-in-out: cubic-bezier(0.645,0.045,0.355,1); // 默认前后缓动
-  --ease-in-out-back:cubic-bezier(0.68,-0.55,0.27,1.55); // 前后回动
-  --ease-in-out-circ:cubic-bezier(0.78,0.14,0.15,0.86); // 圆形前后缓动
-  --ease-in-out-quint:cubic-bezier(0.86, 0, 0.07, 1);	// quint 前后缓动
-  --border-transition-base: cubic-bezier(0.3, 0, 0.5, 1); // 适用于边框缓动
-  --color-transition-base:cubic-bezier(.645, .045, .355, 1); // 适用于颜色渐变
+.choco-table{
+  --ease-in-out: #{$ease-in-out}; // 默认前后缓动
+  --ease-in-out-back: #{$ease-in-out-back}; // 前后回动
+  --ease-in-out-circ: #{$ease-in-out-circ}; // 圆形前后缓动
+  --ease-in-out-quint: #{$ease-in-out-quint};	// quint 前后缓动
+  --border-transition-base: #{$border-transition-base}; // 适用于边框缓动
+  --color-transition-base: #{$color-transition-base}; // 适用于颜色渐变
 }
 

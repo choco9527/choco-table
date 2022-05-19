@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h2>APPs</h2>
+    <h2>TABLE</h2>
     <global-table
       ref="globalTable"
       show-context-menu
@@ -29,14 +29,16 @@ export default {
       getConfig: async() => {
         try {
           const config = await getConfig()
+          console.log(config)
           return { config }
         } catch (e) {
           console.log(e)
         }
       },
-      getList: async(data) => {
+      getList: async(query) => {
         try {
-          const resData = await getList(data)
+          console.log('请求参数', query) // 如有需要请自行合并
+          const resData = await getList(query)
           return { data: resData }
         } catch (e) {
           console.log(e)

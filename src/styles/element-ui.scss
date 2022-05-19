@@ -112,17 +112,26 @@
   .el-switch.is-checked .el-switch__core::after{
     margin-left: -18px;
   }
+}
 
-  //
-  //// 覆盖复选框
-  //.el-checkbox__inner::after {
-  //  border-width: 2px;
-  //}
-  //// el-autocomplete
-  //.el-autocomplete-suggestion{
-  //  li{
-  //    line-height: 40px;
-  //  }
-  //}
 
+// Message
+.el-message.choco-table-msg{
+  padding: 10px 16px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  pointer-events: all;
+  min-width: auto;
+  transition: all .24s $ease-in-out-circ;
+  .el-message__content{
+    color: $color-text-regular;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    list-style: none;
+    font-weight: 300;
+  }
 }

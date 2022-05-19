@@ -103,7 +103,7 @@ export default {
     this.clipBoard = new ClipboardJS(`.val-tr>.copy[tId="${vm.tId}"]`, { // 事件委派创建拷贝
       text(trigger) {
         const val = trigger.getAttribute('copy-data')
-        vm.$msg.success('已拷贝至剪切板')
+        vm.$choco_msg.success('已拷贝至剪切板')
         return val || ''
       }
     })
