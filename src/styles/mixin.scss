@@ -1,13 +1,5 @@
 @import './variables.scss';
 
-@mixin clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-}
-
 @mixin drag-icon($width){
   height: 6px;
   width: $width;
@@ -37,80 +29,6 @@
     height: 2px;
     background: #D0D3D9;
     border-radius: 2px;
-  }
-}
-
-@mixin scrollBar {
-  &::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
-  }
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #99a9bf;
-    border-radius: 20px;
-  }
-}
-
-@mixin relative {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-@mixin dropdown_pre-fix($width) { // 下拉框前缀
-  display: inline-block;
-  position: absolute;
-  height: var(--gutter_26-30);
-  left: 0;
-  top: 0;
-  width: $width;
-  background: #FAFCFF;
-  border-radius: 4px 0 0 4px;
-  border-right: 1px solid #E1E4EB;
-
-  >span{
-    line-height: var(--gutter_26-30);
-    display: inline-block;
-    font-size: var(--gutter_13-14);
-    color: $color-text-regular;
-  }
-}
-@mixin layout{
-  margin: var(--gutter_14-16) var(--gutter_24-48);
-  background: $bg-white-1;
-  min-height: calc(100vh - 180px);
-}
-
-@mixin over-hide{
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-@mixin status-item($size:8px){ // 广告系列/组状态
-  text-align: left;
-  display: inline-block;
-  .status-icon{
-    margin-right: 6px;
-  }
-  .running-icon,.pausing-icon{
-    line-height: 40px;
-    display: inline-block;
-    width: $size;
-    height: $size;
-    border-radius: 50%;
-  }
-  .running-icon{
-    background-color: #88CC00;
-  }
-  .pausing-icon{
-    background-color: #C0C4CC;
-  }
-  >i{
-    font-size: $size;
   }
 }
 
@@ -151,7 +69,6 @@
   }
 }
 
-
 $breakpoints: (
   'xs': 'screen and ( min-width: 480px)',
   'sm': 'screen and ( min-width: 768px)',
@@ -171,36 +88,3 @@ $breakpoints: (
     @content;
   }
 }
-
-@mixin line{ // 红色标注线
-  border: 6px solid #ff5656;
-  display: inline-block;
-  position: absolute;
-  border-radius: 10px;
-  z-index: 2;
-  box-shadow: 0 0 20px -5px #333;
-  opacity: 0.9;
-}
-
-@mixin text-base($text){ // 红色标注线旁文字
-  content: $text;
-  display: inline-block;
-  position: absolute;
-  color: #ff5656;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: .6px;
-  width: auto;
-  white-space: nowrap;
-}
-@mixin text-right{
-  right: 0;
-  top: 50%;
-  transform: translate3d(110%,-50%,0);
-}
-@mixin text-top{
-  left: 50%;
-  top: 0;
-  transform: translate3d(-50%,-120%,0);
-}
-

@@ -93,7 +93,9 @@
 // 文字溢出隐藏
 .over-hide{
   overflow: hidden;
-  @include over-hide
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 
