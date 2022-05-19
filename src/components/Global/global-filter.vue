@@ -11,7 +11,7 @@
           </div>
           <div class="batch wrap">
             <el-button class="batch-item btn" @click="clearAllQuery()">
-              <svg-icon class="delete fs-14 mr-4" icon-class="delete" />
+              <svg-icon class="delete mr-4" icon-class="delete" />
               <span>清空</span>
             </el-button>
           </div>
@@ -659,6 +659,9 @@ export default {
             padding: 2px 8px;
             .delete{
               color: #D0D3D9;
+              &+span{
+                font-size: var(--gutter_13-14);
+              }
             }
             @include normal-btn
           }
