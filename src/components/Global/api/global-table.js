@@ -2,24 +2,20 @@ import request from '@/utils/request'
 import { promiseRetry } from '@/utils/tool'
 
 // 获取全局表格配置
-export function getTableConfig(params) {
-  const vm = this
-  return promiseRetry({
-    fn: request,
-    times: 0,
-    delay: 500,
-    args: {
+export function getTableConfig(params, vm) {
+  try {
+    return request({
       url: vm.$cTableGetConfigUrl || 'api/globalTable/getTableConfig',
       method: 'get',
       params
-    }
-  })
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 // 获取全局表格列表
-export function getTableList(data) {
-  const vm = this
-
+export function getTableList(data, vm) {
   return request({
     url: vm.$cTableGetListUrl || 'api/globalTable/getTableList',
     method: 'post',
@@ -28,9 +24,7 @@ export function getTableList(data) {
 }
 
 // 搜索options
-export function searchPageOptions(params) {
-  const vm = this
-
+export function searchPageOptions(params, vm) {
   return request({
     url: vm.$cTableSearchOptionsUrl || 'api/globalTable/searchPageOptions',
     method: 'get',
@@ -39,9 +33,7 @@ export function searchPageOptions(params) {
 }
 
 // 导出表格
-export function exportTable(params) {
-  const vm = this
-
+export function exportTable(params, vm) {
   return request({
     url: vm.$cTableExportUrl || 'api/globalTable/exportTable',
     method: 'get',
@@ -50,9 +42,7 @@ export function exportTable(params) {
 }
 
 // 提交表单
-export function submitForm(data) {
-  const vm = this
-
+export function submitForm(data, vm) {
   return request({
     url: vm.$cTableSubmitFormUrl || 'api/globalTable/submitForm',
     method: 'post',

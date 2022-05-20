@@ -194,7 +194,7 @@ export default {
       // 对dimensions进行处理
       const params = this.filterData()
       try {
-        const { data, cb = null } = await this.requestMethod(params) // 可接受callback函数
+        const { data, cb = null } = await this.requestMethod(params, this) // 可接受callback函数
         if (!data) throw new Error('no data')
         let list = null
         let count = 0

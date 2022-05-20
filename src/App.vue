@@ -6,8 +6,6 @@
       show-context-menu
       :show-setting-export="false"
       :show-menu-edit="false"
-      :self-get-config="getConfig"
-      :self-get-list="getList"
       :config="{tableId: 'self_application_list'}"
       :self-cell-formats="selfCellFormats"
       :col-config-map="colConfigMap"
@@ -15,6 +13,20 @@
       el-size="mini"
       table-size="small"
     />
+    <!--    <global-table-->
+    <!--      ref="globalTable"-->
+    <!--      show-context-menu-->
+    <!--      :show-setting-export="false"-->
+    <!--      :show-menu-edit="false"-->
+    <!--      :self-get-config="getConfig"-->
+    <!--      :self-get-list="getList"-->
+    <!--      :config="{tableId: 'self_application_list'}"-->
+    <!--      :self-cell-formats="selfCellFormats"-->
+    <!--      :col-config-map="colConfigMap"-->
+    <!--      :self-options="selfOptions"-->
+    <!--      el-size="mini"-->
+    <!--      table-size="small"-->
+    <!--    />-->
   </div>
 </template>
 

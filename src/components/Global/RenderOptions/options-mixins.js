@@ -39,7 +39,7 @@ export default {
           const opts = that.getOptions(that.storageOptions(sear.key))
           that.$set(that, 'options', opts)
         } else {
-          searchPageOptions(params).then(({ list }) => {
+          searchPageOptions(params, this).then(({ list }) => {
             const { next_page_token, options } = list
             const mapOptions = that.getOptions(options)
             that.$set(that, 'options', mapOptions)
@@ -57,7 +57,7 @@ export default {
       const params = {
         searchNextPageToken: sear.searchNextPageToken
       }
-      searchPageOptions(params).then(({ list }) => {
+      searchPageOptions(params, this).then(({ list }) => {
         const { next_page_token, options } = list
         const opts = this.getOptions(options)
         sear.options.push(...opts)

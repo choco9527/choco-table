@@ -258,7 +258,10 @@ export default {
         this.nothingWrong = true
         this.$refs[this.scrollTableName] && (this.$refs[this.scrollTableName].listLoading = true)
         let config = {}
-        const { config: remoteConfig } = this.selfGetConfig ? await this.selfGetConfig() : await getTableConfig({ table_view_id: this.config.tableId })
+        const resData = this.selfGetConfig ? await this.selfGetConfig() : await getTableConfig({ table_view_id: this.config.tableId }, this)
+        console.log(resData)
+        if (!resData) throw new Error('获取配置失败')
+        const { config: remoteConfig } = resData
         if (!remoteConfig) return Promise.reject('获取配置失败')
         config = Object.assign(config, remoteConfig)
         this.filterConfig = config.filter_config
@@ -333,7 +336,7 @@ export default {
     },
     pageExport() { // 导出
       const exportQuery = this.filterMethod(true)
-      exportTable(exportQuery).then(res => {
+      exportTable(exportQuery, this).then(res => {
       })
     },
     addForm(formConf) { // 新建表单
@@ -402,7 +405,7 @@ export default {
             }
           })
         } else if (submitType === 'delete') {
-          submitForm(data).then(res => {
+          submitForm(data, this).then(res => {
             if (res.status.code === 0) {
               this.$choco_msg.success('删除成功')
               this.search()
