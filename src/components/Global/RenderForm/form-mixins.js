@@ -100,7 +100,7 @@ export default {
           }
         }
       })
-      console.log(outData)
+      // console.log(outData)
       return outData
     },
     toRMBFixed(str) {

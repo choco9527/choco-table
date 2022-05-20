@@ -2,11 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 
 // 本地免打包使用
-// import GlobalTable from './components/Global'
+import GlobalTable from './components/Global'
 
 // 在线使用
-import GlobalTable from '@youmi/choco-table'
-import '@youmi/choco-table/lib/choco-table.css'
+// import GlobalTable from '@youmi/choco-table'
+// import '@youmi/choco-table/lib/choco-table.css'
 
 // 本地使用打包dist
 // import GlobalTable from '/dist/lib/choco-table.umd.min'

@@ -8,8 +8,9 @@
     "build:stage": "vue-cli-service build --mode staging",
     "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table --dest dist/lib"
   },
+  "sideEffects": true,
   "dependencies": {
-    "@youmi/choco-table": "^1.1.3",
+    "@youmi/choco-table": "^1.1.7",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
     "core-js": "3.6.5",

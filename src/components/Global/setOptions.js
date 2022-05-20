@@ -45,8 +45,11 @@ export function setElement(Vue = null) {
     const option = { customClass: 'choco-table-msg', duration: 3000 }
     const msgList = ['success', 'warning', 'info', 'error']
 
+    Vue.prototype.$choco_msg = function(option) {
+      return Message(option)
+    }
+
     msgList.forEach(type => {
-      if (!Vue.prototype.$choco_msg) Vue.prototype.$choco_msg = {}
       Vue.prototype.$choco_msg[type] = function(msg) {
         return Message[type]({
           message: msg,
