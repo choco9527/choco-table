@@ -259,10 +259,9 @@ export default {
         this.$refs[this.scrollTableName] && (this.$refs[this.scrollTableName].listLoading = true)
         let config = {}
         const resData = this.selfGetConfig ? await this.selfGetConfig() : await getTableConfig({ table_view_id: this.config.tableId }, this)
-        console.log(resData)
-        if (!resData) throw new Error('获取配置失败')
+        if (!resData) throw new Error('未获取到配置信息')
         const { config: remoteConfig } = resData
-        if (!remoteConfig) return Promise.reject('获取配置失败')
+        if (!remoteConfig) return Promise.reject('获取配置失败，配置格式不正确')
         config = Object.assign(config, remoteConfig)
         this.filterConfig = config.filter_config
         this.tableTitle = config.table_title

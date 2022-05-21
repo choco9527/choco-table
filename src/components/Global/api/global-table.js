@@ -1,51 +1,44 @@
-import request from '@/utils/request'
-import { promiseRetry } from '@/utils/tool'
-
 // 获取全局表格配置
 export function getTableConfig(params, vm) {
-  try {
-    return request({
-      url: vm.$cTableGetConfigUrl || 'api/globalTable/getTableConfig',
-      method: 'get',
-      params
-    })
-  } catch (e) {
-    console.log(e)
+  if (vm && vm.$cTableGetConfig) {
+    return vm.$cTableGetConfig(params)
+  } else {
+    throw new Error('未指定全局table get config方法')
   }
 }
 
 // 获取全局表格列表
 export function getTableList(data, vm) {
-  return request({
-    url: vm.$cTableGetListUrl || 'api/globalTable/getTableList',
-    method: 'post',
-    data
-  })
-}
-
-// 搜索options
-export function searchPageOptions(params, vm) {
-  return request({
-    url: vm.$cTableSearchOptionsUrl || 'api/globalTable/searchPageOptions',
-    method: 'get',
-    params
-  })
+  if (vm && vm.$cTableGetList) {
+    return vm.$cTableGetList(data)
+  } else {
+    throw new Error('未指定全局table get list方法')
+  }
 }
 
 // 导出表格
 export function exportTable(params, vm) {
-  return request({
-    url: vm.$cTableExportUrl || 'api/globalTable/exportTable',
-    method: 'get',
-    params
-  })
+  if (vm && vm.$cTableExport) {
+    return vm.$cTableExport(params)
+  } else {
+    throw new Error('未指定全局table export方法')
+  }
 }
 
 // 提交表单
 export function submitForm(data, vm) {
-  return request({
-    url: vm.$cTableSubmitFormUrl || 'api/globalTable/submitForm',
-    method: 'post',
-    data
-  })
+  if (vm && vm.$cTableSubmit) {
+    return vm.$cTableSubmit(data)
+  } else {
+    throw new Error('未指定全局table form submit方法')
+  }
+}
+
+// 搜索options
+export function searchPageOptions(params, vm) {
+  if (vm && vm.$cTableSearchOptions) {
+    return vm.$cTableSearchOptions(params)
+  } else {
+    throw new Error('未指定全局table搜索select options方法')
+  }
 }

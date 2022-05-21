@@ -38,20 +38,21 @@ export default {
   data() {
     return {
       msg: '',
-      getConfig: async() => {
+      getConfig: async() => { // 如不传该方法需要在Vue.use(GlobalTable)时全局指定getConfig方法
         try {
-          const config = await getConfig()
-          console.log(config)
-          return { config }
+          const configData = await getConfig()
+          console.log('自定义的config', configData)
+          return configData
         } catch (e) {
           console.log(e)
         }
       },
-      getList: async(query) => {
+      getList: async(query) => { // 如不传该方法需要在Vue.use(GlobalTable)时全局指定getList方法
         try {
           console.log('请求参数', query) // 如有需要请自行合并
           const resData = await getList(query)
-          return { data: resData }
+          console.log('自定义的data', resData)
+          return resData
         } catch (e) {
           console.log(e)
         }

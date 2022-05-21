@@ -60,9 +60,3 @@ export function promiseRetry({ fn = null, times = 1, delay = 0, args }) {
     return tryFn()
   })
 }
-
-export function getDate(datestr) {
-  var temp = datestr.split('-')
-  var date = new Date(temp[0], temp[1] - 1, temp[2])
-  return date
-}

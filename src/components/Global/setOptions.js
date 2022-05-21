@@ -1,20 +1,21 @@
-import { Button, Select, Message, Tooltip, Loading, SkeletonItem, Checkbox, Dialog, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
-import '@/styles/theme/pure.css' // 引入自定义主题
-import '@/icons' // icon
-
 /* 参数化配置Vue实例 */
 export function setOptions(Vue = null, options = null) {
   if (Vue && options) {
-    const { getConfigUrl = '', getListUrl = '', submitFormUrl = '', searchOptionsUrl = '', exportUrl = '' } = options
-    getConfigUrl && (Vue.prototype.$cTableGetConfigUrl = getConfigUrl)
-    getListUrl && (Vue.prototype.$cTableGetListUrl = getListUrl)
-    submitFormUrl && (Vue.prototype.$cTableSubmitFormUrl = submitFormUrl)
-    searchOptionsUrl && (Vue.prototype.$cTableSearchOptionsUrl = searchOptionsUrl)
-    exportUrl && (Vue.prototype.$cTableExportUrl = exportUrl)
+    const { getConfig = null, getData = null, submitForm = null, exportTable = null, searchOptions = null } = options
+    getConfig && (Vue.prototype.$cTableGetConfig = getConfig)
+    getData && (Vue.prototype.$cTableGetList = getData)
+    submitForm && (Vue.prototype.$cTableSubmit = submitForm)
+    exportTable && (Vue.prototype.$cTableExport = exportTable)
+    searchOptions && (Vue.prototype.$cTableSearchOptions = searchOptions)
   }
 }
 
 /* 引入element */
+
+import { Button, Select, Message, Tooltip, Loading, SkeletonItem, Checkbox, Dialog, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
+import '@/styles/theme/pure.css' // 引入自定义主题
+import '@/icons' // icon
+
 export function setElement(Vue = null) {
   if (Vue) {
     // Element
