@@ -1,0 +1,24 @@
+{
+  "name": "@youmi/choco-table",
+  "description": "base on vxe table,一款基于vxe-table开箱即用的带有UI设计的表格组件",
+  "main": "lib/choco-table.umd.min.js",
+  "author": "choco9527",
+  "version": "1.1.9",
+  "license": "ISC",
+  "keywords": ["vue","table","vxe-table","element-table","beauty","表格"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/choco9527/choco-table"
+  },
+  "dependencies": {
+    "clipboard": "^2.0.8",
+    "core-js": "3.6.5",
+    "dayjs": "^1.10.6",
+    "element-ui": "2.15.6",
+    "vue": "2.6.10",
+    "vue-router": "3.0.6",
+    "vuedraggable": "^2.24.3",
+    "vxe-table": "^3.3.9",
+    "xe-utils": "^3.3.0"
+  }
+}
