@@ -13,8 +13,8 @@ npm install choco-table
 
 ``` bash
 // main.js
-import GlobalTable from '@youmi/choco-table'
-import '@youmi/choco-table/lib/choco-table.css'
+import GlobalTable from 'choco-table'
+import 'choco-table/lib/choco-table.css'
 
 /* 定义默认请求方法，（在非自定义组件方法时使用） */
 import { getConfig, getList, searchPageOptions, exportTable, submitForm } from '@/mock-api/table'
@@ -38,5 +38,10 @@ Vue.use(GlobalTable, options) // 加载全局配置
 ##Options配置
 
 [前端表格设计](https://conf.umlife.net/pages/viewpage.action?pageId=106889620)
-[前端表格配置文档](https://conf.umlife.net/pages/editpage.action?pageId=94019810)
+[前端表格配置文档](https://conf.umlife.net/pages/viewpage.action?pageId=94019810)
 
+## 示例项目
+``` bash
+npm i
+npm run dev // 启动示例项目
+```

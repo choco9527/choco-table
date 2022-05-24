@@ -2,10 +2,7 @@
   "name": "table-test",
   "private": true,
   "scripts": {
-    "dev:local": "vue-cli-service serve --mode local --port 9527",
-    "build:test": "vue-cli-service build --mode development",
-    "build:prod": "vue-cli-service build",
-    "build:stage": "vue-cli-service build --mode staging",
+    "dev": "vue-cli-service serve --mode local --port 9527",
     "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table --dest dist/lib"
   },
   "sideEffects": true,
