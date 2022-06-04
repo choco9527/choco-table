@@ -1,6 +1,6 @@
 <!--该组件可直接通过columns data控制数据-->
 <template>
-  <vxe-table
+  <c-vxe-table
     ref="vxeTable"
     v-bind="$attrs"
     v-on="$listeners"
@@ -16,16 +16,17 @@
         <h2 style="opacity: 0;line-height: calc(var(--gutter_10-40,40px) + 20px)">-</h2>
       </span>
     </template>
-  </vxe-table>
+  </c-vxe-table>
 </template>
 
 <script>
 import LbColumn from './lb-column'
 import VxeTableMixin from '../mixins/vxe-table-mixins'
+import { Table } from 'vxe-table'
 
 export default {
   name: 'PureTable',
-  components: { LbColumn },
+  components: { LbColumn, 'c-vxe-table': Table },
   mixins: [VxeTableMixin],
   props: {
     columns: { type: Array, default() { return [] } },
@@ -45,76 +46,103 @@ export default {
 <style lang="scss">
 @import "../assets/table-base";
 
-//表格样式
+/*
+表格样式
+*/
 
+/*标记行样式*/
 .vxe-custom-row {
   position: relative;
-  &.active:after {
-    content: "";
-    display: block;
-    width: 3px;
-    height: 100%;
-    background: $lighter-blue;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-}
-
-.vxe-table--fixed-wrapper{
-  .vxe-table--fixed-left-wrapper,.vxe-table--fixed-right-wrapper{
-    z-index: 10;
-
-    .vxe-table--header-wrapper,.vxe-table--body-wrapper,.vxe-table--footer-wrapper{
-      overflow-x: hidden !important;
-    }
-  }
-
-}
-
-.vxe-table--footer-wrapper{
-  &.sticky-footer {
-    position: fixed !important;
-    bottom: 0;
-    &.fixed-left--wrapper,&.fixed-right--wrapper {
-      top: auto !important;
-      bottom: 9px;
-      height: 40px;
-    }
-    &.fixed-left--wrapper {
-      >table.vxe-table--footer {
-        position: absolute !important;
-        left: 0;
-        bottom: 0;
+  &.active {
+    @mixin colorType($i,$a){
+      @if($i == 1){
+        background-color: rgba($color-primary,$a*1%);
+      }
+      @if($i == 2){
+        background-color: rgba($color-success,$a*1%);
+      }
+      @if($i == 3){
+        background-color: rgba($color-warning,$a*1%);
+      }
+      @if($i == 4){
+        background-color: rgba($color-danger,$a*1%);
       }
     }
-    &.fixed-right--wrapper {
-      >table.vxe-table--footer {
+    @for $i from 0 through 4{
+      &-#{$i}{
+        @include colorType($i,6);
+      }
+      &-#{$i}:after {
+        content: "";
+        display: block;
+        width: 3px;
+        height: 100%;
         position: absolute;
-        right: 0;
-        bottom: 0;
+        left: 0;
+        top: 0;
+        @include colorType($i,100);
       }
-    }
-  }
-
-  .vxe-custom-footer-row{
-    .vxe-custom-footer-cell {
-      height: 40px;
-      padding: 0 !important;
-      margin: 0 !important;
-      line-height: 16px;
     }
   }
 }
 
-.vxe-table--render-default .vxe-table--expanded .vxe-table--expand-btn {
-  color: $color-primary;
+/*合计行样式*/
+.vxe-table--render-wrapper{
+  .vxe-table--fixed-wrapper{
+    .vxe-table--fixed-left-wrapper,.vxe-table--fixed-right-wrapper{
+      z-index: 10;
+      .vxe-table--header-wrapper,.vxe-table--body-wrapper,.vxe-table--footer-wrapper{
+        overflow-x: hidden !important;
+      }
+    }
+  }
+  .vxe-table--footer-wrapper{
+    &.sticky-footer {
+      position: fixed !important;
+      bottom: 0;
+
+      &.fixed-left--wrapper,&.fixed-right--wrapper {
+        top: auto !important;
+        bottom: 9px;
+        height: 40px;
+      }
+      &.body--wrapper{
+        z-index: 9;
+      }
+      &.fixed-left--wrapper {
+        z-index: 10;
+        >table.vxe-table--footer {
+          position: absolute !important;
+          left: 0;
+          bottom: 0;
+        }
+      }
+      &.fixed-right--wrapper {
+        z-index: 10;
+        >table.vxe-table--footer {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
+      }
+    }
+
+    .vxe-custom-footer-row{
+      .vxe-custom-footer-cell {
+        height: 40px;
+        padding: 0 !important;
+        margin: 0 !important;
+        line-height: 16px;
+      }
+    }
+  }
 }
 
 .vxe-body--expanded-cell {
   padding: 15px;
 }
 
+/*空数据样式*/
 .vxe-table--empty-content{
   color: $border-white-3;
 
@@ -125,7 +153,7 @@ export default {
   }
 }
 
-// 表格右键menu样式
+/*表格右键menu样式*/
 .vxe-table--context-menu-wrapper{
   background-color: #fff;
   border-radius: 4px;

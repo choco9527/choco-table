@@ -1,6 +1,7 @@
 import { has, isEmpty, clone } from 'xe-utils'
 import { JT } from '../form-types'
 import dayjs from '@/utils/dayjs'
+import { _local } from '@/utils/tool'
 
 export default {
   data() {
@@ -11,61 +12,65 @@ export default {
   computed: {
     queryTags() { // 搜索参数已选标签
       const tags = []
-      if (this.cacheSearchQuery) {
-        this.cacheSearchQuery.forEach(query => {
-          if (!!query.value && !isEmpty(query.value)) {
-            const mv = JT.$getType(query.view_type, 'viewType') // match viewType
-            const mq = JT.$getType(query.query_type, 'queryType') // match queryType
-            const val = query.value
-            const tag = {
-              key: query.key,
-              label: query.label,
-              clearable: query.clearable
-            }
-            const _push = () => tags.push(tag)
-            const _set = v => tag.value = v
-            if (mv('TIME') || mv('DATE')) {
-              const [start, end] = val
-              if (start && end) {
-                const _get = day => dayjs(day).format(this.getPickerConfig(query.view_type).format)
-                const s = _get(start)
-                const e = _get(end)
-                _set(s === e ? s : `${_get(s)} ~ ${_get(e)}`)
-                _push()
+      try {
+        if (this.cacheSearchQuery) {
+          this.cacheSearchQuery.forEach(query => {
+            if (typeof query.value === 'number' || (typeof query.value !== 'object' && query.value) || (typeof query.value === 'object' && !isEmpty(query.value))) {
+              const mv = JT.$getType(query.view_type, 'viewType') // match viewType
+              const mq = JT.$getType(query.selectQueryType, 'queryType') // match queryType
+              const val = query.value
+              const tag = {
+                key: query.key,
+                label: query.label,
+                clearable: query.clearable
               }
-            } else if (mv('NORMAL') || mv('CURRENCY_RMB')) { // 普通值 or RMB
-              if (mq('RANGE')) {
-                const { start, end } = val
-                if (start || end) {
-                  if (start && end) {
-                    _set(`${start} ~ ${end}`)
-                  } else if (start) {
-                    _set(`大于${start}`)
-                  } else if (end) {
-                    _set(`小于${end}`)
-                  }
+              const _push = () => tags.push(tag)
+              const _set = v => { tag.value = v }
+              if (mv('TIME') || mv('DATE')) {
+                const [start, end] = val
+                if (start && end) {
+                  const _get = day => dayjs(day).format(this.getPickerConfig(query.view_type).format)
+                  const s = _get(start)
+                  const e = _get(end)
+                  _set(s === e ? s : `${_get(s)} ~ ${_get(e)}`)
                   _push()
                 }
-              } else {
-                _set(val)
+              } else if (mv('NORMAL') || mv('CURRENCY_RMB')) { // 普通值 or RMB
+                if (mq('RANGE')) {
+                  const { start, end } = val
+                  if (start || end) {
+                    if (start && end) {
+                      _set(`${start} ~ ${end}`)
+                    } else if (start) {
+                      _set(`大于${start}`)
+                    } else if (end) {
+                      _set(`小于${end}`)
+                    }
+                    _push()
+                  }
+                } else {
+                  _set(val)
+                  _push()
+                }
+              } else if (mv('OPTIONS') && query.options) {
+                if (mq('IN')) { // 多选
+                  const labels = query.options.filter(opt => val.includes(opt.value))
+                  _set(labels.map(l => l.label).join(','))
+                } else { // 单选
+                  const label = query.options.find(opt => opt.value === val)
+                  _set(label && label.label)
+                }
                 _push()
               }
-            } else if (mv('OPTIONS')) {
-              if (mq('IN')) { // 多选
-                const labels = query.options.filter(opt => val.includes(opt.key))
-                _set(labels.map(l => l.label).join(','))
-              } else {
-                const label = query.options.find(opt => opt.key === val)
-                _set(label && label.label)
-              }
-              _push()
             }
-          }
-        })
+          })
+        }
+        return tags
+      } catch (e) {
+        console.log('已选标签筛选Error:', e)
+        return tags
       }
-      return tags
     }
-
   },
   methods: {
     clearAllQuery() { // 清空所有筛选
@@ -73,7 +78,7 @@ export default {
       this.search()
     },
     clearQuery(key) { // 清空指定筛选
-      const saveFilters = localStorage.getItem(this.filterKey) ? JSON.parse(localStorage.getItem(this.filterKey)) : undefined
+      const saveFilters = _local.get(this.filterKey)
 
       this.searchQuery.forEach((filter, $i) => {
         if (filter.key === key) {
@@ -108,7 +113,7 @@ export default {
     * */
     freshSearch(filters = null, clearKeys = null) { /* filters -> searchData */
       filters = filters || this.filters
-      const saveFilters = localStorage.getItem(this.filterKey) ? JSON.parse(localStorage.getItem(this.filterKey)) : undefined
+      const saveFilters = _local.get(this.filterKey)
 
       const searchQuery = filters.map(filter => {
         const saveFilter = saveFilters && saveFilters.find(f => f.key === filter.key)
@@ -160,7 +165,7 @@ export default {
           } else {
             value = []
           }
-        } else if (mv('OPTIONS')) { // 单选
+        } else if (mv('OPTIONS')) { // 下拉选择
           if (saveFilter && saveFilter.default) {
             value = saveFilter.default
           } else {

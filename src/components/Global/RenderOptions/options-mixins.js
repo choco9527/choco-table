@@ -1,12 +1,13 @@
 // 处理筛选项 options逻辑
 import { searchPageOptions } from '../api/global-table'
 import { isEmpty } from 'xe-utils'
+import { _session, cloneDeep } from '@/utils/tool'
 
 export default {
   methods: {
     // filter options
     firstFocusSearch(sear) { // 首次筛选
-      if (!sear.value && sear.option_token) {
+      if (sear.value !== undefined && sear.value !== null && sear.value !== '' && sear.option_token) {
         this.selectFilterMethod(sear)()
       }
     },
@@ -21,8 +22,14 @@ export default {
     },
     selectFilterMethod(sear) { // 将sear运用到renderOption内部
       const that = this
+      const setOptions = options => {
+        const o = cloneDeep(options)
+        that.$set(that, 'options', o)
+        sear.options = o
+      }
+
       if (isEmpty(sear) || !sear.option_token) {
-        if (sear.options) that.$set(that, 'options', that.getOptions(sear.options))
+        if (sear.options) setOptions(that.getOptions(sear.options))
         return () => {}
       }
       const obj = { sear }
@@ -34,17 +41,19 @@ export default {
           searchNextPageToken: sear.searchNextPageToken || '',
           searchNumPerPage: 20
         }
-        console.log('selectFilterMethod')
-        if (!val && that.storageOptions(sear.key)) { // not val load sessionStorage
+        // console.log('selectFilterMethod')
+        if (!val && that.storageOptions(sear.key)) { // no value && has sessionStorage
+          // get storage
           const opts = that.getOptions(that.storageOptions(sear.key))
-          that.$set(that, 'options', opts)
+          setOptions(opts)
         } else {
-          searchPageOptions(params, this).then(({ list }) => {
+          searchPageOptions(params, that).then(({ list }) => {
             const { next_page_token, options } = list
             const mapOptions = that.getOptions(options)
-            that.$set(that, 'options', mapOptions)
+            setOptions(mapOptions)
 
-            if (!val && !next_page_token && !sear.searchNextPageToken) { // no search val && no next page && no prev token
+            if (!val && !next_page_token && !sear.searchNextPageToken) { // no val && no next page && no prev token
+              // set storage
               that.storageOptions(sear.key, mapOptions)
             }
             sear.searchNextPageToken = next_page_token
@@ -60,24 +69,24 @@ export default {
       searchPageOptions(params, this).then(({ list }) => {
         const { next_page_token, options } = list
         const opts = this.getOptions(options)
-        sear.options.push(...opts)
-        sear.searchNextPageToken = next_page_token
+        if (sear.options) {
+          sear.options.push(...opts)
+          sear.searchNextPageToken = next_page_token
+        }
       })
     },
-    storageOptions(key = '', value = null) { // 缓存options
+    storageOptions(key = '', value = null) { // 使用sessionstorage缓存options
       if (!key) return
       const optionKey = this.configId + '-options'
-      const tableOptionsJson = sessionStorage.getItem(optionKey)
+      const tableOptions = _session.get(optionKey)
 
-      if (!value && tableOptionsJson) { // 读
-        const tableOptions = JSON.parse(tableOptionsJson)
+      if (!value && tableOptions) { // 读
         return tableOptions[key]
       } else if (value) { // 写
         if (isEmpty(value)) return // 数据为空不写入
-        let tableOptions = {}
-        if (tableOptionsJson) tableOptions = JSON.parse(tableOptionsJson)
-        tableOptions[key] = value
-        sessionStorage.setItem(optionKey, JSON.stringify(tableOptions))
+        const setTableOptions = tableOptions || {}
+        setTableOptions[key] = value
+        _session.set(optionKey, setTableOptions, 60 * 1000) // 缓存1min
       }
     }
   }

@@ -40,7 +40,7 @@ export default {
     },
     top: {
       type: String,
-      default: '50%'
+      default: '15vh'
     },
     destroy: {
       type: Boolean,
@@ -116,6 +116,7 @@ export default {
       background-color: #fff;
       border-bottom: 1px solid #F0F3FA;
       padding: 0 16px;
+      box-sizing: border-box;
 
       .title {
         float: left;

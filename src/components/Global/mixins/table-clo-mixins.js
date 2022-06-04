@@ -2,7 +2,8 @@
 import { objectEach, has, isEmpty } from 'xe-utils'
 import { filterType, JT } from '../form-types'
 import ClipboardJS from 'clipboard'
-import { cloneDeep } from '@/utils/tool'
+import dayjs from '@/utils/dayjs'
+import { isJson } from '@/utils/tool'
 
 export default {
   data() {
@@ -69,7 +70,7 @@ export default {
               showOverflow: this.showOverflow,
               renderHeader: this.renderHeader(config),
               render: this.renderRow(config, mv),
-              renderFooter: this.renderFooter(mv),
+              renderFooter: this.useSlotFooter ? this.renderFooter(mv) : false,
               noRender: config.noRender || false
             }
             columns.push(item)
@@ -214,6 +215,10 @@ export default {
         el = this.getTableLinkEl(val)
       } else if (mv('image')) { // 图片类型
         el = this.getTableImageEl(val)
+      } else if (mv('date')) { // 日期类型
+        el = this.getTableDateEl(val)
+      } else if (mv('time')) { // 时间类型
+        el = this.getTableDateEl(val, 'time')
       }
       return el
     },
@@ -242,7 +247,7 @@ export default {
       return <p class='val-self'>{fn({ item, row: row.r_d, rowIndex, h, pk: row.pk }) || icon}</p>
     },
     getTableNormalEl(val) {
-      return <p class='val-string' title={val}>{val}</p>
+      return <span class='val-string' title={val}>{val}</span>
     },
     getTableJsonEl(val) {
       const jsonVal = JSON.parse(val)
@@ -256,9 +261,31 @@ export default {
     getTableLinkEl(val) {
       return val ? <a title={val} class='val-link' href={val} target='_blank'>下载链接</a> : ''
     },
+    isTimeStamp(val) {
+      const int = parseInt(val)
+      if (isNaN(int) || (int + '').length < 11) {
+        return false
+      } else {
+        return int
+      }
+    },
+    getTableDateEl(val, type = 'date') {
+      let int = this.isTimeStamp(val)
+
+      if (!int) { // 不处理非时间戳类型
+        return val
+      } else {
+        if ((int + '').length === 11) {
+          int *= 1000
+        }
+        const format = type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm'
+        const date = dayjs(int).format(format)
+        return this.getTableNormalEl(date)
+      }
+    },
     getTableImageEl(val) {
       let url = ''; let urlList = []
-      if (this.isJson(val)) {
+      if (isJson(val)) {
         urlList = JSON.parse(val) // 完整图urlList
       } else if (typeof val === 'string') {
         url = val
@@ -268,14 +295,6 @@ export default {
         return (<el-image src={item.resize_url} fit='contain' preview-src-list={urlList.map(v => v.url)}/>)
       })
       return <div class='val-image'>{imgList}</div>
-    },
-    isJson(str) {
-      try {
-        JSON.parse(str)
-      } catch (e) {
-        return false
-      }
-      return true
     }
   }
 }

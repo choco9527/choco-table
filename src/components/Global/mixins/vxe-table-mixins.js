@@ -24,6 +24,9 @@ export default {
     }
   },
   methods: {
+    getTableData() {
+      return this.$refs[this.refName].getTableData()
+    },
     getColumns() {
       return this.$refs[this.refName].getColumns()
     },
@@ -59,15 +62,17 @@ export default {
     clearFilter(columnKey) {
       this.$refs[this.refName].clearFilter(columnKey)
     },
-    openExport() {
-      this.$refs[this.refName].openExport()
+    openExport(opts) {
+      this.$refs[this.refName].openExport(opts)
     },
     async loadData() {
       this.$refs[this.refName] && await this.$refs[this.refName].loadData(this.data)
     },
     async reloadData() {
       this.$refs[this.refName] && await this.$refs[this.refName].reloadData(this.data)
-      console.log('reloadData')
+    },
+    async clearAll() {
+      this.$refs[this.refName] && await this.$refs[this.refName].clearAll()
     }
   }
 }

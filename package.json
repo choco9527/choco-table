@@ -1,13 +1,19 @@
 {
   "name": "table-test",
   "private": true,
+  "author": "CHOCO",
   "scripts": {
-    "dev": "vue-cli-service serve --mode local --port 9527",
-    "lib": "vue-cli-service build --target lib src/components/Global/index.js --name choco-table --dest dist/lib"
+    "dev": "vue-cli-service serve --mode local --port 9529",
+    "lib": "vue-cli-service build --target lib src/index.js --name packages --dest lib",
+    "report": "vue-cli-service build --report"
+  },
+  "main": "lib/packages.umd.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/choco9527/choco-table"
   },
   "sideEffects": true,
   "dependencies": {
-    "@youmi/choco-table": "^1.1.7",
     "axios": "0.24.0",
     "clipboard": "^2.0.8",
     "core-js": "3.6.5",
@@ -16,7 +22,7 @@
     "vue": "2.6.10",
     "vue-router": "3.0.6",
     "vuedraggable": "^2.24.3",
-    "vxe-table": "^3.3.9",
+    "vxe-table": "^3.5.7",
     "xe-utils": "^3.3.0"
   },
   "devDependencies": {
@@ -32,6 +38,7 @@
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "chalk": "2.4.2",
+    "compression-webpack-plugin": "^6.0.5",
     "connect": "3.6.6",
     "eslint": "6.7.2",
     "eslint-plugin-vue": "6.2.2",

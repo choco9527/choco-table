@@ -1,38 +1,43 @@
 <template>
-  <div class="scroll-load-table" :table-id="tableId" :style="{height: height === 'auto' ? '100%' : 'auto'}">
-    <pure-table
-      v-if="showTable"
-      ref="pureTable"
-      v-loading="listLoading && data.length === 0"
-      class="youmi-scroll-table"
-      :data="data"
-      auto-resize
-      resizable
-      :scroll-x="{enabled: false}"
-      :scroll-y="{enabled:false}"
-      :max-height="maxTbHeight"
-      :height="height"
-      :show-footer="showSummary"
-      :footer-method="getSummaries"
-      :menu-config="tableMenu"
-      :export-config="exportConfig"
-      header-row-class-name="vxe-custom-head"
-      header-align="center"
-      :row-class-name="rowClassName"
-      footer-cell-class-name="vxe-custom-footer-cell"
-      footer-row-class-name="vxe-custom-footer-row"
-      :sort-config="sortConfig"
-      :columns="columns"
-      v-bind="$attrs"
-      @toggle-row-expand="onRowExpand"
-      @checkbox-all="selectAllEvent"
-      @checkbox-change="handleSelectionChange"
-      @menu-click="menuClick"
-      @resizable-change="resizeCol"
-      @sort-change="onSortColumn"
-      @filter-change="filterChange"
-      v-on="$listeners"
-    />
+  <div
+    class="scroll-load-table"
+    :table-id="tableId"
+    :style="{height: autoHeight ? tableBodyHeight : 'auto'}"
+  >
+    <section :style="{height: autoHeight && showTotal ? 'calc(100% - 40px)' : 'auto',overflowY:'auto'}">
+      <pure-table
+        v-if="showTable"
+        ref="pureTable"
+        v-loading="listLoading && data.length === 0"
+        class="youmi-scroll-table"
+        :data="data"
+        resizable
+        :scroll-x="{enabled: false}"
+        :scroll-y="{enabled:false}"
+        :height="autoHeight ? 'auto' : height"
+        :max-height="maxTbHeight"
+        :show-footer="showSummary"
+        :footer-method="getSummaries"
+        :menu-config="tableMenu"
+        :export-config="exportConfig"
+        header-row-class-name="vxe-custom-head"
+        header-align="center"
+        :row-class-name="rowClassName"
+        footer-cell-class-name="vxe-custom-footer-cell"
+        footer-row-class-name="vxe-custom-footer-row"
+        :sort-config="sortConfig"
+        :columns="columns"
+        v-bind="$attrs"
+        @toggle-row-expand="onRowExpand"
+        @checkbox-all="selectAllEvent"
+        @checkbox-change="handleSelectionChange"
+        @menu-click="menuClick"
+        @resizable-change="resizeCol"
+        @sort-change="onSortColumn"
+        @filter-change="filterChange"
+        v-on="$listeners"
+      />
+    </section>
     <div v-if="showNextPageTab && data.length > 0" class="next-page" @click="getNextPage">
       <i v-if="listLoading" class="el-icon-loading" style="color: #104466;font-weight: bold" />
       <i v-else class="el-icon-arrow-down" />
@@ -58,8 +63,9 @@
 
 <script>
 import PureTable from './pure-table'
-import { isEmpty, debounce, has } from 'xe-utils'
+import { isEmpty, debounce } from 'xe-utils'
 import VxeTableMixin from '../mixins/vxe-table-mixins'
+const highLineMap = { blue: 1, success: 2, warning: 3, danger: 4 }
 
 export default {
   name: 'VxeScrollLoadTable',
@@ -77,9 +83,9 @@ export default {
         return null
       }
     },
+    autoHeight: { type: Boolean, default: true }, // true则铺满父容器，false由内容撑开
     height: { type: [String, Number], default: 'auto' }, // 列表高度
     maxTbHeight: { type: [String, Number], default: 2000 }, // 列表最大定高，如果需要高度自适应则设置为100%
-    // autoHeight: { type: Boolean, default: false }, // 列表高度自适应
     selectable: { type: Boolean, default: false }, // 是否可以多选 （若打开多选功能则不支持前端缓存加载）
     showTotal: { type: Boolean, default: true }, // 显示下方分页器
     showTableSummary: { type: Boolean, default: false }, // 显示合计
@@ -89,29 +95,32 @@ export default {
     isPhone: { type: Boolean, default: false }, // 是否是移动端
     sortConfig: { type: Object, default: null }, // 排序配置
     stickyFooter: { type: Boolean, default: false }, // 是否合计行吸底
-    elSize: { type: String, default: 'small' } // ui样式尺寸
+    elSize: { type: String, default: 'small' }, // ui样式尺寸
+    pages: { type: Array, default: () => [25, 50, 100, 200] } // 分页
   },
   data() {
-    const pageOptions = [25, 50, 100, 200, 400].map(item => ({
-      value: item,
-      label: item
-    }))
     this.allList = [] // 缓存所有数据列表
     this.expandList = []
     this.tableSelector = `.scroll-load-table[table-id="${this.tableId}"]`
-    this.expandRowIds = []
     this.refName = 'pureTable'
+
     return {
       listLoading: false,
-      pageOptions,
       data: [],
       total: 0,
       summary: null, // 合计
-      showTable: true
-      // tableHeight: '200px'
+      showTable: true,
+      tableBodyHeight: 'auto',
+      highLineRows: {} // {blue: [], } // 按颜色标记
     }
   },
   computed: {
+    pageOptions() {
+      return this.pages.map(item => ({
+        value: item,
+        label: item
+      }))
+    },
     showSummary() {
       return (!isEmpty(this.summary) && this.showTableSummary)
     },
@@ -144,17 +153,15 @@ export default {
       }
     }
 
-    // const resizeFn = () => this.setTableHeight() // 监听窗口改变table大小
+    const resizeFn = () => this.setTableHeight() // 监听窗口改变table大小
     const resizeFooterFn = () => this.setFootersClass() // 监听窗口改变计算底部合计行
 
     this.$nextTick(() => {
       dom && dom.addEventListener('scroll', debounce(scrollFn, 300), false)
-      // if (this.autoHeight) { // calc height auto when window resize
-      //   setTimeout(() => resizeFn(), 1000)
-      //   window.addEventListener('resize', debounce(resizeFn, 200))
-      // } else {
-      //   this.tableHeight = typeof this.maxTbHeight === 'string' ? this.maxTbHeight : this.maxTbHeight + 'px'
-      // }
+      if (this.autoHeight) { // calc height auto when window resize,铺满父容器
+        setTimeout(() => resizeFn(), 1000)
+        window.addEventListener('resize', debounce(resizeFn, 200))
+      }
 
       if (this.stickyFooter) { // calc footer width when window resize
         window.addEventListener('resize', debounce(resizeFooterFn, 200))
@@ -175,18 +182,21 @@ export default {
         cb && cb()
       })
     },
-    // setTableHeight() {
-    //   const nav = 84
-    //   const totalHeight = 40
-    //   const filterEle = document.querySelector(`.global-filter[table-id="${this.tableId}"]`)
-    //   const filterHeight = filterEle ? filterEle.clientHeight : 0
-    //   const footerHeight = this.showTableSummary ? 50 : 20
-    //   if (!this.isPhone) {
-    //     this.tableHeight = window.innerHeight - nav - filterHeight - footerHeight - totalHeight - parseFloat(this.customHeight) + 'px'
-    //   } else {
-    //     this.tableHeight = '100%'
-    //   }
-    // },
+    setTableHeight() {
+      try {
+        const ele = document.querySelector(`.choco-filter[table-id="${this.tableId}"]`)
+        const filterEle = ele ? ele.querySelector(`section.filter-sections`) : null
+        const filterBackEle = ele ? ele.querySelector(`section.filter-back`) : null
+
+        const filterHeight = filterEle ? filterEle.clientHeight : 0
+        const filterBackHeight = filterBackEle ? filterBackEle.clientHeight : 0
+
+        const elseHeight = filterHeight + filterBackHeight + parseFloat(this.customHeight) + 'px'
+        this.tableBodyHeight = `calc( 100% - ${elseHeight} )`
+      } catch (e) {
+        console.log('setTableHeight Error:', e)
+      }
+    },
     // 获取列表,因为滚动加载下一页基本结构一样
 
     async $getList(update = true) {
@@ -265,7 +275,7 @@ export default {
     },
     refreshCustomCol() { // 重置列自定义属性
       this.getColumns().forEach(col => {
-        console.log(col)
+        // console.log(col)
         if (!col.type || !col.fixed || !col.fix) col.fixed = ''
       })
     },
@@ -276,11 +286,12 @@ export default {
     },
     onRowExpand(params) {
       const { expanded, row } = params
+      const key = row._XID || row._X_ROW_KEY // 兼容_XID
       if (expanded) {
-        this.expandRowIds.push(row._XID)
+        this.highLineRows['blue'].push(key) // 展开行使用蓝色标记
       } else {
-        const index = this.expandRowIds.indexOf(row._XID)
-        if (index >= 0) this.expandRowIds.splice(index, 1)
+        const index = this.highLineRows['blue'].indexOf(key)
+        if (index >= 0) this.highLineRows['blue'].splice(index, 1)
       }
     },
     selectAllEvent({ checked, records }) { // 全选
@@ -320,19 +331,29 @@ export default {
       this.setFootersStyle()
     },
     rowClassName({ row }) {
-      if (row && this.expandRowIds.includes(row._XID)) {
-        return 'vxe-custom-row active'
-      }
-      return 'vxe-custom-row'
+      const key = row._XID || row._X_ROW_KEY
+      let className = 'vxe-custom-row'
+      Object.keys(this.highLineRows).forEach(color => {
+        if (this.highLineRows[color].includes(key)) {
+          className = `vxe-custom-row active-${highLineMap[color]}`
+        }
+      })
+      return className
     },
     getSummaries({ columns }) {
-      // const col = !isEmpty(this.summary) ? columns.map(({ property }, i) => {
-      //   let colEle = ''
-      //   if (property && this.summary[property]) {
-      //     colEle = this.summary[property].value
-      //   }
-      //   return i === 0 ? '合计' : colEle
-      // }) : []
+      const col = !isEmpty(this.summary) ? columns.map(({ property, type, ...args }, i) => {
+        let colEle = ''
+
+        if (i === 0) return '合计'
+        if (['seq', 'checkbox', 'radio', 'expand', 'html'].includes(type)) {
+          return colEle
+        }
+        if (property && this.summary[property]) {
+          colEle = this.summary[property].value
+        }
+        return colEle
+      }) : []
+
       const fn = () => {
         this.$nextTick(() => {
           if (!this.judgeBottomAppear()) {
@@ -343,7 +364,8 @@ export default {
         })
       }
       debounce(fn, 666)()
-      return [['合计']]
+      return [col]
+      // return [['合计']]
     },
     initSpin() { // 加载自定义loading
       setTimeout(() => {

@@ -13,7 +13,7 @@ export const filterType = {
     LINK: 8, // LINK格式
     RICH_TEXT: 9 // 富文本格式（比较特殊，需全局引入富文本插件）
   },
-  /* (必须)值类型,决定值最终存储的类型 */
+  /* (必须)值类型,决定值最终存储的类型 同列field_type */
   valueType: {
     STRING: 0, // 字符串
     INT: 1, // 整数

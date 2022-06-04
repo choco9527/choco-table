@@ -112,6 +112,11 @@
   .el-switch.is-checked .el-switch__core::after{
     margin-left: -18px;
   }
+
+  .el-range-input{ // fix背景色问题
+    background-color: #fff;
+  }
+
 }
 
 // Message

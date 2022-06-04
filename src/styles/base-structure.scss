@@ -34,19 +34,6 @@
 
 /* 响应式页面布局
 -------------------------- */
-
-.choco-table{
-  @for $i from 5 through 24 {
-    @for $j from $i through 24{
-      @if($i != $j){
-        --gutter_#{$i*2}-#{$j*2}: #{$i*2 * 1px};
-      }
-    }
-  }
-  --gutter_1-2: 1px; // 用于差距为1的计算
-  --gutter_13-14: calc(var(--gutter_1-2) + 12px); // 用于字体
-}
-
 @include respond-to('mg'){
   .choco-table{
     @for $i from 5 through 24 {
@@ -61,63 +48,85 @@
   }
 }
 
+.choco-table{
+  @for $i from 5 through 24 {
+    @for $j from $i through 24{
+      @if($i != $j){
+        --gutter_#{$i*2}-#{$j*2}: #{$i*2 * 1px};
+      }
+    }
+  }
+  --gutter_1-2: 1px; // 用于差距为1的计算
+  --gutter_13-14: calc(var(--gutter_1-2) + 12px); // 用于字体
 
-/* svg图标
+  --backdrop-filter: blur(1.8px) brightness(0.9) saturate(0.92);
+
+  /* svg图标
 -------------------------- */
-.svg-wrap{
-  color: $color-text-secondary;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-  transition: all .3s var(--color-transition-base);
+  .svg-wrap{
+    color: $color-text-secondary;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    transition: all .3s var(--color-transition-base);
 
-  &.danger{
-    &:hover{
+    &.danger{
+      &:hover{
+        color: $color-danger;
+      }
+    }
+  }
+
+  // 清除浮动
+  .clearfix {
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+  }
+
+  // 文字溢出隐藏
+  .over-hide{
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* color 文字颜色
+  -------------------------- */
+  .color{
+    &-primary{
+      color: $color-text-primary;
+    }
+    &-regular{
+      color: $color-text-regular;
+    }
+    &-secondary{
+      color: $color-text-secondary;
+    }
+    &-danger{
       color: $color-danger;
+    }
+    &-warning{
+      color: $color-warning;
+    }
+    &-success{
+      color: $color-success;
+    }
+    &-white{
+      color: white;
+    }
+    &-blue{
+      color: $color-primary;
     }
   }
 }
 
-// 清除浮动
-.clearfix {
-  &:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-  }
-}
-
-// 文字溢出隐藏
-.over-hide{
-  overflow: hidden;
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
 
 
-/* color 文字颜色
--------------------------- */
-.color{
-  &-primary{
-    color: $color-text-primary;
-  }
-  &-regular{
-    color: $color-text-regular;
-  }
-  &-secondary{
-    color: $color-text-secondary;
-  }
-  &-danger{
-    color: $color-danger;
-  }
-  &-white{
-    color: white;
-  }
-  &-blue{
-    color: $color-primary;
-  }
-}
+

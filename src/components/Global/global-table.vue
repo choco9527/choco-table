@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nothingWrong" class="choco-table">
+  <div v-if="nothingWrong" :class="['choco-table', {'auto-height': autoHeight}]">
     <global-filter
       ref="pageFilter"
       v-bind="$attrs"
@@ -10,7 +10,7 @@
       :delete-data-form="deleteDataForm"
       :from-nest="fromNest"
       :is-phone="isPhone"
-      :el-size="elSize"
+      :el-size="$elSize"
       :show-filter="showFilter"
       @search="search"
       @handleSetCols="handleSetCols"
@@ -26,7 +26,7 @@
       <template v-slot:filterBack>
         <template v-if="allowAddForm && createDataForms && createDataForms.length>0">
           <div class="batch">
-            <el-button v-for="formConf in createDataForms" :key="formConf.form_id" type="primary" class="batch-item btn" :size="elSize" @click="addForm(formConf)">{{ formConf.call_action_text }}</el-button>
+            <el-button v-for="formConf in createDataForms" :key="formConf.form_id" type="primary" class="batch-item btn" :size="$elSize" @click="addForm(formConf)">{{ formConf.call_action_text }}</el-button>
           </div>
         </template>
         <slot name="filterBack" :filterConfig="filterConfig" />
@@ -35,8 +35,8 @@
         <slot name="tableFront" :filterConfig="filterConfig" />
         <vxe-scroll-load-table
           :ref="scrollTableName"
-          :size="tableSize"
-          :el-size="elSize"
+          :size="$tableSize"
+          :el-size="$elSize"
           v-bind="$attrs"
           :table-id="tId"
           :columns="columns"
@@ -49,6 +49,7 @@
           :stripe="false"
           :is-phone="isPhone"
           fit
+          :auto-height="autoHeight"
           align="center"
           border
           v-on="$listeners"
@@ -69,8 +70,8 @@
     >
       <global-form ref="globalForm" :height="dialogConfig.height" :config-id="config.tableId" :dialog-size="dialogSize" v-bind="$attrs" />
       <div slot="footer">
-        <el-button :size="elSize" type="primary" @click="submitForm('edit')">{{ submitText }}</el-button>
-        <el-button :size="elSize" @click="closeForm">取消</el-button>
+        <el-button :size="$elSize" type="primary" @click="submitForm('edit')">{{ submitText }}</el-button>
+        <el-button :size="$elSize" @click="closeForm">取消</el-button>
       </div>
     </beauty-dialog>
   </div>
@@ -79,6 +80,7 @@
 <script>
 import { getTableConfig, getTableList, exportTable } from './api/global-table'
 import { submitForm } from './api/global-table'
+import BeautyDialog from '@/components/BeautyDialog/index'
 
 import VxeScrollLoadTable from './VxeScrollLoadTable'
 import GlobalFilter from './global-filter'
@@ -91,6 +93,8 @@ import { isDevicePhone } from './assets/js/tools'
 import GlobalForm from './global-form'
 
 import { isEmpty, clone } from 'xe-utils'
+import { _local } from '@/utils/tool'
+const rememberTime = 3 * 24 * 3600 * 1000 // 列宽缓存3天
 
 /*
   全局的表格渲染组件 筛选项已经列均由后端控制 后经过vxeTableMixin处理
@@ -99,7 +103,7 @@ import { isEmpty, clone } from 'xe-utils'
 */
 export default {
   name: 'GlobalTable',
-  components: { GlobalFilter, GlobalExport, GlobalForm, VxeScrollLoadTable },
+  components: { GlobalFilter, GlobalExport, GlobalForm, VxeScrollLoadTable, BeautyDialog },
   mixins: [tableColMixin, tableFilterMixin],
   props: {
     config: { // 表格配置
@@ -127,30 +131,33 @@ export default {
     selfFilters: { type: Array, default: () => ([]) }, // 自定义filter 不渲染此filter
     showIndex: { type: Boolean, default: false }, // 显示表格序号
     colConfigMap: { type: Object, default: () => ({}) }, // 列属性 { key: { align:'right', width: 120, fix: 'left'} }
-    tableSize: { type: String, default: 'medium' }, // 表格尺寸
+    tableSize: { type: String, default: '' }, // 表格尺寸
     extraQuery: { type: Object, default: null }, // 额外的自定义筛选项，最终会被拼接在请求参数中
     allowAddForm: { type: Boolean, default: true }, // 是否显示添加表格按钮
     dialogSize: { type: String, default: '' }, // 编辑窗口大小
-    showOverflow: { type: [Boolean, String], default: 'ellipsis' },
+    showOverflow: { type: [Boolean, String], default: 'ellipsis' }, // 文本溢出形式
+    useSlotFooter: { type: Boolean, default: true }, // 是否使用slot形式渲染表尾，不使用性能会好点但无法使用与row相同的format方法
 
     /* filter */
     showFilter: { type: Boolean, default: true }, // 显示表格顶部筛选项
     showExport: { type: Boolean, default: false }, // 显示导出键
     showSetting: { type: Boolean, default: true }, // 是否显示表格设置（列排序等按钮）
-    elSize: { type: String, default: 'small' }, // ui样式尺寸
+    elSize: { type: String, default: '' }, // ui样式尺寸
     // selfOptions: { type: Object, default: () => ({}) }, // 自定义options { key=> options:[] }
     // showSettingExport: { type: Boolean, default: true }, // 是否显示前端导出按钮
+    exportOptions: { type: Object, default: () => ({}) }, // 前端导出options https://vxetable.cn/v3/#/table/api
 
     /* scroll */
-    selectable: { type: Boolean, default: false } // 是否可以多选
+    selectable: { type: Boolean, default: false }, // 是否可以多选
+    autoHeight: { type: Boolean, default: true } // true则铺满父容器，false由内容撑开
     // maxTbHeight: { type: String, default: 2000 }, // 列表最大定高
     // showTotal: { type: Boolean, default: true }, // 显示下方分页器
     // showTableSummary: { type: Boolean, default: false }, // 显示合计
     // showContextMenu: { type: Boolean, default: false }, // 显示右键菜单
     // showMenuEdit: { type: Boolean, default: true }, // 显示右键编辑
     // customHeight: { type: Number, default: 0 } // 自定义表格计算需要减去高度
-    // autoHeight: { type: Boolean, default: false }, // 列表高度自适应
     // stickyFooter: { type: Boolean, default: false } // 是否合计行吸底
+    // pages: { type: Array, default: () => [25, 50, 100, 200] } // 分页
 
   },
   data() {
@@ -179,12 +186,18 @@ export default {
       sortColumn: null, // 排序列
       formDialogTitle: '',
       submitText: '',
-      widthMap: JSON.parse(localStorage.getItem(widthKey)) || {}, // 列宽
+      widthMap: _local.get(widthKey) || {}, // 列宽
       selectedValues: [], // 选择的行元素
       isPhone: false
     }
   },
   computed: {
+    $elSize() {
+      return this.elSize || this.$cTableElSize
+    },
+    $tableSize() {
+      return this.tableSize || this.$cTableTableSize
+    },
     dialogConfig() {
       // dialog顶部+底部 = 88px
       return this.dialogSize === 'max'
@@ -226,7 +239,7 @@ export default {
         })
       }
       this.widthMap = {}
-      localStorage.removeItem(this.widthKey)
+      _local.remove(this.widthKey)
       if (!this.fromNest) {
         this.getTableConfig().then(config => {
           setTable()
@@ -467,20 +480,29 @@ export default {
     },
     setWidthMap(prop = '', width = '') { // 设置列宽
       this.widthMap[prop] = width
-      localStorage.setItem(this.widthKey, JSON.stringify(this.widthMap))
+      _local.set(this.widthKey, this.widthMap, rememberTime)
       // this.$choco_msg.success('已记录当前列宽')
     },
 
     onOpenExport() {
-      this.$refs[this.scrollTableName].openExport()
+      this.$refs[this.scrollTableName].openExport(this.exportOptions)
     },
     resetTableHeight() {
       this.$refs[this.scrollTableName].setTableHeight()
     },
     getData() {
       return this.$refs[this.scrollTableName].data
+    },
+    setActiveRows(activeIds, color = 'blue') {
+      if (Object.prototype.toString.call(activeIds) === '[object Array]') {
+        this.$refs[this.scrollTableName].highLineRows[color] = [...activeIds]
+        this.$refs[this.scrollTableName].clearAll()
+      }
+    },
+    clearActiveRows(color = 'blue') {
+      this.$refs[this.scrollTableName].highLineRows[color] = []
+      this.$refs[this.scrollTableName].clearAll()
     }
-
   }
 }
 </script>
@@ -489,6 +511,9 @@ export default {
 @import "./assets/table-base";
 .choco-table {
   padding: 0;
+  &.auto-height{ // height auto 铺满，否则撑开
+    height: 100%;
+  }
 
   .svg-wrap {
     vertical-align: text-bottom;
@@ -496,7 +521,7 @@ export default {
     line-height: 1.5;
   }
 
-  input {
+  input:not(.el-select__input) {
     &:focus {
       box-shadow: 0 0 0 2px rgba(0, 123, 255, 25%);
       border-color: $lighter-blue;
@@ -624,11 +649,17 @@ export default {
         justify-content: flex-start;
         align-items: flex-start;
         flex-direction: row;
-
+        .el-image{
+          margin-bottom: 2px;
+          margin-top: 2px;
+          border-radius: 4px;
+          &:not(:last-of-type) {
+            margin-right: 2px;
+          }
+        }
         img {
           cursor: zoom-in !important;
-          max-height: 36px;
-          margin-bottom: 1px;
+          max-height: 30px;
         }
       }
 

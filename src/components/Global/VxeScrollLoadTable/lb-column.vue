@@ -1,5 +1,5 @@
 <template>
-  <vxe-column
+  <c-vxe-column
     :type="column.type"
     :field="column.field"
     :visible="column.visible"
@@ -51,15 +51,18 @@
     <template v-if="column.children">
       <lb-column v-for="(col, index) in column.children" :key="index" :column="col" />
     </template>
-  </vxe-column>
+  </c-vxe-column>
 </template>
 
 <script>
 import LbRender from './lb-render'
+import { Column } from 'vxe-table'
+
 export default {
   name: 'LbColumn',
   components: {
-    LbRender
+    LbRender,
+    'c-vxe-column': Column
   },
   props: {
     column: Object,

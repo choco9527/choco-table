@@ -1,10 +1,11 @@
 <template>
   <span>
-    <el-select v-if="optionType === 'self'" v-model="value" class="item-input" :size="size" :placeholder="sear.tips" :multiple="sear.selectQueryType === queryType.IN" collapse-tags :clearable="clearable" @change="change">
+    <el-select v-if="optionType === 'self'" ref="elSelect" v-model="value" class="item-input" :size="size" :placeholder="sear.tips" :multiple="multiple" collapse-tags :clearable="clearable" @change="change">
       <el-option v-for="opt in sear.options" :key="opt.key" :label="opt.label" :value="opt.value" />
     </el-select>
     <el-select
       v-if="optionType === 'remote'"
+      ref="elSelect"
       v-model="value"
       :size="size"
       filterable
@@ -12,7 +13,7 @@
       :placeholder="sear.tips"
       collapse-tags
       :clearable="clearable"
-      :multiple="sear.selectQueryType === queryType.IN"
+      :multiple="multiple"
       class="item-input"
       @focus="firstFocusSearch(sear)"
       @change="change"
@@ -68,11 +69,15 @@ export default {
   computed: {
     optionType() {
       return this.sear.option_type
+    },
+    multiple() {
+      return this.sear.selectQueryType === this.queryType.IN
     }
   },
   watch: {
     propVal(newVal, oldVal) {
-      if (newVal && newVal !== oldVal) this.setValue()
+      // console.log('propVal change', newVal)
+      if (newVal !== oldVal) this.setValue()
     }
   },
   created() {
@@ -92,9 +97,15 @@ export default {
       const oriVal = this.sear[this.modelName]
       this.value = this.formatValType(oriVal)
     },
-    change(val) {
+    changeVal(val) {
       this.sear[this.modelName] = val
       this.optionChange && this.optionChange(val)
+    },
+    change(val) {
+      this.changeVal(val)
+      if (this.multiple && this.$refs.elSelect) { // 收起菜单
+        this.$refs.elSelect.blur()
+      }
       this.$emit('optionChange')
     }
   }

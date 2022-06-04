@@ -14,7 +14,7 @@ npm install choco-table
 ``` bash
 // main.js
 import GlobalTable from 'choco-table'
-import 'choco-table/lib/choco-table.css'
+import '@choco-table/lib/packages.css'
 
 /* 定义默认请求方法，（在非自定义组件方法时使用） */
 import { getConfig, getList, searchPageOptions, exportTable, submitForm } from '@/mock-api/table'

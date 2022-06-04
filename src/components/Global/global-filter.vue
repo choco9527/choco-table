@@ -1,6 +1,6 @@
 <template>
-  <div class="global-filter" :table-id="tableId">
-    <div v-if="showFilter" class="sections">
+  <div class="choco-filter" :table-id="tableId">
+    <section v-if="showFilter" class="filter-sections">
       <section v-if="queryTags.length" class="selected-area area-structure clearfix">
         <div class="area-left">
           <span>已选标签</span>
@@ -27,19 +27,15 @@
               <el-button :size="elSize" class="btn" @click="toggleExpand">全部筛选<i class="el-icon-arrow-down ml-16" /></el-button>
             </span>
 
-            <!--        时间日期筛选框-->
-            <span v-for="sear in searchQuery.filter(sear => sear.open && getPickerConfig(sear.view_type).show)" :key="'filter-item-'+sear.key" class="filter-item">
-              <date-picker :clearable="sear.clearable" :size="elSize" :sear="sear" :get-picker-config="getPickerConfig" :picker-options="pickerOptions" @search="search" />
-            </span>
+            <span v-for="sear in searchQuery.filter(sear => sear.open)" :key="'filter-item-'+sear.key" class="filter-item">
+              <!--        时间日期筛选框-->
+              <date-picker v-if="getPickerConfig(sear.view_type).show" :clearable="sear.clearable" :size="elSize" :sear="sear" :get-picker-config="getPickerConfig" :picker-options="pickerOptions" @search="search" />
 
-            <!--      普通匹配筛选框（范围 / 纯数值 / RMB）-->
-            <span v-for="sear in searchQuery.filter(sear => sear.open && (sear.view_type === viewType.NORMAL || sear.view_type === viewType.CURRENCY_RMB))" :key="'filter-item-'+sear.key" class="filter-item">
-              <normal-input :clearable="sear.clearable" :size="elSize" :sear="sear" :get-input-type="getInputType" :query-type="queryType" @search="search" />
-            </span>
+              <!--      普通匹配筛选框（范围 / 纯数值 / RMB）-->
+              <normal-input v-if="(sear.view_type === viewType.NORMAL || sear.view_type === viewType.CURRENCY_RMB)" :clearable="sear.clearable" :size="elSize" :sear="sear" :get-input-type="getInputType" :query-type="queryType" @search="search" />
 
-            <!--      远程搜索/自定义 下拉筛选框-->
-            <span v-for="sear in searchQuery.filter(sear => sear.open && sear.view_type === viewType.OPTIONS)" :key="'filter-item-'+sear.key" class="filter-item">
-              <render-options :clearable="sear.clearable" :size="elSize" :prop-val="sear.value" :config-id="configId" :sear="sear" @optionChange="search" />
+              <!--      远程搜索/自定义 下拉筛选框-->
+              <render-options v-if="sear.view_type === viewType.OPTIONS" :clearable="sear.clearable" :size="elSize" :prop-val="sear.value" :config-id="configId" :sear="sear" @optionChange="search" />
             </span>
 
             <!--            has searchQuery!-->
@@ -72,59 +68,49 @@
 
       <!--      隐藏筛选<非常规筛选，需要点击后显示>-->
       <div v-if="searchQuery && searchQuery.length > 0" :class="['whole-section-wrap',{expand}]" :style="{'max-height': expand ? expandHeight : 0}">
-        <section v-for="sear in searchQuery.filter(sear => !sear.open && getPickerConfig(sear.view_type).show)" :key="'filter-item-'+sear.key" class="whole-area area-structure clearfix">
+        <section v-for="sear in searchQuery.filter(sear => !sear.open)" :key="'filter-item-'+sear.key" class="whole-area area-structure clearfix">
           <div class="area-left">
             <span class="over-hide" :title="sear.tips">{{ sear.label }}</span>
             <svg-icon icon-class="arrow" class="arrow-icon" />
           </div>
           <div class="area-right search-form">
             <span class="filter-item">
-              <date-picker :clearable="sear.clearable" :size="elSize" :sear="sear" :get-picker-config="getPickerConfig" :picker-options="pickerOptions" @search="search" />
-            </span>
-          </div>
-        </section>
-        <section v-for="sear in searchQuery.filter(sear => !sear.open && (sear.view_type === viewType.NORMAL || sear.view_type === viewType.CURRENCY_RMB))" :key="'filter-item-'+sear.key" class="whole-area area-structure clearfix">
-          <div class="area-left">
-            <span class="over-hide" :title="sear.tips">{{ sear.label }}</span>
-            <svg-icon icon-class="arrow" class="arrow-icon" />
-          </div>
-          <div class="area-right search-form">
-            <span class="filter-item">
-              <normal-input :clearable="sear.clearable" :size="elSize" :sear="sear" :get-input-type="getInputType" :query-type="queryType" @search="search" />
+              <!--        时间日期筛选框-->
+              <date-picker v-if="getPickerConfig(sear.view_type).show" :clearable="sear.clearable" :size="elSize" :sear="sear" :get-picker-config="getPickerConfig" :picker-options="pickerOptions" @search="search" />
+
+              <!--      普通匹配筛选框（范围 / 纯数值 / RMB）-->
+              <normal-input v-if="(sear.view_type === viewType.NORMAL || sear.view_type === viewType.CURRENCY_RMB)" :clearable="sear.clearable" :size="elSize" :sear="sear" :get-input-type="getInputType" :query-type="queryType" @search="search" />
+
+              <!--      远程搜索/自定义 下拉筛选框-->
+              <render-options v-if="sear.view_type === viewType.OPTIONS" :clearable="sear.clearable" :size="elSize" :prop-val="sear.value" :config-id="configId" :sear="sear" @optionChange="search" />
             </span>
           </div>
         </section>
 
-        <section v-for="sear in searchQuery.filter(sear => !sear.open && sear.view_type === viewType.OPTIONS)" :key="'filter-item-'+sear.key" class="whole-area area-structure clearfix">
-          <div class="area-left">
-            <span class="over-hide" :title="sear.tips">{{ sear.label }}</span>
-            <svg-icon icon-class="arrow" class="arrow-icon" />
-          </div>
-          <div class="area-right search-form">
-            <span class="filter-item">
-              <!--      远程搜索/自定义 下拉筛选框-->
-              <render-options :clearable="sear.clearable" :size="elSize" :prop-val="sear.value" :config-id="configId" :sear="sear" @optionChange="search" />
-            </span>
-          </div>
-        </section>
         <footer class="section-wrap_footer">
           <el-button type="primary" :size="elSize" @click="search">确定</el-button>
           <el-button class="ml-20" :size="elSize" @click="toggleExpand">取消</el-button>
         </footer>
       </div>
-    </div>
+    </section>
     <section v-if="showFilter" class="filter-back clearfix mb--7">
       <slot name="filterBack" />
-      <div v-if="showSetting" class="batch">
+      <span v-if="showSetting" class="batch">
         <el-button :size="elSize" class="batch-item btn" @click="toggleColSetDialog">列设置</el-button>
-      </div>
-      <div v-if="selectable && openDeleteBatch" class="batch">
+      </span>
+      <span v-if="showSettingExport" class="batch">
+        <el-tooltip effect="light" content="仅提供页面前端导出" placement="top">
+          <el-button :size="elSize" class=" batch-item btn" @click="openExport">导出</el-button>
+        </el-tooltip>
+      </span>
+
+      <span v-if="selectable && openDeleteBatch" class="batch">
         <render-popup v-if="allowDeleteBatch" :handle-confirm="confirmDeleteRows" popup-title="确认批量删除？">
           <el-button slot="reference" :size="elSize" class="batch-item btn">批量删除
           </el-button>
         </render-popup>
         <el-button v-else :size="elSize" disabled class="batch-item btn">批量删除</el-button>
-      </div>
+      </span>
 
       <!--    !SET FORM-->
       <div
@@ -133,7 +119,6 @@
         :style="{width: showSettingExport ? '160px' : '110px'}"
       >
         <!--      导出-->
-        <div v-if="showSettingExport" class="wrap" @click="openExport"><i class="svg-wrap"><svg-icon icon-class="export" /></i></div>
         <i v-show="isPhone" class="el-icon-caret-right phone-icon" @click="phoneSetting = !phoneSetting" />
       </div>
     </section>
@@ -148,7 +133,7 @@
           <svg-icon icon-class="fresh" class="fresh-icon fs-20" @click="()=>{resetForm('filter');toggleFilterSetDialog()}" />
         </el-tooltip>
       </template>
-      <section class="filter-popup sections">
+      <section class="filter-popup filter-sections">
         <article class="filter-set">
           <div v-for="sear in searchQuery" :key="sear.key" class="area-structure edit-item">
             <div class="area-left">
@@ -285,11 +270,14 @@ import filterQueryMixin from './mixins/filter-query-mixins'
 import filterOptionMixin from './RenderOptions/options-mixins'
 import DatePicker from './components/DatePicker'
 import NormalInput from './components/NormalInput'
+import { _local, getAllParams } from '@/utils/tool'
+const rememberTime = 3 * 24 * 3600 * 1000 // 列以及筛选项信息缓存3天
+import BeautyDialog from '@/components/BeautyDialog/index'
 
 // 全局的表格筛选项渲染组件
 export default {
   name: 'GlobalFilter',
-  components: { draggable, DatePicker, NormalInput },
+  components: { draggable, DatePicker, NormalInput, BeautyDialog },
   mixins: [filterDateMixin, filterQueryMixin, filterOptionMixin],
   props: {
     showFilter: { type: Boolean, default: true }, // 显示表格顶部筛选项
@@ -318,7 +306,7 @@ export default {
       ...filterType,
       columns: [],
       getQueryTypeName: JT.getQueryTypeName,
-      rememberColumn: localStorage.getItem(reKey) || '2',
+      rememberColumn: _local.get(reKey) || '2',
       expand: false,
       searching: false, // 正在搜索，防止重复触发搜索
       selectedValues: [],
@@ -355,8 +343,8 @@ export default {
     },
     setExpandHeight() {
       this.$nextTick(() => {
-        const filterEle = document.querySelector(`.global-filter[table-id="${this.tableId}"]`)
-        const sectionsEle = document.querySelector(`.global-filter[table-id="${this.tableId}"] .sections`)
+        const filterEle = document.querySelector(`.choco-filter[table-id="${this.tableId}"]`)
+        const sectionsEle = document.querySelector(`.choco-filter[table-id="${this.tableId}"]>.filter-sections`)
         if (filterEle && sectionsEle) {
           this.expandHeight = (filterEle.clientHeight - sectionsEle.clientHeight - 10) + 'px'
         }
@@ -378,8 +366,8 @@ export default {
     search() {
       if (!this.searching) {
         this.searching = true
+        this.expand = false
         this.$emit('search', () => {
-          this.expand = false
           this.searching = false
         })
       }
@@ -390,12 +378,12 @@ export default {
     resetForm(type = '') {
       this.freshSearch()
       if (type === 'filter') {
-        localStorage.removeItem(this.filterKey)
+        _local.remove(this.filterKey)
       }
       if (type === 'col') {
-        localStorage.removeItem(this.colKey)
+        _local.remove(this.colKey)
       }
-      localStorage.removeItem(this.reKey)
+      _local.remove(this.reKey)
       this.rememberColumn = '2'
       this.$emit('resetForm')
     },
@@ -423,15 +411,15 @@ export default {
       return res
     },
     getColumns(columns = null) {
-      const localCols = localStorage.getItem(this.colKey) // 检查缓存
+      const localCols = _local.get(this.colKey) // 检查缓存
       if (!localCols) {
         this.columns = columns.map(col => ({ key: col.key, column_type: col.column_type, label: col.label, open: col.open || !col.collapse_default }))
       } else {
-        this.columns = JSON.parse(localCols)
+        this.columns = localCols
       }
 
       if (this.rememberColumn === '1') {
-        localStorage.setItem(this.colKey, JSON.stringify(this.columns))
+        _local.set(this.colKey, this.columns, rememberTime)
       }
       this.$emit('sortListByArr', columns, this.columns)
       return columns
@@ -441,47 +429,53 @@ export default {
         this.$choco_msg.warning('请打开至少一个列')
         return
       }
-      localStorage.setItem(this.reKey, this.rememberColumn)
+      _local.set(this.reKey, this.rememberColumn, rememberTime)
 
       if (this.rememberColumn === '1') {
-        localStorage.setItem(this.colKey, JSON.stringify(this.columns))
+        _local.set(this.colKey, this.columns, rememberTime)
       } else {
-        localStorage.removeItem(this.colKey)
+        _local.remove(this.colKey)
       }
       this.colSetDialog = false
       this.$emit('handleSetCols', clone(this.columns, true))
     },
     autoSearch() { // 根据路由参数自动搜索
-      if (!this.$route || !this.$route.query || this.fromNest) return
-      objectEach(this.$route.query, (item, key) => {
+      const query = getAllParams()
+      if (isEmpty(query) || this.fromNest) return
+      objectEach(query, (item, key) => {
         this.searchQuery.forEach(qItem => {
           if (qItem.key === key) qItem.value = item
         })
       })
     },
     setDefaultFilter(sear = null) {
-      if (sear) { // 需要先进行default值转换
-        const mv = JT.$getType(sear.view_type, 'viewType') // match viewType
-        const mq = JT.$getType(sear.defaultSelectQueryType, 'queryType') // match queryType
+      const that = this
+      const t = setTimeout(() => { // 异步防止阻塞卡顿
+        if (sear) { // 需要先进行default值转换
+          const mv = JT.$getType(sear.view_type, 'viewType') // match viewType
+          const mq = JT.$getType(sear.defaultSelectQueryType, 'queryType') // match queryType
 
-        if (mv('NORMAL') || mv('CURRENCY_RMB')) {
-          if (mq('RANGE')) {
-            sear.default = { start: '', end: '' }
-          } else {
-            sear.default = ''
+          if (mv('NORMAL') || mv('CURRENCY_RMB')) {
+            if (mq('RANGE')) {
+              sear.default = { start: '', end: '' }
+            } else {
+              sear.default = ''
+            }
           }
         }
-      }
 
-      if (this.searchQuery && this.searchQuery.length > 0) {
-        const q = this.searchQuery.map(item => ({ key: item.key, label: item.label, default: item.default, defaultSelectQueryType: item.defaultSelectQueryType, defaultOpen: item.defaultOpen }))
-        localStorage.setItem(this.filterKey, JSON.stringify(q))
-        this.$choco_msg.success('已设置')
-      }
+        if (that.searchQuery && that.searchQuery.length > 0) {
+          const q = that.searchQuery.map(item => ({ key: item.key, label: item.label, default: item.default, defaultSelectQueryType: item.defaultSelectQueryType, defaultOpen: item.defaultOpen }))
+          _local.set(that.filterKey, q, rememberTime)
+          that.$choco_msg.success('已设置')
+        }
+        clearTimeout(t)
+      }, 20)
     },
     getInputType(valueType) {
       return (valueType === this.valueType.INT || valueType === this.valueType.FLOAT) ? 'number' : 'text'
     }
+
   }
 }
 </script>
@@ -517,8 +511,9 @@ export default {
   color: $color-text-primary;
 }
 
-.global-filter {
+.choco-filter {
   width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   transition: max-height .2s var(--ease-in-out);
@@ -529,7 +524,7 @@ export default {
   .el-select__tags{
     flex-wrap: nowrap;
   }
-  .sections{
+  .filter-sections{
     background-color: $bg-white-1;
     position: relative;
 
@@ -848,13 +843,12 @@ export default {
           }
         }
         .check-cell{
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
           border-radius: 3px;
           border: 1.2px solid $border-white-3;
           cursor: pointer;
           position: relative;
-          transition: all .1s ease-in-out;
           margin-left: 8px;
           position: relative;
           .svg-check{
@@ -864,7 +858,6 @@ export default {
             left: 50%;
             top: 50%;
             transform: translate3d(-50%, -50%, 0px);
-            transition: opacity .2s var(--ease-in-out-quint);
           }
 
           &.checked{
