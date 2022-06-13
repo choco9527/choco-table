@@ -33,7 +33,7 @@
   }
 
   .el-button {
-    transition: all .3s var(--color-transition-base);
+    transition: background-color .3s var(--color-transition-base);
     > span {
       transition: margin-left .3s var(--color-transition-base);
     }
@@ -113,10 +113,9 @@
     margin-left: -18px;
   }
 
-  .el-range-input{ // fix背景色问题
-    background-color: #fff;
+  .el-input--mini .el-input__inner{
+    min-height: 28px;
   }
-
 }
 
 // Message

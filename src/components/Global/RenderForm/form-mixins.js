@@ -84,7 +84,7 @@ export default {
     formatFormDataMethod() { /* outputFormData -> outputData 将outputFormData处理为上传的data */
       const outData = {}
       objectEach(this.outputFormData, (item, key) => {
-        const config = this.itemsRaw.find(raw => raw.key === key)
+        const config = this.itemsRaw?.find(raw => raw.key === key)
         if (config) {
           const mv = JT.$getType(config.view_type, 'viewType') // 展示形式
           const format = JT.$toType(config.value_type) // 值形式

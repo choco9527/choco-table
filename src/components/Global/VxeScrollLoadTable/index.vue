@@ -167,7 +167,6 @@ export default {
         window.addEventListener('resize', debounce(resizeFooterFn, 200))
         window.addEventListener('scroll', debounce(scrollFooterFn, 500))
       }
-      // this.initSpin()
     })
     this.$init()
   },
@@ -188,8 +187,8 @@ export default {
         const filterEle = ele ? ele.querySelector(`section.filter-sections`) : null
         const filterBackEle = ele ? ele.querySelector(`section.filter-back`) : null
 
-        const filterHeight = filterEle ? filterEle.clientHeight : 0
-        const filterBackHeight = filterBackEle ? filterBackEle.clientHeight : 0
+        const filterHeight = filterEle?.clientHeight ?? 0
+        const filterBackHeight = filterBackEle?.clientHeight ?? 0
 
         const elseHeight = filterHeight + filterBackHeight + parseFloat(this.customHeight) + 'px'
         this.tableBodyHeight = `calc( 100% - ${elseHeight} )`
@@ -215,7 +214,7 @@ export default {
         list = data.list
         count = data.count
         next_page_token = data.next_page_token
-        summary = data.summary && data.summary.r_d
+        summary = data.summary?.r_d
         if (this.nestTables) expandList = data.$expandList
 
         if (!list || list.length === 0) {
@@ -233,7 +232,7 @@ export default {
           expandList && (this.expandList = expandList)
         }
         this.listQuery.next_page_token = next_page_token
-        this.loadData()
+        await this.loadData()
         this.handleInit()
         this.listLoading = false
 
@@ -280,7 +279,7 @@ export default {
       })
     },
     handleInit() {
-      if (this.$route && this.$route.query.expandSearch === '0') {
+      if (this.$route?.query?.expandSearch === '0') {
         this.toggleRowExpand(this.data[this.$route.query.expandSearch])
       }
     },
@@ -326,7 +325,7 @@ export default {
     resizeCol({ column }) { // 列宽改变
       const colId = column.id
       const colEle = document.querySelector(`[colid=${colId}]`)
-      const width = colEle ? colEle.clientWidth : 0
+      const width = colEle?.clientWidth
       if (width) this.$emit('setWidthMap', column.property, width)
       this.setFootersStyle()
     },
@@ -341,49 +340,35 @@ export default {
       return className
     },
     getSummaries({ columns }) {
-      const col = !isEmpty(this.summary) ? columns.map(({ property, type, ...args }, i) => {
-        let colEle = ''
+      try {
+        const col = !isEmpty(this.summary) ? columns?.map(({ property, type, ...args }, i) => {
+          let colEle = ''
 
-        if (i === 0) return '合计'
-        if (['seq', 'checkbox', 'radio', 'expand', 'html'].includes(type)) {
+          if (i === 0) return '合计'
+          if (['seq', 'checkbox', 'radio', 'expand', 'html'].includes(type)) {
+            return colEle
+          }
+          if (property) {
+            colEle = this.summary[property]?.value ?? ''
+          }
           return colEle
-        }
-        if (property && this.summary[property]) {
-          colEle = this.summary[property].value
-        }
-        return colEle
-      }) : []
+        }) : []
 
-      const fn = () => {
-        this.$nextTick(() => {
-          if (!this.judgeBottomAppear()) {
-            this.initStickyFooter()
-          } else {
-            this.removeFootersClass()
-          }
-        })
+        const fn = () => {
+          this.$nextTick(() => {
+            if (!this.judgeBottomAppear()) {
+              this.initStickyFooter()
+            } else {
+              this.removeFootersClass()
+            }
+          })
+        }
+        debounce(fn, 666)()
+        return [col]
+      } catch (e) {
+        console.log('getSummaries Error: ', e)
+        return []
       }
-      debounce(fn, 666)()
-      return [col]
-      // return [['合计']]
-    },
-    initSpin() { // 加载自定义loading
-      setTimeout(() => {
-        const selector = `.el-loading-spinner`
-        const spinner = document.querySelector(selector)
-
-        if (spinner) {
-          const ul = document.createElement('ul')
-          const frag = document.createDocumentFragment()
-          for (let i = 0; i < 9; i++) {
-            const li = document.createElement('li')
-            frag.appendChild(li)
-          }
-          ul.appendChild(frag)
-          spinner.appendChild(ul)
-        }
-        console.log(spinner)
-      }, 0)
     },
     onSortColumn({ column, property, order, sortBy, sortList, $event }) {
       this.$emit('onSortColumn', { column, property, order, sortBy, sortList, $event })

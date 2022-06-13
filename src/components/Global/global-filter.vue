@@ -47,8 +47,8 @@
             </span>
 
           </div>
-          <div v-if="!searchQuery" :class="['search-form', {'max-width': !showSetting}]">
-            <el-skeleton-item v-for="i in 2" :key="'skeleton-'+i" :rows="1" animated style="width: 200px;margin-right: 20px" />
+          <div v-if="!searchQuery" :class="['search-form','w--100', 'h-40', {'max-width': !showSetting }]">
+            <el-skeleton-item v-for="i in 3" :key="'skeleton-'+i" :rows="1" animated :class="['w--25', {'mr-20': i<3}]" />
           </div>
 
           <!--            no searchQuery!-->
@@ -100,8 +100,11 @@
       </span>
       <span v-if="showSettingExport" class="batch">
         <el-tooltip effect="light" content="仅提供页面前端导出" placement="top">
-          <el-button :size="elSize" class=" batch-item btn" @click="openExport">导出</el-button>
+          <el-button :size="elSize" class="batch-item btn" @click="openExport">导出</el-button>
         </el-tooltip>
+      </span>
+      <span v-if="showRemoteExport" class="batch">
+        <el-button class="batch-item btn" :size="elSize" @click="remoteExport">导出表格</el-button>
       </span>
 
       <span v-if="selectable && openDeleteBatch" class="batch">
@@ -129,11 +132,11 @@
     <beauty-dialog top="50px" width="620px" :visible.sync="filterSetDialog">
       <template v-slot:titleSelf>
         <span>默认筛选项设置</span>
-        <el-tooltip effect="light" class="item svg-wrap" content="还原筛选项设置" placement="right">
-          <svg-icon icon-class="fresh" class="fresh-icon fs-20" @click="()=>{resetForm('filter');toggleFilterSetDialog()}" />
+        <el-tooltip effect="light" class="item" content="还原筛选项设置" placement="right">
+          <el-button :size="elSize" type="text">还原</el-button>
         </el-tooltip>
       </template>
-      <section class="filter-popup filter-sections">
+      <section class="filter-popup filter-sections mt-12 mb-12">
         <article class="filter-set">
           <div v-for="sear in searchQuery" :key="sear.key" class="area-structure edit-item">
             <div class="area-left">
@@ -162,15 +165,8 @@
                 </el-select>
                 <render-options v-if="sear.view_type === viewType.OPTIONS" :size="elSize" model-name="default" :config-id="configId" :sear="sear" @optionChange="setDefaultFilter" />
               </div>
-              <span
-                :class="['check-cell', {checked: sear.defaultOpen}]"
-                @click="()=> {
-                  sear.defaultOpen = !sear.defaultOpen
-                  setDefaultFilter()
-                }"
-              >
-                <svg-icon icon-class="check" class-name="svg-check" />
-              </span>
+              <vxe-checkbox v-model="sear.defaultOpen" @change="setDefaultFilter" />
+
             </div>
           </div>
         </article>
@@ -185,71 +181,21 @@
     <beauty-dialog top="50px" width="860px" :visible.sync="colSetDialog">
       <template v-slot:titleSelf>
         <span>列设置</span>
-
       </template>
       <section class="filter-popup">
         <article class="column-set">
-          <div class="content-wrap">
-
-            <div class="left">
-              <div class="title">
+          <c-col-set ref="colSet" :span="12" :columns.sync="columns" :size="elSize">
+            <template v-slot:title>
+              <span class="flex between" style="width: 100%">
                 <span>列设置</span>
-                <el-tooltip effect="light" class="item svg-wrap" content="还原列设置" placement="right">
-                  <svg-icon icon-class="fresh" class="fresh-icon fs-20" @click="()=>{resetForm('col');toggleColSetDialog()}" />
-                </el-tooltip>
-              </div>
-              <div class="inner-content">
-                <div class="content-item">
-                  <header>
-                    <el-checkbox v-model="openMetrics" @change="allCols(0)">维度</el-checkbox>
-                  </header>
-                  <section>
-                    <el-row>
-                      <el-col v-for="item in columns.filter(col => col.column_type === 0)" :key="item.key" :span="12">
-                        <el-checkbox v-model="item.open">{{ item.label }}</el-checkbox>
-                      </el-col>
-                    </el-row>
-                  </section>
-                </div>
-                <div class="content-item">
-                  <header>
-                    <el-checkbox v-model="openDimensions" @change="allCols(1)">指标</el-checkbox>
-                  </header>
-                  <section>
-                    <el-row>
-                      <el-col v-for="item in columns.filter(col => col.column_type === 1)" :key="item.key" :span="12">
-                        <el-checkbox v-model="item.open">{{ item.label }}</el-checkbox>
-                      </el-col>
-                    </el-row>
-                  </section>
-                </div>
-              </div>
-            </div>
-            <div class="right">
-              <div class="title">
-                <span class="w-100">已选</span>
-                <el-button type="text" class="ml-54 pr-0" :size="elSize" @click="columns.forEach(item => item.open = false)">清空</el-button>
-              </div>
-              <draggable v-model="columns" class="column-edit">
-                <transition-group>
-                  <div
-                    v-for="item in columns"
-                    :key="item.key"
-                    :class="['drag-item', {open: item.open}]"
-                    :title="`${item.column_type === 0 ? '(维度)' : '(指标)'}-${item.label}`"
-                  >
-                    <i class="drag-icon" />
-                    <span class="label">{{ item.label }}</span>
-                    <svg-icon icon-class="close" class="close-icon" @click="item.open = false" />
-                  </div>
-                </transition-group>
-              </draggable>
-            </div>
-          </div>
-          <div class="pl-16 lh-30">
-            <el-checkbox v-model="rememberColumn" true-label="1" false-label="2">
+                <el-button :size="elSize" class="item pr-0" type="text" @click="()=>{resetForm('col');toggleColSetDialog()}">还原</el-button>
+              </span>
+            </template>
+          </c-col-set>
+          <div class="lh-30">
+            <vxe-checkbox v-model="rememberColumn" checked-value="1" unchecked-value="2">
               记住我的选择
-            </el-checkbox>
+            </vxe-checkbox>
           </div>
         </article>
       </section>
@@ -263,21 +209,22 @@
 
 <script>
 import { filterType, JT } from './form-types'
-import draggable from 'vuedraggable'
-import { clone, objectEach, isEmpty } from 'xe-utils'
+import { objectEach, isEmpty } from 'xe-utils'
 import filterDateMixin from './mixins/filter-date-mixins'
 import filterQueryMixin from './mixins/filter-query-mixins'
 import filterOptionMixin from './RenderOptions/options-mixins'
 import DatePicker from './components/DatePicker'
 import NormalInput from './components/NormalInput'
-import { _local, getAllParams } from '@/utils/tool'
+import { _local, getAllParams, cloneDeep } from '@/utils/tool'
+import CColSet from '@/components/ColSet'
+
 const rememberTime = 3 * 24 * 3600 * 1000 // 列以及筛选项信息缓存3天
 import BeautyDialog from '@/components/BeautyDialog/index'
 
 // 全局的表格筛选项渲染组件
 export default {
   name: 'GlobalFilter',
-  components: { draggable, DatePicker, NormalInput, BeautyDialog },
+  components: { CColSet, DatePicker, NormalInput, BeautyDialog },
   mixins: [filterDateMixin, filterQueryMixin, filterOptionMixin],
   props: {
     showFilter: { type: Boolean, default: true }, // 显示表格顶部筛选项
@@ -285,6 +232,7 @@ export default {
     tableId: { type: String, default: '' },
     showSetting: { type: Boolean, default: true }, // 是否显示列设置
     showSettingExport: { type: Boolean, default: false }, // 是否显示前端导出按钮
+    showRemoteExport: { type: Boolean, default: false }, // 是否显示后端导出按钮
     selfOptions: { type: Object, default: () => ({}) }, // 自定义options { key=> options }
     selectable: { type: Boolean, default: false }, // 是否可以多选 （若打开多选则支持批量操作）
     deleteDataForm: { type: Object, default: () => ({}) },
@@ -313,9 +261,8 @@ export default {
       phoneSetting: false,
       expandHeight: 0,
       filterSetDialog: false,
-      colSetDialog: false,
-      openMetrics: true,
-      openDimensions: true
+      colSetDialog: false
+
     }
   },
   computed: {
@@ -355,13 +302,11 @@ export default {
     },
     toggleColSetDialog() { // open col set dialog
       this.colSetDialog = !this.colSetDialog
-    },
-    allCols(colType = 0) { // 开启or关闭维度指标
-      this.columns.forEach(col => {
-        if (col.column_type === colType) {
-          col.open = colType === 0 ? this.openMetrics : this.openDimensions
-        }
-      })
+      if (this.colSetDialog) {
+        this.$nextTick(() => {
+          this.$refs['colSet'].$init()
+        })
+      }
     },
     search() {
       if (!this.searching) {
@@ -373,7 +318,7 @@ export default {
       }
     },
     getFilterConfig(filters) { // 获取筛选项
-      this.filters = clone(filters, true)
+      this.filters = cloneDeep(filters)
     },
     resetForm(type = '') {
       this.freshSearch()
@@ -388,11 +333,14 @@ export default {
       this.$emit('resetForm')
     },
     setSelectedValues(vals) {
-      this.selectedValues = clone(vals, true)
+      this.selectedValues = cloneDeep(vals)
     },
     // export
     openExport() {
       this.$emit('onOpenExport')
+    },
+    remoteExport() { // 后端导出
+      this.$emit('remoteExport')
     },
     getPickerConfig(viewType) { // 获取时间选择器config
       const res = { show: false, type: '', format: '' }
@@ -425,19 +373,20 @@ export default {
       return columns
     },
     applySetting() { // 立即应用列设置
+      this.columns = this.$refs['colSet'].$getData()
       if (this.columns.every(col => !col.open)) {
         this.$choco_msg.warning('请打开至少一个列')
         return
       }
       _local.set(this.reKey, this.rememberColumn, rememberTime)
 
-      if (this.rememberColumn === '1') {
+      if (this.rememberColumn === '1') { // 记住选择
         _local.set(this.colKey, this.columns, rememberTime)
       } else {
         _local.remove(this.colKey)
       }
       this.colSetDialog = false
-      this.$emit('handleSetCols', clone(this.columns, true))
+      this.$emit('handleSetCols', cloneDeep(this.columns))
     },
     autoSearch() { // 根据路由参数自动搜索
       const query = getAllParams()
@@ -467,7 +416,8 @@ export default {
         if (that.searchQuery && that.searchQuery.length > 0) {
           const q = that.searchQuery.map(item => ({ key: item.key, label: item.label, default: item.default, defaultSelectQueryType: item.defaultSelectQueryType, defaultOpen: item.defaultOpen }))
           _local.set(that.filterKey, q, rememberTime)
-          that.$choco_msg.success('已设置')
+          // that.$choco_msg.success('已设置')
+          console.log('已设置')
         }
         clearTimeout(t)
       }, 20)
@@ -881,101 +831,7 @@ export default {
   }
 
   .column-set{
-    .content-wrap{
-      overflow: hidden;
-      padding: 12px 16px 0 16px;
-      .left,.right{
-        border-radius: 4px;
-        border: 1px solid $border-white-2;
-        .title{
-          width: 100%;
-          height: 38px;
-          line-height: 34px;
-          border-bottom: 1px solid $border-white-2;
-          background: $bg-white-2;
-          display: inline-block;
-          padding: 0 16px;
-          >span,>button,>.svg-wrap{
-            display: inline-block;
-            vertical-align: middle;
-          }
-        }
-      }
-      .left{
-        width: 585px;
-        float: left;
-        .inner-content{
-          padding: 8px 16px;
-          max-height: 400px;
-
-          .content-item{
-            line-height: 28px;
-            >header{
-              width: 100%;
-              border-bottom: $border-white-1 1px solid;
-            }
-            >section{
-              padding: 4px 20px;
-            }
-          }
-        }
-      }
-      .right{
-        width: 230px;
-        float: right;
-        &.max-width{
-          width: 100%;
-        }
-      }
-    }
-
-    .column-edit {
-      padding: 16px 0;
-      overflow-x: auto;
-      max-height: 400px;
-
-      > span {
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        height: auto;
-      }
-
-      .drag-item {
-        cursor: pointer;
-        transition: .2s all ease-in-out;
-        box-sizing: content-box;
-        user-select: none;
-        padding: 3px 16px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        line-height: 22px;
-        &:not(.open){
-          display: none;
-        }
-        .label{
-          flex: 1;
-        }
-        .drag-icon{
-          margin-right: 8px;
-        }
-        .close-icon{
-          color: $color-white-4;
-          &:hover{
-            color: $color-danger;
-          }
-        }
-
-        &:hover{
-          background-color: $bg-white-1;
-
-          >span{
-            color: $color-primary;
-          }
-        }
-      }
-    }
+    padding: 12px 16px 0 16px;
 
     .sub-btn {
       cursor: pointer;

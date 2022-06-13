@@ -5,7 +5,6 @@
       <global-table
         ref="globalTable"
         show-context-menu
-        :show-setting-export="false"
         :show-menu-edit="false"
         :config="{tableId: 'self_application_list'}"
         :self-cell-formats="selfCellFormats"
@@ -19,6 +18,7 @@
         sticky-footer
         use-slot-footer
         show-setting-export
+        show-remote-export
         :row-config="{isCurrent: true, isHover: true}"
         @handleTableSelectionChange="selectionChange"
       >
@@ -26,7 +26,7 @@
           <span class="batch">
             <!--     使用 class batch 维持样式-->
             <el-button type="primary" size="mini" @click="setCurrentRow">标记指定行</el-button>
-            <el-button type="primary" size="mini" @click="clearCurrentRow">清除指定行</el-button>
+            <el-button type="info" size="mini" @click="clearCurrentRow">清除指定行</el-button>
           </span>
         </template>
         <template v-slot:tableBack>
@@ -35,7 +35,7 @@
       </global-table>
     </div>
     <!--    全局安装可使用内置beauty-dialog组件-->
-    <beauty-dialog :append-to-body="false" top="50px" width="635px" :visible.sync="showWordInfoDialog">
+    <beauty-dialog top="50px" width="635px" :visible.sync="showWordInfoDialog">
       <template v-slot:titleSelf>
         <span>关键词</span>
       </template>
@@ -56,15 +56,18 @@
         <el-button class="btn" size="small" type="primary" @click="()=>{closeWordDialog()}">好的</el-button>
       </template>
     </beauty-dialog>
+
   </div>
 </template>
 
 <script>
 import { getConfig, getList } from '@/mock-api/table'
 import { pureColumns, pureData } from './utils/tableData'
+import { PureTable, BeautyDialog, _local } from './index'
 
 export default {
   name: 'App',
+  components: { PureTable, BeautyDialog },
   data() {
     return {
       msg: '',
@@ -113,12 +116,14 @@ export default {
       wordColumns: pureColumns(this)
     }
   },
+  mounted() {
+    _local.set('hello', { ok: 1 }, 3600) // 使用方法
+  },
   methods: {
     selectionChange(val) {
       console.log(val)
     },
     showWordInfo() {
-      console.log('show')
       this.showWordInfoDialog = true
     },
     closeWordDialog() {

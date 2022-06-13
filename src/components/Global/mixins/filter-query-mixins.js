@@ -1,7 +1,7 @@
-import { has, isEmpty, clone } from 'xe-utils'
+import { has, isEmpty } from 'xe-utils'
 import { JT } from '../form-types'
 import dayjs from '@/utils/dayjs'
-import { _local } from '@/utils/tool'
+import { _local, cloneDeep } from '@/utils/tool'
 
 export default {
   data() {
@@ -54,10 +54,10 @@ export default {
                 }
               } else if (mv('OPTIONS') && query.options) {
                 if (mq('IN')) { // 多选
-                  const labels = query.options.filter(opt => val.includes(opt.value))
+                  const labels = query?.options.filter(opt => val.includes(opt.value))
                   _set(labels.map(l => l.label).join(','))
                 } else { // 单选
-                  const label = query.options.find(opt => opt.value === val)
+                  const label = query?.options.find(opt => opt.value === val)
                   _set(label && label.label)
                 }
                 _push()
@@ -83,7 +83,7 @@ export default {
       this.searchQuery.forEach((filter, $i) => {
         if (filter.key === key) {
           let value = ''
-          const saveFilter = saveFilters && saveFilters.find(f => f.key === filter.key)
+          const saveFilter = saveFilters?.find(f => f.key === filter.key)
           const mv = JT.$getType(filter.view_type, 'viewType') // match viewType
           const defaultSelectQueryType = saveFilter ? saveFilter.defaultSelectQueryType : ''
           const queryType = typeof defaultSelectQueryType === 'number' ? defaultSelectQueryType : filter.query_type[0]
@@ -116,7 +116,7 @@ export default {
       const saveFilters = _local.get(this.filterKey)
 
       const searchQuery = filters.map(filter => {
-        const saveFilter = saveFilters && saveFilters.find(f => f.key === filter.key)
+        const saveFilter = saveFilters?.find(f => f.key === filter.key)
 
         const mv = JT.$getType(filter.view_type, 'viewType') // match viewType
 
@@ -198,7 +198,7 @@ export default {
 
         return sear
       })
-      const q = clone(searchQuery, true)
+      const q = cloneDeep(searchQuery)
       if (clearKeys) {
         const len = this.searchQuery.length
         for (let i = 0; i < len; i++) {
@@ -211,7 +211,7 @@ export default {
       this.autoSearch()
     },
     freshCacheQuery() { // 更新已选标签
-      const query = clone(this.searchQuery, true)
+      const query = cloneDeep(this.searchQuery)
       this.cacheSearchQuery = query
       return query
     },

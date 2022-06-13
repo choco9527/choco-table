@@ -3,10 +3,10 @@ import App from './App.vue'
 import { getConfig, getList, searchPageOptions, exportTable, submitForm } from '@/mock-api/table'
 
 // 本地免打包使用
-import GlobalTable from './index'
+import GlobalTable, { BeautyDialog } from './index'
 
 // 本地使用打包lib
-// import GlobalTable from '/lib/packages.umd.min'
+// import GlobalTable, { BeautyDialog } from '/lib/packages.umd.min'
 // import '/lib/packages.css'
 
 /* 定义默认请求方法，（在非自定义组件方法时使用） */
@@ -20,7 +20,10 @@ const options = {
   tableSize: 'small'
 }
 
-Vue.use(GlobalTable, options) // 加载全局配置
+// const { BeautyDialog } = GlobalTable
+
+// Vue.component('BeautyDialog', BeautyDialog) // 全局注册 BeautyDialog
+Vue.use(GlobalTable, options) // 挂载GlobalTable 加载全局配置
 
 import Router from 'vue-router'
 Vue.use(Router)

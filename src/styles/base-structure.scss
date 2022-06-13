@@ -23,6 +23,8 @@
 
     .w-#{$i} { width: 1px * $i !important; }
     .h-#{$i} { height: 1px * $i !important; }
+    .w--#{$i} { width: 1% * $i !important; }
+    .h--#{$i} { height: 1% * $i !important; }
     .lh-#{$i} { line-height: 1px * $i !important; }
 
     .fs-#{$i} {font-size: 1px * $i !important;}
@@ -68,7 +70,7 @@
     cursor: pointer;
     display: inline-block;
     vertical-align: middle;
-    transition: all .3s var(--color-transition-base);
+    transition: color .3s var(--color-transition-base), width .3s var(--color-transition-base),height .3s var(--color-transition-base);
 
     &.danger{
       &:hover{

@@ -12,6 +12,9 @@
     padding:0;
     list-style: none;
   }
+  input{
+    background-color: transparent;
+  }
 
   box-sizing: border-box;
   *,
@@ -47,6 +50,24 @@
     background-color: rgba(50,50,50,.1);
   }
 
+
+  /*flex布局*/
+  .flex{
+    display: flex;
+    align-items: center;
+    &.jcc{
+      justify-content: center;
+    }
+    &.start{
+      justify-content: flex-start;
+    }
+    &.end{
+      justify-content: flex-end;
+    }
+    &.between{
+      justify-content: space-between;
+    }
+  }
 }
 
 

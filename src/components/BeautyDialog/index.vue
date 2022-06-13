@@ -1,15 +1,22 @@
 <template>
   <!--  美化Dialog-->
-  <main class="beauty-dialog">
-    <el-dialog
-      :destroy-on-close="destroy"
-      :top="full ? '0' :top"
-      v-bind="$attrs"
-      :before-close="onBeforeClose"
-      :show-close="false"
-      :custom-class="`beauty-el-dialog ${full ? 'full' : ''}`"
-      v-on="$listeners"
-    >
+  <vxe-modal
+    ref="vxeModal"
+    :value="visible"
+    :destroy-on-close="destroy"
+    v-bind="$attrs"
+    :show-close="false"
+    :class-name="`beauty-vxe-dialog ${full?'full':''} ${transparent ? 'transparent' : ''}`"
+    :fullscreen="full"
+    :before-hide-method="onBeforeClose"
+    :mask-closable="closeOnClickModal"
+    :esc-closable="closeOnPressEscape"
+    lock-view
+    lock-scroll
+    :show-footer="showFooter"
+    v-on="$listeners"
+  >
+    <template v-slot:title>
       <slot name="title">
         <div class="title-wrap clearfix">
           <h2 class="title">
@@ -20,51 +27,40 @@
           </i>
         </div>
       </slot>
-      <slot />
-      <template slot="footer">
-        <footer v-show="hasFooter" class="footer">
-          <slot name="footer" />
-        </footer>
-      </template>
-    </el-dialog>
-  </main>
+    </template>
+
+    <slot />
+    <template slot="footer">
+      <footer v-show="hasFooter" class="footer">
+        <slot name="footer" />
+      </footer>
+    </template>
+  </vxe-modal>
 </template>
 
 <script>
 export default {
   name: 'BeautyDialog',
   props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    top: {
-      type: String,
-      default: '15vh'
-    },
-    destroy: {
-      type: Boolean,
-      default: false
-    },
-    showClose: {
-      type: Boolean,
-      default: true
-    },
-    hasFooter: {
-      type: Boolean,
-      default: true
-    },
-    full: {
-      type: Boolean,
-      default: false
-    }
+    transparent: { type: Boolean, default: false }, // 透明背景
+    visible: { type: Boolean, default: false },
+    title: { type: String, default: '' },
+    top: { type: String, default: '15vh' },
+    destroy: { type: Boolean, default: false },
+    showClose: { type: Boolean, default: true },
+    hasFooter: { type: Boolean, default: true },
+    full: { type: Boolean, default: false },
+    closeOnClickModal: { type: Boolean, default: true },
+    closeOnPressEscape: { type: Boolean, default: true },
+    showFooter: { type: Boolean, default: true }
   },
   methods: {
     closeForm() {
       this.$emit('closeForm')
     },
-    onBeforeClose(done) {
+    onBeforeClose() {
       this.$emit('update:visible', false)
+      this.$emit('close')
     }
   }
 }
@@ -73,119 +69,111 @@ export default {
 <style lang="scss">
 
 // 富文本z-index
-.tox-tinymce-aux{
+.tox-tinymce-aux {
   z-index: 2030 !important;
 }
-.beauty-el-dialog {
-  &.full{
-    width: 100%;
-    height: 100%;
+
+/*重置beauty-vxe-dialog样式*/
+.beauty-dialog,.beauty-vxe-dialog {
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+
+  &.is--active {
+    visibility: visible;
+    opacity: 1;
+    .vxe-modal--box{
+      transform: scale(1) !important;
+      //transition: transform .1s cubic-bezier(0.78,0.14,0.15,0.86)
+    }
+  }
+
+  &.full .vxe-modal--box {
     border-radius: 0;
   }
-    p,article{
-      padding: 0;
-      margin: 0;
-    }
+
+  /*透明背景*/
+  &.transparent .vxe-modal--box {
+    background-color: transparent;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .vxe-modal--box {
     border-radius: 4px;
-    overflow: hidden;
-    &.is-fullscreen{
-      overflow: auto;
-    }
+    transition: transform .18s cubic-bezier(0.78,0.14,0.15,0.86)!important;
+    transform: scale(0.33) !important;
 
-    >.el-dialog__header {
-      height: auto;
-      padding: 0;
-      margin: 0;
-    }
-
-    >.el-dialog__body {
-      padding: 0;
-      margin: 0;
-    }
-
-    >.el-dialog__footer {
-      padding: 0;
-      margin: 0;
-    }
-
-    .title-wrap {
+    > .vxe-modal--header {
       height: 50px;
-      line-height: 50px;
-      width: 100%;
-      display: inline-block;
-      background-color: #fff;
-      border-bottom: 1px solid #F0F3FA;
-      padding: 0 16px;
-      box-sizing: border-box;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
 
-      .title {
-        float: left;
-        font-size: 18px;
-        font-weight: 400;
-        color: #303133;
-        line-height: 50px;
-        margin: 0;
-      }
-      .title-icon {
-        float: right;
-        font-size: 24px;
-        line-height: 50px;
-        color: #D0D3D9;
-        font-weight: 500;
-        display: inline-block;
-        cursor: pointer;
+    > .vxe-modal--body {
+      padding: 0 !important;
+      margin: 0 !important;
+
+      > .vxe-modal--content {
+        padding: 0 !important;
+        margin: 0 !important;
       }
     }
 
-    .footer {
-      height: 56px;
-      line-height: 56px;
-      background: #FAFCFF;
-      border-radius: 0 0 4px 4px;
-      text-align: center;
-      border-top: 1px solid #F0F3FA;
-      button{
-        min-width: 80px;
-        letter-spacing: 3px;
-      }
-    }
-
-    //自定义弹窗动画
-    .el-dialog__wrapper {
-      transition-duration: 0.2s;
-      backdrop-filter: saturate(180%) blur(0.99px);
-    }
-    .dialog-fade-enter-active{
-      animation: none !important;
-    }
-    .dialog-fade-leave-active {
-      transition-duration: 0.1s !important;
-      animation: none !important;
-    }
-    .dialog-fade-enter-active .el-dialog,
-    .dialog-fade-leave-active .el-dialog{
-      animation-fill-mode: forwards;
-    }
-    .dialog-fade-enter-active .el-dialog{
-      animation-duration: 0.2s;
-      animation-name: anim-open;
-      animation-timing-function: cubic-bezier(0.08,0.82,0.17,1);
-    }
-    .dialog-fade-leave-active .el-dialog{
-      animation-duration: 0.2s;
-      animation-name: anim-close;
-      animation-timing-function: cubic-bezier(0.78,0.14,0.15,0.86);
-    }
-
-    @keyframes anim-open {
-      0% { opacity: 0;  transform: scale3d(0, 0, 1); }
-      100% { opacity: 1; transform: scale3d(1, 1, 1); }
-    }
-
-    @keyframes anim-close {
-      0% { opacity: 1; }
-      100% { opacity: 0; transform: scale3d(.2, .2, 1); }
+    > .vxe-modal--footer {
+      padding: 0 !important;
+      margin: 0 !important;
     }
   }
+
+  p, article {
+    padding: 0;
+    margin: 0;
+  }
+
+  .title-wrap {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    background-color: #fff;
+    border-bottom: 1px solid #F0F3FA;
+    padding: 0 16px;
+    box-sizing: border-box;
+
+    .title {
+      float: left;
+      font-size: 18px;
+      font-weight: 400;
+      color: #303133;
+      line-height: 50px;
+      margin: 0;
+    }
+
+    .title-icon {
+      float: right;
+      font-size: 24px;
+      line-height: 50px;
+      color: #D0D3D9;
+      font-weight: 500;
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
+
+  .footer {
+    height: 56px;
+    line-height: 56px;
+    background: #FAFCFF;
+    border-radius: 0 0 4px 4px;
+    text-align: center;
+    border-top: 1px solid #F0F3FA;
+
+    button {
+      min-width: 80px;
+      letter-spacing: 3px;
+    }
+  }
+}
 
 </style>

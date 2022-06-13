@@ -14,7 +14,7 @@ export function setOptions(Vue = null, options = null) {
 
 /* 引入element */
 
-import { Button, Select, Message, Tooltip, Loading, SkeletonItem, Checkbox, Dialog, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
+import { Button, Select, Message, Tooltip, Loading, SkeletonItem, Divider, Popconfirm, Option, Form, Row, Col, FormItem, Tabs, Switch, TabPane, Input, Popover, Image, Tag, DatePicker, Skeleton } from 'element-ui'
 import '@/styles/theme/pure.css' // 引入自定义主题
 import '@/icons' // icon
 
@@ -34,7 +34,7 @@ export function setElement(Vue = null) {
     Vue.use(Popover)
     Vue.use(Image)
     Vue.use(Tag)
-    Vue.use(Dialog)
+    // Vue.use(Dialog)
     Vue.use(Input)
     Vue.use(Switch)
     Vue.use(Form)
@@ -44,7 +44,6 @@ export function setElement(Vue = null) {
     Vue.use(Popconfirm)
     Vue.use(Divider)
     Vue.use(Loading)
-    Vue.use(Checkbox)
 
     const option = { customClass: 'choco-table-msg', duration: 3000 }
     const msgList = ['success', 'warning', 'info', 'error']
@@ -75,3 +74,4 @@ export function setVxe(Vue = null) {
     })
   }
 }
+

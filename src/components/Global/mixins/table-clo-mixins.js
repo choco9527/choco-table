@@ -183,7 +183,7 @@ export default {
           const tabs = []
           this.nestTables.forEach((tab, $i) => {
             const nestViewId = tab.table_view_id
-            const n_d = row.n_d // 嵌套表格数据
+            const n_d = row?.n_d // 嵌套表格数据
             const nest_view_filter_data_token = n_d[nestViewId]
 
             const tabConfig = { pageNum: 25, tableToken: tab.table_token, tableId: nestViewId, nestViewFilterDataToken: nest_view_filter_data_token }

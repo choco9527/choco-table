@@ -16,7 +16,8 @@
 <script>
 // 表单数据全部由formConfig驱动
 import RenderForm from './RenderForm/renderForm'
-import { clone, objectEach, isEmpty } from 'xe-utils'
+import { objectEach } from 'xe-utils'
+import { cloneDeep } from '../../utils/tool'
 import { submitForm } from './api/global-table'
 import formConfigMap from './config-map'
 
@@ -71,7 +72,7 @@ export default {
     $getFormConfig(formConfig, pks) { // 表单配置
       if (formConfig) {
         this.pks = [...pks]
-        const config = clone(formConfig, true)
+        const config = cloneDeep(formConfig)
         config.form.items && config.form.items.forEach(item => {
           item.width = this.widthMap[item.key] || '100%'
         })
@@ -80,15 +81,15 @@ export default {
     },
     $getFormData(formData, formConf) { // 表单数据
       if (!isEmpty(formData) && !isEmpty(formConf)) {
-        this.formData = clone(formData, true)
-        const config = clone(formConf, true)
+        this.formData = cloneDeep(formData)
+        const config = cloneDeep(formConf)
         this.$refs.renderForm.freshOutputFormData(this.formData, config)
       }
     },
     async $submit(data = null) {
       try {
         if (!data) {
-          const submitFormData = clone(this.$refs.renderForm.formatFormDataMethod(), true)
+          const submitFormData = cloneDeep(this.$refs.renderForm.formatFormDataMethod())
           const form = this.formConfig.form
           const vals = form.items.filter(item => {
             const type = submitFormData[item.key] + ''

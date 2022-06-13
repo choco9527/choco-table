@@ -19,6 +19,7 @@
       @resetForm="fresh"
       @resetTableHeight="resetTableHeight"
       @handleDeleteRow="handleDeleteRow"
+      @remoteExport="pageExport"
     >
       <template v-slot:filterMore>
         <slot name="filterMore" :filterConfig="filterConfig" />
@@ -60,7 +61,6 @@
         <slot name="tableBack" />
       </template>
     </global-filter>
-    <global-export v-if="showExport" ref="pageExporter" @pageExport="pageExport" />
     <beauty-dialog
       :title="formDialogTitle"
       :width="dialogConfig.width"
@@ -84,7 +84,6 @@ import BeautyDialog from '@/components/BeautyDialog/index'
 
 import VxeScrollLoadTable from './VxeScrollLoadTable'
 import GlobalFilter from './global-filter'
-import GlobalExport from './global-export'
 import tableFilterMixin from './mixins/table-filter-mixins'
 import tableColMixin from './mixins/table-clo-mixins'
 import { JT } from './form-types'
@@ -92,8 +91,8 @@ import { isDevicePhone } from './assets/js/tools'
 
 import GlobalForm from './global-form'
 
-import { isEmpty, clone } from 'xe-utils'
-import { _local } from '@/utils/tool'
+import { isEmpty } from 'xe-utils'
+import { _local, cloneDeep } from '@/utils/tool'
 const rememberTime = 3 * 24 * 3600 * 1000 // 列宽缓存3天
 
 /*
@@ -103,7 +102,7 @@ const rememberTime = 3 * 24 * 3600 * 1000 // 列宽缓存3天
 */
 export default {
   name: 'GlobalTable',
-  components: { GlobalFilter, GlobalExport, GlobalForm, VxeScrollLoadTable, BeautyDialog },
+  components: { GlobalFilter, GlobalForm, VxeScrollLoadTable, BeautyDialog },
   mixins: [tableColMixin, tableFilterMixin],
   props: {
     config: { // 表格配置
@@ -140,8 +139,8 @@ export default {
 
     /* filter */
     showFilter: { type: Boolean, default: true }, // 显示表格顶部筛选项
-    showExport: { type: Boolean, default: false }, // 显示导出键
     showSetting: { type: Boolean, default: true }, // 是否显示表格设置（列排序等按钮）
+    // showRemoteExport: { type: Boolean, default: true }, // 是否显示后端导出按钮
     elSize: { type: String, default: '' }, // ui样式尺寸
     // selfOptions: { type: Object, default: () => ({}) }, // 自定义options { key=> options:[] }
     // showSettingExport: { type: Boolean, default: true }, // 是否显示前端导出按钮
@@ -167,7 +166,7 @@ export default {
     this.deleteDataForm = {}
     this.filters = [] // 筛选项
     this.tId = (Math.random() * Date.now()).toString(32) // 前端自定义id
-    this.requestMethod = this.selfGetList ? this.selfGetList : getTableList
+    this.requestMethod = this.selfGetList || getTableList
     this.tableTitle = ''
     this.tableToken = ''
     this.hasConfig = false
@@ -273,7 +272,7 @@ export default {
         let config = {}
         const resData = this.selfGetConfig ? await this.selfGetConfig() : await getTableConfig({ table_view_id: this.config.tableId }, this)
         if (!resData) throw new Error('未获取到配置信息')
-        const { config: remoteConfig } = resData
+        const remoteConfig = resData.config
         if (!remoteConfig) return Promise.reject('获取配置失败，配置格式不正确')
         config = Object.assign(config, remoteConfig)
         this.filterConfig = config.filter_config
@@ -305,36 +304,36 @@ export default {
     initFilter(filters) { // 初始化筛选项
       this.filters = filters
       if (!this.showFilter) return
-      filters = clone(filters, true)
+      filters = cloneDeep(filters)
       if (!this.$refs['pageFilter']) return
       this.$refs['pageFilter'].getFilterConfig(filters)
       this.$refs['pageFilter'].freshSearch(filters)
     },
     initColumnConfig(columns) { // 初始化【列】定义
       if (!columns) return
-      columns = clone(columns, true)
+      columns = cloneDeep(columns)
       let cols = columns
       let allOpen = true
       if (this.showSetting) {
-        cols = this.$refs['pageFilter'] ? this.$refs['pageFilter'].getColumns(columns) : []
+        cols = this.$refs['pageFilter']?.getColumns(columns) ?? []
         allOpen = false
       }
       this.columnsConfig = this.initCols(cols, allOpen)
       return columns
     },
     initTableForms(c, e, d) { // 初始化表单
-      this.createDataForms = c ? clone(c, true) : null
-      this.editDataForms = e ? clone(e, true) : null
-      this.deleteDataForm = d ? clone(d, true) : null
+      this.createDataForms = c ? cloneDeep(c) : null
+      this.editDataForms = e ? cloneDeep(e) : null
+      this.deleteDataForm = d ? cloneDeep(d) : null
     },
     initNestTable(propNestTables) { // 初始化行展开
-      this.nestTables = clone(propNestTables, true)
+      this.nestTables = cloneDeep(propNestTables)
     },
     initSortColumn(sortColumn) { // 初始化【列】排序
       if (!sortColumn) return
-      const column = this.columnsConfig.find(col => col.key === sortColumn.key)
+      const column = this.columnsConfig?.find(col => col.key === sortColumn.key)
       if (column && column.open) {
-        this.sortColumn = clone(sortColumn, true)
+        this.sortColumn = cloneDeep(sortColumn)
       }
     },
     initCols(cols, allOpen = true) { // 初始化【列】属性
@@ -349,6 +348,7 @@ export default {
     pageExport() { // 导出
       const exportQuery = this.filterMethod(true)
       exportTable(exportQuery, this).then(res => {
+        console.log(res)
       })
     },
     addForm(formConf) { // 新建表单
@@ -371,7 +371,7 @@ export default {
 
       formConfig.form.items.forEach(item => {
         const format = JT.$toType(item.value_type)
-        const { value, ...res } = firstRow.r_d[item.key]
+        const { value, ...res } = firstRow?.r_d[item.key] ?? {}
         const newVal = format(res.source_value)
         formData[item.key] = { ...res, value: newVal }
       })
@@ -458,8 +458,8 @@ export default {
       list.sort((a, b) => {
         const iA = od.indexOf(a[key])
         const iB = od.indexOf(b[key])
-        a.open = newOrder[iA] ? newOrder[iA].open : true
-        b.open = newOrder[iA] ? newOrder[iB].open : true
+        a.open = newOrder[iA]?.open ?? true
+        b.open = newOrder[iB]?.open ?? true
         return iA - iB
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="global-export">
     <div class="flex-wrap">
-      <el-button class="button" type="primary" size="mini" @click="pageExport()">导出表格</el-button>
+      <el-button class="batch-item btn" type="primary" size="mini" @click="pageExport()">导出表格</el-button>
     </div>
   </div>
 </template>
@@ -27,7 +27,6 @@ export default {
     display: flex;
     justify-content: start;
     align-items: center;
-
   }
 }
 </style>
