@@ -21,7 +21,6 @@
     "dayjs": "^1.10.6",
     "element-ui": "2.15.6",
     "vue": "2.6.10",
-    "vue-router": "3.0.6",
     "vuedraggable": "^2.24.3",
     "vxe-table": "^3.5.7",
     "xe-utils": "^3.3.0"

@@ -25,9 +25,6 @@ const options = {
 // Vue.component('BeautyDialog', BeautyDialog) // 全局注册 BeautyDialog
 Vue.use(GlobalTable, options) // 挂载GlobalTable 加载全局配置
 
-import Router from 'vue-router'
-Vue.use(Router)
-
 new Vue({
   el: '#app',
   render: h => h(App)
