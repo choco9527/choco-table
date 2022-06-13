@@ -133,7 +133,7 @@
       <template v-slot:titleSelf>
         <span>默认筛选项设置</span>
         <el-tooltip effect="light" class="item" content="还原筛选项设置" placement="right">
-          <el-button :size="elSize" type="text">还原</el-button>
+          <el-button :size="elSize" type="text" @click="()=>{resetForm('filter');toggleFilterSetDialog()}">还原</el-button>
         </el-tooltip>
       </template>
       <section class="filter-popup filter-sections mt-12 mb-12">

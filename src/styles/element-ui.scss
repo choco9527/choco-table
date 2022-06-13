@@ -116,6 +116,12 @@
   .el-input--mini .el-input__inner{
     min-height: 28px;
   }
+  .el-input--small .el-input__inner{
+    min-height: 32px;
+  }
+  .el-input--medium .el-input__inner{
+    min-height: 36px;
+  }
 }
 
 // Message

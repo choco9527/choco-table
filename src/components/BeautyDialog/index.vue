@@ -14,6 +14,7 @@
     lock-view
     lock-scroll
     :show-footer="showFooter"
+    :transfer="appendToBody"
     v-on="$listeners"
   >
     <template v-slot:title>
@@ -52,7 +53,8 @@ export default {
     full: { type: Boolean, default: false },
     closeOnClickModal: { type: Boolean, default: true },
     closeOnPressEscape: { type: Boolean, default: true },
-    showFooter: { type: Boolean, default: true }
+    showFooter: { type: Boolean, default: true },
+    appendToBody: { type: Boolean, default: false }
   },
   methods: {
     closeForm() {
