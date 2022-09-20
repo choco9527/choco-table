@@ -1,13 +1,13 @@
 // 处理筛选项 options逻辑
 import { searchPageOptions } from '../api/global-table'
 import { isEmpty } from 'xe-utils'
-import { _session, cloneDeep } from '@/utils/tool'
+import { _session, cloneDeep } from '@/utils/tools'
 
 export default {
   methods: {
     // filter options
-    firstFocusSearch(sear) { // 首次筛选
-      if (sear.value !== undefined && sear.value !== null && sear.value !== '' && sear.option_token) {
+    handleSearFocus(sear) { // 下拉focus进行初始化
+      if (sear.value !== undefined && sear.value !== null && sear.option_token) {
         this.selectFilterMethod(sear)()
       }
     },
@@ -20,12 +20,17 @@ export default {
         }
       })
     },
+    setOptions(options, sear) {
+      if (!sear) return
+      const that = this
+      const o = cloneDeep(options)
+      that.$set(that, 'options', o)
+      sear.options = o
+    },
     selectFilterMethod(sear) { // 将sear运用到renderOption内部
       const that = this
       const setOptions = options => {
-        const o = cloneDeep(options)
-        that.$set(that, 'options', o)
-        sear.options = o
+        that.setOptions(options, sear)
       }
 
       if (isEmpty(sear) || !sear.option_token) {
@@ -41,7 +46,6 @@ export default {
           searchNextPageToken: sear.searchNextPageToken || '',
           searchNumPerPage: 20
         }
-        // console.log('selectFilterMethod')
         if (!val && that.storageOptions(sear.key)) { // no value && has sessionStorage
           // get storage
           const opts = that.getOptions(that.storageOptions(sear.key))

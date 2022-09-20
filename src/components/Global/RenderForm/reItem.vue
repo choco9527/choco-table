@@ -36,25 +36,25 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/styles/variables.scss";
+
 .re-item{
   min-height: 60px;
   .el-form-item{
     .el-form-item__label{
       position: relative;
-      //margin-right: 6px;
       &:before{
         position: absolute;
         content: "*";
-        color: #ff4949;
-        right: 0;
-        top: -9px;
+        color: #FF5533;
+        right:0;
+        top: -4px;
       }
     }
   }
   .label{
-    color: rgba(0,0,0,.85);
-    font-weight: normal;
-
+    color: $color-text-regular;
+    font-weight: 400;
   }
 }
 </style>

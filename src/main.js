@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { getConfig, getList, searchPageOptions, exportTable, submitForm } from '@/mock-api/table'
+import { getConfig, getList, searchPageOptions, exportTable, submitForm } from '@/mock-api/tableMethods'
 
 // 本地免打包使用
 import GlobalTable, { BeautyDialog } from './index'
@@ -20,9 +20,7 @@ const options = {
   tableSize: 'small'
 }
 
-// const { BeautyDialog } = GlobalTable
-
-// Vue.component('BeautyDialog', BeautyDialog) // 全局注册 BeautyDialog
+Vue.component('BeautyDialog', BeautyDialog) // 全局注册 BeautyDialog
 Vue.use(GlobalTable, options) // 挂载GlobalTable 加载全局配置
 
 new Vue({

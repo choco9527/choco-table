@@ -47,8 +47,8 @@
             </span>
 
           </div>
-          <div v-if="!searchQuery" :class="['search-form','w--100', 'h-40', {'max-width': !showSetting }]">
-            <el-skeleton-item v-for="i in 3" :key="'skeleton-'+i" :rows="1" animated :class="['w--25', {'mr-20': i<3}]" />
+          <div v-if="!searchQuery" :class="['search-form','_w-100', 'h-40', {'max-width': !showSetting }]">
+            <el-skeleton-item v-for="i in 3" :key="'skeleton-'+i" :rows="1" animated :class="['_w-25', {'mr-20': i<3}]" />
           </div>
 
           <!--            no searchQuery!-->
@@ -115,21 +115,12 @@
         <el-button v-else :size="elSize" disabled class="batch-item btn">批量删除</el-button>
       </span>
 
-      <!--    !SET FORM-->
-      <div
-        v-if="showSetting"
-        :class="['batch', 'set-form', {hide: phoneSetting}]"
-        :style="{width: showSettingExport ? '160px' : '110px'}"
-      >
-        <!--      导出-->
-        <i v-show="isPhone" class="el-icon-caret-right phone-icon" @click="phoneSetting = !phoneSetting" />
-      </div>
     </section>
     <!-- table组件放置在 filter后-->
     <slot name="tableArea" />
 
     <!-- 默认筛选项设置弹窗-->
-    <beauty-dialog top="50px" width="620px" :visible.sync="filterSetDialog">
+    <beauty-dialog :show-close="true" :margin-size="-200" top="50px" width="620px" :visible.sync="filterSetDialog">
       <template v-slot:titleSelf>
         <span>默认筛选项设置</span>
         <el-tooltip effect="light" class="item" content="还原筛选项设置" placement="right">
@@ -178,25 +169,23 @@
     </beauty-dialog>
 
     <!-- 列设置弹窗-->
-    <beauty-dialog top="50px" width="860px" :visible.sync="colSetDialog">
+    <beauty-dialog top="50px" :margin-size="-200" width="720" :visible.sync="colSetDialog">
       <template v-slot:titleSelf>
         <span>列设置</span>
       </template>
       <section class="filter-popup">
         <article class="column-set">
-          <c-col-set ref="colSet" :span="12" :columns.sync="columns" :size="elSize">
+          <c-col-set ref="colSet" show-fixed :span="12" :columns.sync="columns" :size="elSize">
             <template v-slot:title>
-              <span class="flex between" style="width: 100%">
+              <span class="flex between _w-100">
                 <span>列设置</span>
                 <el-button :size="elSize" class="item pr-0" type="text" @click="()=>{resetForm('col');toggleColSetDialog()}">还原</el-button>
               </span>
             </template>
           </c-col-set>
-          <div class="lh-30">
-            <vxe-checkbox v-model="rememberColumn" checked-value="1" unchecked-value="2">
-              记住我的选择
-            </vxe-checkbox>
-          </div>
+          <vxe-checkbox v-if="!defaultRememberCol" v-model="rememberColumn" size="small" class="lh-30 pb-4" checked-value="1" unchecked-value="2">
+            <span class="fw-normal">记住我的选择</span>
+          </vxe-checkbox>
         </article>
       </section>
       <template v-slot:footer>
@@ -215,10 +204,10 @@ import filterQueryMixin from './mixins/filter-query-mixins'
 import filterOptionMixin from './RenderOptions/options-mixins'
 import DatePicker from './components/DatePicker'
 import NormalInput from './components/NormalInput'
-import { _local, getAllParams, cloneDeep } from '@/utils/tool'
+import { _local, getAllParams, cloneDeep } from '@/utils/tools'
 import CColSet from '@/components/ColSet'
 
-const rememberTime = 3 * 24 * 3600 * 1000 // 列以及筛选项信息缓存3天
+const rememberTime = 30 * 24 * 3600 * 1000 // 列以及筛选项信息缓存30天
 import BeautyDialog from '@/components/BeautyDialog/index'
 
 // 全局的表格筛选项渲染组件
@@ -237,8 +226,8 @@ export default {
     selectable: { type: Boolean, default: false }, // 是否可以多选 （若打开多选则支持批量操作）
     deleteDataForm: { type: Object, default: () => ({}) },
     fromNest: { type: Boolean, default: false }, // 是否来自嵌套表格（子表格）
-    isPhone: { type: Boolean, default: false }, // 是否是移动端
-    elSize: { type: String, default: 'small' } // ui样式尺寸
+    elSize: { type: String, default: 'small' }, // ui样式尺寸
+    defaultRememberCol: { type: Boolean, default: true } // 默认记住我的选择（列设置）
   },
   data() {
     this.colKey = 'table-cols-' + this.configId
@@ -254,15 +243,13 @@ export default {
       ...filterType,
       columns: [],
       getQueryTypeName: JT.getQueryTypeName,
-      rememberColumn: _local.get(reKey) || '2',
+      rememberColumn: this.defaultRememberCol ? '1' : (_local.get(reKey) || '2'), // 1记住 2不记住
       expand: false,
       searching: false, // 正在搜索，防止重复触发搜索
       selectedValues: [],
-      phoneSetting: false,
       expandHeight: 0,
       filterSetDialog: false,
       colSetDialog: false
-
     }
   },
   computed: {
@@ -277,12 +264,7 @@ export default {
       return this.$parent && this.$parent.$refs.scrollLoadTable && this.$parent.$refs.scrollLoadTable.listLoading
     }
   },
-  watch: {
-    isPhone(val) {
-      this.phoneSetting = val
-      // this.resetFilterHeight()
-    }
-  },
+
   methods: {
     toggleExpand() {
       this.expand = !this.expand
@@ -361,7 +343,7 @@ export default {
     getColumns(columns = null) {
       const localCols = _local.get(this.colKey) // 检查缓存
       if (!localCols) {
-        this.columns = columns.map(col => ({ key: col.key, column_type: col.column_type, label: col.label, open: col.open || !col.collapse_default }))
+        this.columns = columns.map(col => ({ key: col.key, column_type: col.column_type, label: col.label, open: col.open || !col.collapse_default, fixed: col.fixed || '' }))
       } else {
         this.columns = localCols
       }
@@ -603,7 +585,7 @@ export default {
             height: 24px;
             padding: 2px 8px;
             .delete{
-              color: #D0D3D9;
+              color: $color-white-4;
               &+span{
                 font-size: var(--gutter_13-14);
               }
@@ -653,7 +635,7 @@ export default {
       background-color: $color-white;
       z-index: -1;
       &.expand{
-        z-index: 2001;
+        z-index: 988;
       }
       .whole-area{
         border-left: none;
@@ -684,7 +666,7 @@ export default {
     width: 100%;
     display: inline-block;
     line-height: 1;
-    background-color: $bg-white-1;
+    background-color: transparent;
 
     .batch{
       display: flex;
@@ -717,42 +699,7 @@ export default {
         }
       }
     }
-
-    .set-form{
-      float: right;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      align-items: center;
-
-      .wrap {
-        width: 28px;
-        height: 28px;
-        line-height: 28px;
-        cursor: pointer;
-        text-align: center;
-        background-color: transparent;
-        color: $light-blue;
-        font-size: 20px;
-        border-color: #f3f0f1;
-        margin: 0;
-        &.first{
-          margin-left: 0;
-        }
-
-        .set-icon {
-          transition: transform .2s ease-in-out;
-          &:hover {
-            transform: rotateZ(-90deg);
-          }
-        }
-        .fresh-icon{
-          font-size: 24px;
-        }
-      }
-    }
   }
-
 }
 
 .filter-popup{
@@ -792,36 +739,7 @@ export default {
             width: 100%;
           }
         }
-        .check-cell{
-          width: 18px;
-          height: 18px;
-          border-radius: 3px;
-          border: 1.2px solid $border-white-3;
-          cursor: pointer;
-          position: relative;
-          margin-left: 8px;
-          position: relative;
-          .svg-check{
-            font-size: 12px;
-            position: absolute;
-            opacity: 0;
-            left: 50%;
-            top: 50%;
-            transform: translate3d(-50%, -50%, 0px);
-          }
 
-          &.checked{
-            background-color: $light-blue;
-            border-color: $light-blue;
-            color: #fff;
-            .svg-check{
-              opacity: 1;
-            }
-          }
-          &:hover{
-            border-color: $light-blue;
-          }
-        }
         .item-input {
           @include item-input
         }

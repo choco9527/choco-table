@@ -1,13 +1,7 @@
 <template>
-  <div class="global-form" :style="{width,height}">
-    <article v-if="showLeft" class="left-tabs">
-      <!--      <template v-for="(conf,index) in formConfig">-->
-      <!--        <div :key="conf.form.form_token" class="tab" :class="{active: tabIndex === index}" @click="tabClick(index)">-->
-      <!--          <p class="title">{{ conf.form.title }}</p>-->
-      <!--        </div>-->
-      <!--      </template>-->
-    </article>
-    <article class="right-forms">
+  <div class="global-form" :style="{width,maxHeight}">
+    <article v-if="showLeft" class="left-tabs" />
+    <article class="right-forms p-0">
       <render-form ref="renderForm" :config-id="configId" :items-raw="formItems" :form-data="formData" v-bind="$attrs" />
     </article>
   </div>
@@ -16,8 +10,8 @@
 <script>
 // 表单数据全部由formConfig驱动
 import RenderForm from './RenderForm/renderForm'
-import { objectEach } from 'xe-utils'
-import { cloneDeep } from '../../utils/tool'
+import { objectEach, isEmpty } from 'xe-utils'
+import { cloneDeep } from '../../utils/tools'
 import { submitForm } from './api/global-table'
 import formConfigMap from './config-map'
 
@@ -31,9 +25,9 @@ export default {
       type: String,
       default: '100%'
     },
-    height: {
+    maxHeight: {
       type: String,
-      default: '100%'
+      default: '90vh'
     }
   },
   data() {
@@ -121,7 +115,7 @@ export default {
   overflow-y: auto;
   display: flex;
   justify-content: start;
-  padding: 20px 20px 0 0;
+  padding: 20px 2px 0 0;
   p{
     margin:0;
     padding: 0;
@@ -153,18 +147,9 @@ export default {
     }
   }
   .right-forms{
-    padding: 6px;
     height: 100%;
     flex: 1;
     overflow-y: auto;
-    .label{
-      color: #303030;
-      font-size:14px;
-      font-weight: 600;
-      line-height: 1.5;
-      padding-top: calc(0.375rem + 1px);
-      padding-bottom: calc(0.375rem + 1px);
-    }
     .input-short{
       width: 140px;
     }

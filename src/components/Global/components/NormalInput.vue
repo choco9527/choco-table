@@ -1,12 +1,12 @@
 <template>
   <span>
     <template v-if="sear[sType] === queryType.RANGE">
-      <el-input v-model="sear[modelName].start" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '最小'" class="item-input short" @input="handleSearch" @clear="search" @change="onChange" />
+      <el-input v-model="sear[modelName].start" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '最小'" class="item-input short" @input="handleSearch" @clear="handleSearch" @change="onChange" />
       <span class="space" />
-      <el-input v-model="sear[modelName].end" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '最大'" class="item-input short" @input="handleSearch" @clear="search" @change="onChange" />
+      <el-input v-model="sear[modelName].end" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '最大'" class="item-input short" @input="handleSearch" @clear="handleSearch" @change="onChange" />
     </template>
     <template v-else>
-      <el-input v-model="sear[modelName]" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '输入默认值'" class="item-input" @input="handleSearch" @clear="search" @change="onChange" />
+      <el-input v-model="sear[modelName]" :clearable="clearable" :size="size" :type="getInputType(sear.value_type)" :placeholder="notDefault ? sear.tips : '输入默认值'" class="item-input" @input="handleSearch" @clear="handleSearch" @change="onChange" />
     </template>
   </span>
 </template>

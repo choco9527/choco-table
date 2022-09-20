@@ -4,26 +4,26 @@
     ref="vxeModal"
     :value="visible"
     :destroy-on-close="destroy"
-    v-bind="$attrs"
     :show-close="false"
-    :class-name="`beauty-vxe-dialog ${full?'full':''} ${transparent ? 'transparent' : ''}`"
+    :class-name="`${customClass} beauty-vxe-dialog ${full?'full':''} ${transparent ? 'transparent' : ''}`"
     :fullscreen="full"
     :before-hide-method="onBeforeClose"
     :mask-closable="closeOnClickModal"
     :esc-closable="closeOnPressEscape"
-    lock-view
     lock-scroll
     :show-footer="showFooter"
     :transfer="appendToBody"
+    v-bind="$attrs"
+    :mask="false"
     v-on="$listeners"
   >
-    <template v-slot:title>
+    <template #title>
       <slot name="title">
         <div class="title-wrap clearfix">
           <h2 class="title">
             <slot name="titleSelf">{{ title }}</slot>
           </h2>
-          <i class="title-icon">
+          <i v-if="showClose" class="title-icon">
             <svg-icon icon-class="close" @click="$emit('update:visible',false)" />
           </i>
         </div>
@@ -46,7 +46,6 @@ export default {
     transparent: { type: Boolean, default: false }, // 透明背景
     visible: { type: Boolean, default: false },
     title: { type: String, default: '' },
-    top: { type: String, default: '15vh' },
     destroy: { type: Boolean, default: false },
     showClose: { type: Boolean, default: true },
     hasFooter: { type: Boolean, default: true },
@@ -54,7 +53,8 @@ export default {
     closeOnClickModal: { type: Boolean, default: true },
     closeOnPressEscape: { type: Boolean, default: true },
     showFooter: { type: Boolean, default: true },
-    appendToBody: { type: Boolean, default: false }
+    appendToBody: { type: Boolean, default: false },
+    customClass: { type: String, default: '' }
   },
   methods: {
     closeForm() {
@@ -80,14 +80,18 @@ export default {
   display: block !important;
   visibility: hidden;
   opacity: 0;
-  overflow: hidden;
+  transition: opacity .2s ease-in-out;
+  &:not(.is--active) {
+    .vxe-modal--box >div{
+      display: none !important;
+    }
+  }
 
   &.is--active {
-    visibility: visible;
-    opacity: 1;
+    visibility: visible ;
+    opacity: 1 ;
     .vxe-modal--box{
       transform: scale(1) !important;
-      //transition: transform .1s cubic-bezier(0.78,0.14,0.15,0.86)
     }
   }
 
@@ -102,10 +106,16 @@ export default {
     border: none !important;
   }
 
+  &.is--visible::before{ // 自定义遮罩层
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all .13s ease-in-out;
+  }
+
   .vxe-modal--box {
     border-radius: 4px;
-    transition: transform .18s cubic-bezier(0.78,0.14,0.15,0.86)!important;
-    transform: scale(0.33) !important;
+    transition: transform .13s cubic-bezier(.38,1.38,.85,.98) !important;
+    transform: scale(0.78) !important;
+    opacity: 0.4;
 
     > .vxe-modal--header {
       height: 50px;
@@ -137,23 +147,22 @@ export default {
   .title-wrap {
     height: 100%;
     width: 100%;
-    display: inline-block;
+    display: flex;
+    justify-content: start;
     background-color: #fff;
-    border-bottom: 1px solid #F0F3FA;
     padding: 0 16px;
     box-sizing: border-box;
 
     .title {
-      float: left;
       font-size: 18px;
       font-weight: 400;
       color: #303133;
       line-height: 50px;
       margin: 0;
+      flex: 1;
     }
 
     .title-icon {
-      float: right;
       font-size: 24px;
       line-height: 50px;
       color: #D0D3D9;

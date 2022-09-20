@@ -1,6 +1,6 @@
 <template>
   <div class="render-form">
-    <el-form ref="form" label-width="auto" :model="outputFormData" v-bind="$attrs">
+    <el-form ref="form" label-width="auto" label-position="left" :model="outputFormData" v-bind="$attrs">
       <el-row :gutter="40" class="form-row">
         <el-col
           v-for="item in items.filter(v => !v.fullRow)"
@@ -46,7 +46,7 @@ export default {
 <style scoped lang="scss">
 
 .render-form{
-  padding: 0 20px;
+  padding: 0 80px;
   .form-row{
     flex-wrap: wrap;
     display: flex;

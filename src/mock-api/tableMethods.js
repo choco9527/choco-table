@@ -1,16 +1,27 @@
-import { sleep } from '@/utils/tool'
-import { filters, columns, mockData, mockSummary } from '@/utils/tableData'
-import request from '@/utils/request'
+// table请求示例
+import { sleep } from '@/utils/tools'
+import { filters, columns, formItems } from '@/mock-api/tableConfigs'
+import { mockData, mockSummary } from '@/mock-api/tableDatas'
 
 export async function getConfig() {
   await sleep(100)
+  const nestConfig = {
+    columns: columns,
+    create_data_forms: null,
+    edit_data_forms: null,
+    nest_tables: null,
+    table_title: '嵌套表格',
+    table_token: 'nest_token',
+    table_view_id: 'NEST_TABLE_ID',
+    filter_config: { }
+  }
   const res = {
     config: {
       columns: columns,
       create_data_forms: null,
-      edit_data_forms: null,
-      nest_tables: null,
-      table_title: '示例表格',
+      edit_data_forms: formItems, // 设置为 'allow' 可使用自定义编辑列 key = $edit
+      nest_tables: [nestConfig], // 嵌套表格
+      table_title: '主表格',
       filter_config: { filters }
     }
   }
@@ -59,20 +70,20 @@ export async function searchPageOptions(params) {
   }
 }
 
+const postConfig = {
+  method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  mode: 'cors', // no-cors, *cors, same-origin
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}
+
 // 导出表格
 export function exportTable(params) {
-  return request({
-    url: 'api/globalTable/exportTable',
-    method: 'get',
-    params
-  })
+  return fetch('api/globalTable/exportTable', postConfig)
 }
 
 // 提交表单
 export function submitForm(data) {
-  return request({
-    url: 'api/globalTable/submitForm',
-    method: 'post',
-    data
-  })
+  return fetch('api/globalTable/submitForm', postConfig)
 }

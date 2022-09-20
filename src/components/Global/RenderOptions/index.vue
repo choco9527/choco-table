@@ -15,7 +15,7 @@
       :clearable="clearable"
       :multiple="multiple"
       class="item-input"
-      @focus="firstFocusSearch(sear)"
+      @focus="handleSearFocus(sear)"
       @change="change"
     >
       <el-option
@@ -60,10 +60,10 @@ export default {
     }
   },
   data() {
+    Object.assign(this, filterType)
     return {
       value: '',
-      options: [],
-      ...filterType
+      options: []
     }
   },
   computed: {
@@ -75,9 +75,16 @@ export default {
     }
   },
   watch: {
-    propVal(newVal, oldVal) {
-      // console.log('propVal change', newVal)
-      if (newVal !== oldVal) this.setValue()
+    propVal(n, o) {
+      if (n !== o) {
+        this.setValue()
+      }
+    },
+    'sear.options'(n, o) {
+      if (n === null && o) {
+        // 'clear options has been clear'
+        if (this.options && this.sear) this.setOptions(this.options, this.sear) // 将内部options加载至sear对象
+      }
     }
   },
   created() {
@@ -85,6 +92,7 @@ export default {
     this.setValue()
   },
   mounted() {
+    if (this.options && this.sear) this.setOptions(this.options, this.sear) // 将内部options加载至sear对象
   },
   methods: {
     formatValType(oriVal) {

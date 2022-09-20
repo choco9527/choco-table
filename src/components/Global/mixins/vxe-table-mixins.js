@@ -3,9 +3,20 @@ import StickyFooterMixin from './sticky-footer-mixin'
 
 export default {
   mixins: [StickyFooterMixin],
+  props: {
+    enableContextMenu: { type: Boolean, default: true } // 开启右键菜单
+  },
   data() {
     return {
-      tableMenu: { // 右键菜单
+      exportConfig: {
+        modes: ['current', 'selected']
+      }
+    }
+  },
+  computed: {
+    tableMenu() {
+      return { // 右键菜单
+        enabled: this.enableContextMenu,
         header: {
           options: [[{ name: '列左锁定', code: 'lockColLeft' }, { name: '列右锁定', code: 'lockColRight' }, {
             name: '取消锁定',
@@ -16,14 +27,15 @@ export default {
           options: [
             this.selectable ? [{ name: '全选', code: 'selectAll' }, { name: '取消全选', code: 'clearAll' }] : []
           ]
-        }
-      },
-      exportConfig: {
-        modes: ['current', 'selected']
+        },
+        className: 'choco-right-menu'
       }
     }
   },
   methods: {
+    _getVxeTable() { // 获取vxeTable
+      return (this.refName === 'vxeTable') ? this.$refs[this.refName] : this.$refs[this.refName]._getVxeTable()
+    },
     getTableData() {
       return this.$refs[this.refName].getTableData()
     },
@@ -34,9 +46,7 @@ export default {
       this.$refs[this.refName].reloadColumn(columns)
     },
     async refreshColumn() {
-      // await this.$broadcast('refreshColumn') // 向下传递刷新组件
       await this.$refs[this.refName].refreshColumn()
-      this.initStickyFooter()
     },
     clearCheckboxRow() {
       this.$refs[this.refName].clearCheckboxRow()

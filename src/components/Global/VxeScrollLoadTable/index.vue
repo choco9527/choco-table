@@ -4,7 +4,7 @@
     :table-id="tableId"
     :style="{height: autoHeight ? tableBodyHeight : 'auto'}"
   >
-    <section :style="{height: autoHeight && showTotal ? 'calc(100% - 40px)' : 'auto',overflowY:'auto'}">
+    <section :class="{nest:fromNest}" :style="{height: autoHeight && showTotal ? 'calc(100% - 40px)' : 'auto',overflowY: 'auto'}">
       <pure-table
         v-if="showTable"
         ref="pureTable"
@@ -83,20 +83,20 @@ export default {
         return null
       }
     },
+    fromNest: { type: Boolean, default: false }, // 是否来自嵌套表格（子表格）
     autoHeight: { type: Boolean, default: true }, // true则铺满父容器，false由内容撑开
     height: { type: [String, Number], default: 'auto' }, // 列表高度
     maxTbHeight: { type: [String, Number], default: 2000 }, // 列表最大定高，如果需要高度自适应则设置为100%
     selectable: { type: Boolean, default: false }, // 是否可以多选 （若打开多选功能则不支持前端缓存加载）
     showTotal: { type: Boolean, default: true }, // 显示下方分页器
     showTableSummary: { type: Boolean, default: false }, // 显示合计
-    showContextMenu: { type: Boolean, default: false }, // 挂载右键菜单
     selfCellFormats: { type: Object, default: null }, // 自定义合计单元格格式化方法 { key=> fn:Function }
     customHeight: { type: [Number, String], default: 0 }, // 自定义表格计算需要减去高度
-    isPhone: { type: Boolean, default: false }, // 是否是移动端
     sortConfig: { type: Object, default: null }, // 排序配置
-    stickyFooter: { type: Boolean, default: false }, // 是否合计行吸底
     elSize: { type: String, default: 'small' }, // ui样式尺寸
     pages: { type: Array, default: () => [25, 50, 100, 200] } // 分页
+    // stickyFooter: { type: Boolean, default: false }, // 是否合计行吸底
+    // scrollSelector: { type: String, default: '' } // 指定需要作为滚动监测的包裹元素，默认为window
   },
   data() {
     this.allList = [] // 缓存所有数据列表
@@ -111,7 +111,7 @@ export default {
       summary: null, // 合计
       showTable: true,
       tableBodyHeight: 'auto',
-      highLineRows: {} // {blue: [], } // 按颜色标记
+      highLineRows: { blue: [] } // {blue: [], } // 按颜色标记
     }
   },
   computed: {
@@ -129,57 +129,51 @@ export default {
     }
   },
   mounted() {
-    // 滚动加载下一页的数据
-    this.bodyDom = document.querySelector(`${this.tableSelector} .vxe-table--body-wrapper`)
-    const dom = this.bodyDom
-    const scrollFn = () => { // 监听table滚动加载下一页
-      if (!dom.scrollTop) return
-      if ((dom.scrollHeight - ~~(dom.scrollTop + dom.clientHeight)) < 100) {
-        // 如果next_page_token 不存在，则不加载下一页
-        if ((this.data.length === 0 && this.allList.length === 0) || this.data.length === this.total) {
-          return
-        }
-        this.getNextPage()
-      }
-      if (!this.selectable && 2 * ~~(dom.scrollTop + dom.clientHeight) > dom.scrollHeight && this.allList.length > 0) { // 从allList取出数据 (不可多选时支持)
-        this.pushListData()
-      }
-    }
-    const scrollFooterFn = () => { // 监听视图滚动锁定合计行
-      if (this.judgeBottomAppear()) {
-        this.removeFootersClass()
-      } else {
-        this.setFootersClass()
-      }
-    }
-
-    const resizeFn = () => this.setTableHeight() // 监听窗口改变table大小
-    const resizeFooterFn = () => this.setFootersClass() // 监听窗口改变计算底部合计行
-
-    this.$nextTick(() => {
-      dom && dom.addEventListener('scroll', debounce(scrollFn, 300), false)
-      if (this.autoHeight) { // calc height auto when window resize,铺满父容器
-        setTimeout(() => resizeFn(), 1000)
-        window.addEventListener('resize', debounce(resizeFn, 200))
-      }
-
-      if (this.stickyFooter) { // calc footer width when window resize
-        window.addEventListener('resize', debounce(resizeFooterFn, 200))
-        window.addEventListener('scroll', debounce(scrollFooterFn, 500))
-      }
-    })
     this.$init()
   },
   methods: {
     $init() {
+      // 滚动加载下一页的数据
+      this.bodyDom = document.querySelector(`${this.tableSelector} .vxe-table--body-wrapper`)
+      const dom = this.bodyDom
+      const scrollFn = () => { // 监听table滚动加载下一页
+        if (!dom.scrollTop) return
+        if ((dom.scrollHeight - ~~(dom.scrollTop + dom.clientHeight)) < 100) {
+          // 如果next_page_token 不存在，则不加载下一页
+          if ((this.data.length === 0 && this.allList.length === 0) || this.data.length === this.total) {
+            return
+          }
+          this.getNextPage()
+        }
+        if (!this.selectable && 2 * ~~(dom.scrollTop + dom.clientHeight) > dom.scrollHeight && this.allList.length > 0) { // 从allList取出数据 (不可多选时支持)
+          this.pushListData()
+        }
+      }
+
+      const resizeFn = () => this.setTableHeight() // 监听窗口改变table大小
+
+      this.$nextTick(() => {
+        dom && dom.addEventListener('scroll', debounce(scrollFn, 300), false)
+        if (this.autoHeight) { // calc height auto when window resize,铺满父容器
+          setTimeout(() => resizeFn(), 1000)
+          window.addEventListener('resize', debounce(resizeFn, 200))
+        }
+      })
       this.$emit('$vxeTableInit')
     },
     $reloadTable(cb = null) { // 使用vif 大型重载table
-      this.showTable = false
-      this.$nextTick(() => {
-        this.showTable = true
-        cb && cb()
+      const that = this
+      that.showTable = false
+      that.$nextTick(_ => {
+        that.showTable = true
+        afterReload()
       })
+      function afterReload() { // 重载后重新初始化并回调
+        that.$nextTick(_ => {
+          that.$init()
+          cb && cb()
+        })
+      }
     },
     setTableHeight() {
       try {
@@ -196,8 +190,8 @@ export default {
         console.log('setTableHeight Error:', e)
       }
     },
-    // 获取列表,因为滚动加载下一页基本结构一样
 
+    // 获取列表,因为滚动加载下一页基本结构一样
     async $getList(update = true) {
       this.listLoading = true
       // 对dimensions进行处理
@@ -246,7 +240,6 @@ export default {
         this.listLoading = false
       }
     },
-
     getNextPage() {
       if (this.listQuery.next_page_token) {
         // console.log('next_page')
@@ -310,7 +303,7 @@ export default {
       }
       this.handleColumn(row, column, code)
     },
-    handleColumn(row, column, code) {
+    async handleColumn(row, column, code) {
       if (!row && column) { // 头操作
         if (code === 'lockColLeft' && column.fixed !== 'left') {
           column.fixed = 'left'
@@ -319,7 +312,8 @@ export default {
         } else if (code === 'cancelLockCol' && column.fixed) {
           column.fixed = ''
         }
-        this.refreshColumn()
+        await this.refreshColumn()
+        this.initStickyFooter()
       }
     },
     resizeCol({ column }) { // 列宽改变
@@ -327,7 +321,7 @@ export default {
       const colEle = document.querySelector(`[colid=${colId}]`)
       const width = colEle?.clientWidth
       if (width) this.$emit('setWidthMap', column.property, width)
-      this.setFootersStyle()
+      this.changeFooterFn()
     },
     rowClassName({ row }) {
       const key = row._XID || row._X_ROW_KEY
@@ -353,14 +347,9 @@ export default {
           }
           return colEle
         }) : []
-
         const fn = () => {
           this.$nextTick(() => {
-            if (!this.judgeBottomAppear()) {
-              this.initStickyFooter()
-            } else {
-              this.removeFootersClass()
-            }
+            this.initStickyFooter()
           })
         }
         debounce(fn, 666)()
@@ -427,6 +416,10 @@ export default {
   font-weight: 400;
   color: $color-text-regular;
   text-align: left;
+}
+
+section.nest::-webkit-scrollbar{
+  display: none;
 }
 
 </style>

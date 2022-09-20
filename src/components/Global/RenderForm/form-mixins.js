@@ -147,7 +147,7 @@ export default {
         jsonVal = null
       }
       return (<div class='json-wrap'>
-        <v-json-edit mode='text' lang='zh-CN' v-model={jsonVal} edit onChange={(val) => {
+        <v-json-edit mode='code' drag lang='zh-CN' v-model={jsonVal} mainMenuBar={false} edit onChange={(val) => {
           outObj.tempVal = JSON.stringify(val)
         }}/>
       </div>)

@@ -3,7 +3,7 @@ import { objectEach, has, isEmpty } from 'xe-utils'
 import { filterType, JT } from '../form-types'
 import ClipboardJS from 'clipboard'
 import dayjs from '@/utils/dayjs'
-import { isJson } from '@/utils/tool'
+import { isJson } from '@/utils/tools'
 
 export default {
   data() {
@@ -49,7 +49,7 @@ export default {
       try {
         const columns = []
         if (this.showEditRow() && this.columnsConfig.every(fig => fig.key !== '$edit')) {
-          this.columnsConfig.push({ key: '$edit', open: true, label: '编辑', tips: '进行编辑操作', width: this.colWidthMap['$edit'] || '', minWidth: this.colMinWidthMap['$edit'] || 120 })
+          this.columnsConfig.push({ key: '$edit', open: true, label: '操作', tips: '操作', width: this.colWidthMap['$edit'] || '', minWidth: this.colMinWidthMap['$edit'] || 120 })
         }
         this.columnsConfig.forEach(config => {
           const mv = JT.$getType(config.view_type, 'viewType') // 控制列的展示形式
@@ -58,14 +58,14 @@ export default {
             columns.push(config)
           } else {
             const item = {
-              width: config.width || this.colWidthMap[configKey] || '',
-              minWidth: config.minWidth || this.colMinWidthMap[configKey] || 80,
+              width: config.width || '',
+              minWidth: config.minWidth || 80,
               field: configKey,
               align: this.colAlignMap[configKey] || 'center',
               title: config.label,
               sortable: false,
               visible: config.open,
-              fixed: config.fixed ? 'left' : this.colFixMap[configKey] || '',
+              fixed: (config.fixed || ''),
               className: config.className,
               showOverflow: this.showOverflow,
               renderHeader: this.renderHeader(config),
@@ -76,22 +76,29 @@ export default {
             columns.push(item)
           }
         })
+
+        /* 展开行 */
         const showExpand = ((this.nestTables && this.nestTables.length > 0) + '') === 'true'
-        if (showExpand) { // 展开行
+        if (showExpand) {
           const item = {
             type: 'expand',
             width: 40,
             resizable: false,
+            fixed: this.colFixMap['expand'],
             renderContent: this.renderExpandContent()
           }
           columns.unshift(item)
         }
-        if (this.showIndex) { // 序列
-          const item = { type: 'seq', visible: true, width: 50, title: '#', resizable: false }
+
+        /* 序列 */
+        if (this.showIndex) {
+          const item = { type: 'seq', visible: true, width: 50, title: '#', resizable: false, fixed: this.colFixMap['seq'] }
           columns.unshift(item)
         }
-        if (this.selectable) { // 多选
-          columns.unshift({ type: 'checkbox', visible: true, width: 40, resizable: false, fixed: 'left' })
+
+        /* 多选 */
+        if (this.selectable) {
+          columns.unshift({ type: 'checkbox', visible: true, width: 40, resizable: false, fixed: this.colFixMap['checkbox'] })
         }
         return columns
       } catch (e) {
@@ -116,15 +123,15 @@ export default {
     renderHeader(config) { // 渲染普通row的header
       return (h, { _columnIndex }) => {
         const sortType = this.sortColumn && this.sortColumn.key === config.key && this.sortColumn.sort_type
-        const sortEl = config.sortable ? (<div class='sort'>
+        const sortEl = config.sortable ? (<div class='sort ml-2 flex column a-center j-center'>
           <svg-icon onClick={() => this.onSortColumn(config.key, sortType === 0 ? null : 'asc')}
-            icon-class='sort' class={`top caret ${sortType === 0 ? 'active' : ''}`}/>
+            icon-class='sort' class={`top mb--2 fs-12 caret ${sortType === 0 ? 'active' : ''}`}/>
           <svg-icon onClick={() => this.onSortColumn(config.key, sortType === 1 ? null : 'desc')}
-            icon-class='sort' class={`bottom caret ${sortType === 1 ? 'active' : ''}`}/>
+            icon-class='sort' class={` fs-12 caret ${sortType === 1 ? 'active' : ''}`}/>
         </div>) : ''
-        return (<div class='val-th'>
+        return (<div class='val-th _w-100 flex j-center a-center f-left'>
           <el-tooltip popper-class='table-head-tips' effect='light' open-delay={300} content={config.tips} placement='top' transition='el-zoom-in-top'>
-            <span class='label'>{config.label}</span>
+            <span class='label t-left'>{config.label}</span>
           </el-tooltip>
           {sortEl}
         </div>)
@@ -146,7 +153,7 @@ export default {
           ele = this.formatValCol(mv, item.value)
         }
         const trStyle = { textAlign: this.colAlignMap[configKey] || 'center' }
-        return (<div class='val-tr' style={trStyle}>{ele}</div>)
+        return (<div class='val-tr _w-100' style={trStyle}>{ele}</div>)
       }
     },
     renderRow(config, mv) { // 渲染row内容
@@ -171,7 +178,7 @@ export default {
           }
 
           // const trStyle = { textAlign: this.colAlignMap[configKey] || 'center' }
-          return (<div class='val-tr'>{ele}{copyEl}</div>)
+          return (<div class='val-tr _w-100'>{ele}{copyEl}</div>)
         } catch (e) {
           console.log('row render error', e)
         }
@@ -190,9 +197,19 @@ export default {
             const propTableForm = { createDataForms: tab.create_data_forms, editDataForms: tab.edit_data_forms, deleteDataForm: tab.delete_data_form }
 
             const tabEl = (<el-tab-pane key={tab.table_token} label={tab.table_title} name={$i + ''} lazy>
-              <global-table ref='tabTable' show-index max-tb-height={400} from-nest show-context-menu config={tabConfig}
-                propNestTables={tab.nest_tables} propColumns={tab.columns} propSortColumn={tab.sort_column} propFilters={tab.filter_config.filters} propTableForm={propTableForm} />
-
+              <global-table
+                ref='tabTable'
+                showIndex={this.showIndex}
+                max-tb-height={400}
+                from-nest
+                config={tabConfig}
+                propNestTables={tab.nest_tables}
+                colConfigMap={this.colConfigMap}
+                selfCellFormats={this.selfCellFormats}
+                propColumns={tab.columns}
+                propSortColumn={tab.sort_column}
+                propFilters={tab.filter_config.filters}
+                propTableForm={propTableForm} />
             </el-tab-pane>)
             tabs.push(tabEl)
           })
@@ -240,7 +257,7 @@ export default {
         const popEl = (<render-popup handleConfirm={handleConfirm} popup-title={'确定' + this.deleteDataForm.form.title + '?'}/>)
         deleteEle = row.allowDelete ? popEl : ''
       }
-      return (<div class='val-edit'>{editEleList} {deleteEle}</div>)
+      return (<div class='val-edit flex j-between'>{editEleList} {deleteEle}</div>)
     },
     formatSelfCol(key, row, rowIndex, icon, item) { // 处理自定义列渲染
       const fn = this.selfCellFormats[key]
@@ -251,11 +268,11 @@ export default {
     },
     getTableJsonEl(val) {
       const jsonVal = JSON.parse(val)
-      return <el-popover width='400' trigger='hover'>
+      return <el-popover trigger='click'>
         <div class='json-wrap'>
-          <v-json-edit lang='zh-CN' mode='preview' v-model={jsonVal}/>
+          <v-json-edit mainMenuBar={false} lang='zh-CN' mode='preview' v-model={jsonVal}/>
         </div>
-        <div slot='reference' class='val-json'>{val}</div>
+        <div slot='reference' class='val-json cur-pointer'>{val}</div>
       </el-popover>
     },
     getTableLinkEl(val) {
@@ -294,7 +311,7 @@ export default {
       const imgList = urlList.map(item => {
         return (<el-image src={item.resize_url} fit='contain' preview-src-list={urlList.map(v => v.url)}/>)
       })
-      return <div class='val-image'>{imgList}</div>
+      return <div class='val-image _w-100 h-40 lh-40 flex j-start a-center'>{imgList}</div>
     }
   }
 }

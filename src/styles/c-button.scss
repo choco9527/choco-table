@@ -1,0 +1,92 @@
+button.c-button{
+  cursor: pointer;
+  overflow: hidden;
+  border: none;
+  border-radius: 120px;
+  outline: none;
+
+  // 特殊的按钮样式
+  &::before{
+    content: '';
+    display: block;
+    position: absolute;
+    transition: all .22s var(--color-transition-base);
+    box-sizing: inherit;
+    outline: none;
+  }
+
+  &.zoom{
+    position: relative;
+    &::before{
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      height: 60%;
+      transform: translate3d(-50%,-50%,0);
+      opacity: 0;
+      background-color: #fff;
+      box-sizing: border-box;
+      border-radius: inherit;
+    }
+    &:hover::before,&:focus::before{
+      transition: all .22s var(--color-transition-base);
+      opacity: .16;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /*ASO按钮样式*/
+
+  // 线框型
+  &.line{
+    position: relative;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    box-sizing: border-box;
+    background-image:linear-gradient(263deg, rgba(152, 42, 255, 1), rgba(255, 58, 185, 1));
+
+    .content {
+      outline: none;
+      box-sizing: inherit;
+      border-color: transparent;
+      border: 1px solid;
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: inherit;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 400;
+      color: #BC29D2;
+      line-height: inherit;
+      transition: background .22s var(--color-transition-base), border-color .22s var(--border-transition-base), color .22s var(--color-transition-base);
+    }
+    &:hover,&:active,&:focus{
+      background-image: linear-gradient(263deg, rgba(152, 42, 255, 1), rgba(255, 58, 185, 1));
+      .content{
+        background: transparent;
+        border-color: transparent;
+        color: #fff;
+        box-sizing: inherit;
+        outline: none;
+      }
+    }
+  }
+
+  // 变色型
+  &.trans {
+    background-image: linear-gradient(263deg, #982AFF 0%, #FF3AB9 50%, #982AFF 100%);
+    background-size: 200% 100%;
+    background-position: 0 0;
+    transition: background-position .48s linear;
+    color: #fff;
+    &:hover, &:active, &:focus {
+      background-position: 100% 0;
+    }
+  }
+}
+

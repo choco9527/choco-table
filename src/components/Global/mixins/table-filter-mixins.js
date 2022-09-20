@@ -1,4 +1,4 @@
-// 筛选项处理为上传数据
+// 将筛选项处理为上传数据
 import { objectEach, isEmpty } from 'xe-utils'
 import { JT } from '../form-types'
 import dayjs from '@/utils/dayjs'
@@ -19,7 +19,7 @@ export default {
           const mq = JT.$getType(filter.selectQueryType, 'queryType') // match queryType
           const format = JT.$toType(filter.value_type)
 
-          /* 决定了值的内容类型*/
+          /* 决定了值的内容类型 */
           const terms = mq('RANGE') ? null : this.handleTermVal(mv, filter, format)
           const ranges = mq('RANGE') ? this.handleRangeVal(mv, filter, format) : null
           if (!!terms || !!ranges) {

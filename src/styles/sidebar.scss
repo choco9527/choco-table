@@ -1,0 +1,176 @@
+@import "variables";
+
+$menuText:#606266;
+$menuIcon:#bfcbd9;
+$menuLogoText:#297ab9;
+$menuActiveText:#6C63FF;
+$menuActiveBg: rgba(108, 99, 255, 0.08);
+$menuBg: hsla(0,0%,100%,0.72);
+
+.c-sidebar.sidebar-container {
+  transition-delay: unset;
+  background-color: $menuBg;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  backdrop-filter: saturate(180%) blur(5px);
+  transition: background-color .5s cubic-bezier(.28,.11,.32,1),width 0.28s cubic-bezier(0.08,0.82,0.17,1);
+  &:after{
+    left: calc( 100% - 1px );
+    top: 0;
+    content: "";
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0,0,0,.16);
+  }
+
+  &:not(.hover):not(.lock){
+    .menu-el_title{
+      width: 29px;
+      margin-left: -8.5px;
+      letter-spacing: .4px;
+      overflow: hidden;
+    }
+    .el-submenu__icon-arrow{
+      display: none;
+    }
+  }
+
+  &.hover,&.lock{
+    .svg-icon{
+      margin-right: 1px;
+    }
+  }
+
+  .menu-el_title{ // 内标题
+    display: inline-block;
+    transition: all .12s ease-in-out;
+    &.has-icon{ // 紧邻icon需要缩进
+      margin-left: 4px;
+    }
+  }
+  .nest-menu .menu-el_title{ // 子菜单内标题均缩进
+    margin-left: 4px;
+  }
+
+
+  a {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .svg-icon {
+    margin-right: 24px;
+    margin-left: -5px;
+    font-size: 24px;
+    margin-bottom: -4px;
+    color: $menuIcon;
+    transition: all .12s ease-in-out;
+  }
+
+  .sub-el-icon {
+    margin-right: 12px;
+    margin-left: -2px;
+  }
+
+  .el-menu {
+    border: none;
+    height: auto;
+    max-height: 100%;
+    width: 100% !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .el-menu-item {
+      color: $menuText;
+      .svg-icon{
+        color: $menuIcon;
+      }
+
+      &.is-active {
+        color: $menuActiveText !important;
+        .svg-icon,.el-submenu__icon-arrow{
+          color: inherit;
+        }
+        &:before {
+          position: absolute;
+          left: 0;
+          top: 0;
+          display: inline-block;
+          content: '';
+          width: 4px;
+          height: 100%;
+          background: $menuActiveText;
+          border-radius: 0;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .submenu-title-noDropdown,
+  .el-submenu__title {
+    color: $menuText;
+    .svg-icon,.el-submenu__icon-arrow{
+      color: $menuIcon;
+      font-weight: bold;
+    }
+  }
+
+  .is-active>.el-submenu__title {
+    color: $menuActiveText !important;
+    .svg-icon,.el-submenu__icon-arrow{
+      color: inherit;
+    }
+  }
+
+
+  & .el-submenu,
+  & .el-submenu .el-menu-item {
+    background-color: $menuBg;
+    color: $menuText;
+    &.is-active{
+      color: $menuActiveText !important;
+      .svg-icon,.el-submenu__icon-arrow{
+        color: inherit;
+      }
+    }
+  }
+
+  /*El 样式*/
+  .el-menu-item:focus, .el-menu-item:hover{
+    background-color: $menuActiveBg !important;
+  }
+  .el-menu-item, .el-menu-item{
+    transition: background-color 0.06s ease-in-out;
+  }
+
+  >footer{
+    cursor: pointer;
+    &:hover,&.lock .svg-icon{
+      color: $color-primary;
+    }
+  }
+
+  .el-menu{
+    //自动移滚动条样式
+    &::-webkit-scrollbar{
+      width: 2px !important;
+      height: 2px !important;
+    }
+    &::-webkit-scrollbar-thumb{
+      border-radius: 10px;
+      background-color: rgba($color-primary,.2) !important;
+    }
+    &::-webkit-scrollbar-track{
+      border-radius: 10px;
+      background-color: rgba(50,50,50,.1) !important;
+    }
+  }
+}

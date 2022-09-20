@@ -1,7 +1,8 @@
-import { data } from './orionData'
+// table config格式示例
+
 // 关于type类型请查看 Global/form-types.js
 
-/* filter示例*/
+/* 筛选项filter数据示例*/
 export const filters = [
   {
     key: 'date',
@@ -19,12 +20,12 @@ export const filters = [
     label: '状态',
     option_token: 'test_token',
     option_type: 0,
-    query_type: [2, 0],
+    query_type: [0],
+    // query_type: [2, 0],
     tips: '状态',
     value_type: 1,
-    view_type: 1,
-    default: [1],
-    clearable: true
+    view_type: 1
+    // default: [1],
   }, {
     key: 'name',
     label: '名称',
@@ -67,7 +68,7 @@ export const filters = [
   }
 ]
 
-/* column示例*/
+/* 列column数据示例*/
 export const columns = [
   {
     column_type: 0,
@@ -78,7 +79,7 @@ export const columns = [
     label: '应用id',
     sortable: false,
     tips: '应用id',
-    noRender: true
+    noRender: true // noRender即表示不走table的rander function渲染逻辑，直接通过vxetable渲染，性能更好，但没有copy功能，且无法获取自定义单元格内容
   }, {
     column_type: 0,
     exportable: false,
@@ -98,7 +99,6 @@ export const columns = [
     label: '名称',
     sortable: false,
     tips: '应用名称'
-    // noRender: true
   }, {
     column_type: 0,
     exportable: false,
@@ -135,9 +135,26 @@ export const columns = [
     view_type: 0,
     key: 'num',
     label: '数量',
+    sortable: true,
+    tips: '数量'
+  }, {
+    column_type: 1,
+    exportable: false,
+    field_type: 0,
+    view_type: 0,
+    key: 'text',
+    label: '一个非常长的列名称一般不会这么长',
     sortable: false,
-    tips: '数量',
-    noRender: true
+    tips: '用来测试'
+  }, {
+    column_type: 1,
+    exportable: false,
+    field_type: 0,
+    view_type: 7,
+    key: 'json',
+    label: 'JSON配置',
+    sortable: false,
+    tips: 'JSON示例'
   }, {
     column_type: 1,
     exportable: false,
@@ -150,43 +167,61 @@ export const columns = [
   }
 ]
 
-/* mockData 示例*/
-export const mockData = (function() {
-  return data.map(item => {
-    const { r_d } = item
-    /* 示例图片类型*/
-    const imgs = [
-      { resize_url: item.icon/* 缩略图*/, url: item.icon/* 大图*/ },
-      { resize_url: item.icon, url: item.icon },
-      { resize_url: item.icon, url: item.icon },
-      { resize_url: item.icon, url: item.icon }
-    ]
-
-    /* 示例日期类型*/
-    const date = { value: Date.now(), source_value: Date.now() }
-
-    return {
-      ...item,
-      r_d: {
-        ...r_d,
-        date,
-        images: { value: JSON.stringify(imgs), source_value: JSON.stringify(imgs) }
-      },
-      num: item.cp_id + parseInt(Math.random() * 100 + '')
-    }
-  })
-}())
-
-export const mockSummary = (function() {
-  const r_d = {
-    num: { key: 'num', value: 0 }
+/* 控制编辑表单示例*/
+export const formItems = [
+  {
+    'form': {
+      'items': [ // 表单编辑项
+        {
+          'key': 'text',
+          'label': '测试文字',
+          'tips': '测试文字',
+          'value_type': 0,
+          'view_type': 0,
+          'option_token': ''
+        }, {
+          'key': 'num',
+          'label': '数量',
+          'tips': '修改数量',
+          'value_type': 0,
+          'view_type': 0,
+          'option_token': ''
+        },
+        {
+          'key': 'json',
+          'label': 'JSON配置',
+          'tips': 'JSON配置 适用于闪挣',
+          'value_type': 0,
+          'view_type': 7,
+          'option_token': ''
+        }, {
+          'key': 'json',
+          'label': 'JSON配置',
+          'tips': 'JSON配置 适用于闪挣',
+          'value_type': 0,
+          'view_type': 7,
+          'option_token': ''
+        }, {
+          'key': 'json',
+          'label': 'JSON配置',
+          'tips': 'JSON配置 适用于闪挣',
+          'value_type': 0,
+          'view_type': 7,
+          'option_token': ''
+        }
+      ],
+      'title': '操作',
+      'form_token': 'token',
+      'tips': '操作',
+      'submit_button_text': '保存'
+    },
+    'call_action_text': '编辑',
+    'batch': false,
+    'form_id': 'form_id'
   }
-  mockData.forEach(data => {
-    r_d.num.value += data.num
-  })
-  return { r_d }
-}())
+]
 
+/* 小表格column数据示例*/
 export const pureColumns = (that) => {
   return [
     { type: 'seq', visible: true, title: '#', width: 40 },
@@ -208,9 +243,3 @@ export const pureColumns = (that) => {
     }
   ]
 }
-
-export const pureData = [
-  { keyword: '词语1', num: 18, day: '2022-05-30', start: '00:00', end: '23:59', status: true },
-  { keyword: '词语2', num: 88, day: '2022-11-30', start: '00:00', end: '23:59', status: false },
-  { keyword: '词语3', num: 555, day: '2022-12-12', start: '00:00', end: '23:59', status: false }
-]

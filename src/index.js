@@ -11,7 +11,6 @@ import BeautyDialog from './components/BeautyDialog'
 import CColSet from './components/ColSet'
 
 // 局部方法
-import { _local, _session, debounce, isJson, clearAllTimer, sleep, cloneDeep, promiseRetry, getAllParams } from './utils/tool'
 
 import { setOptions, setElement, setVxe } from './setOptions'
 
@@ -23,7 +22,7 @@ const components = { // 需要全局注册的组件
 
 const install = function(Vue, options = {}) {
   setOptions(Vue, options)
-  setElement(Vue)
+  setElement(Vue, options)
   setVxe(Vue)
 
   Object.keys(components).forEach(key => {
@@ -48,8 +47,6 @@ export { // 导出局部组件
   VxeScrollLoadTable,
   CColSet
 }
-export { // 导出局部方法
-  _local, _session, debounce, isJson, clearAllTimer, sleep, cloneDeep, promiseRetry, getAllParams
-}
+
 export default Table
 

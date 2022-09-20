@@ -8,12 +8,12 @@
     <lb-column v-for="(item, index) in columns" :key="index" v-bind="$attrs" :column="item" />
     <template #empty>
       <span>
-        <h2 style="opacity: 0;line-height: calc(var(--gutter_10-40,40px) + 20px)">-</h2>
+        <h6 style="opacity: 0;line-height: calc(var(--gutter_10-40,40px) + 20px)">-</h6>
         <p class="empty-wrap">
           <svg-icon icon-class="empty" />
         </p>
         <p class="lh-14 mt--10">{{ noContent }}</p>
-        <h2 style="opacity: 0;line-height: calc(var(--gutter_10-40,40px) + 20px)">-</h2>
+        <h6 style="opacity: 0;line-height: calc(var(--gutter_10-40,40px) + 20px)">-</h6>
       </span>
     </template>
   </c-vxe-table>
@@ -97,6 +97,7 @@ export default {
     }
   }
   .vxe-table--footer-wrapper{
+    //transition: all .2s ease-in-out;
     &.sticky-footer {
       position: fixed !important;
       bottom: 0;
@@ -154,24 +155,34 @@ export default {
 }
 
 /*表格右键menu样式*/
-.vxe-table--context-menu-wrapper{
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.1);
+.vxe-table--context-menu-wrapper.choco-right-menu{
+  background-color: $bg-white-1;
+  border-radius: 3px;
+  box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.1);
+  border: none;
+  outline: none;
   .vxe-context-menu--option-wrapper{
-
     >li {
       overflow: hidden;
       border: none;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      height: auto;
       &>.vxe-context-menu--link {
+        width: 128px;
         overflow: hidden;
-        width: 150px;
-        transition: all .1s var(--ease-in-out);
+        transition: all .06s ease-in-out;
         background-color: #fff;
         color: $color-text-regular;
-
+        font-size: 13px;
+        padding: 6px 14px !important;
+        box-sizing: border-box;
         &:hover {
-          background-color: $lightest-blue;
+          background-color: #F8F1FF;
+        }
+        .vxe-context-menu--link-content{
+          line-height: 18px;
         }
       }
     }

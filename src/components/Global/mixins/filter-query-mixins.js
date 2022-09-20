@@ -1,7 +1,7 @@
 import { has, isEmpty } from 'xe-utils'
 import { JT } from '../form-types'
 import dayjs from '@/utils/dayjs'
-import { _local, cloneDeep } from '@/utils/tool'
+import { _local, cloneDeep } from '@/utils/tools'
 
 export default {
   data() {
@@ -10,6 +10,9 @@ export default {
     }
   },
   computed: {
+    // cacheSearchQuery() {
+    //   return cloneDeep(this.searchQuery)
+    // },
     queryTags() { // 搜索参数已选标签
       const tags = []
       try {
@@ -78,17 +81,11 @@ export default {
       this.search()
     },
     clearQuery(key) { // 清空指定筛选
-      const saveFilters = _local.get(this.filterKey)
-
       this.searchQuery.forEach((filter, $i) => {
         if (filter.key === key) {
           let value = ''
-          const saveFilter = saveFilters?.find(f => f.key === filter.key)
-          const mv = JT.$getType(filter.view_type, 'viewType') // match viewType
-          const defaultSelectQueryType = saveFilter ? saveFilter.defaultSelectQueryType : ''
-          const queryType = typeof defaultSelectQueryType === 'number' ? defaultSelectQueryType : filter.query_type[0]
+          const { mv, mq } = this.getPreFilterInfo(filter)
 
-          const mq = JT.$getType(queryType, 'queryType') // match queryType
           if (mv('TIME') || mv('DATE')) { // 时间/日期
             value = []
           } else if (mv('OPTIONS')) { // 单选
@@ -105,6 +102,15 @@ export default {
       const { key } = tag
       if (key) this.clearQuery(key)
     },
+    getPreFilterInfo(filter) {
+      const saveFilter = _local.get(this.filterKey)?.find(f => f.key === filter.key) // 获取默认值
+      const defaultSelectQueryType = saveFilter ? saveFilter.defaultSelectQueryType : '' // 默认选择类型
+      const queryType = typeof defaultSelectQueryType === 'number' ? defaultSelectQueryType : filter.query_type[0]
+
+      const mv = JT.$getType(filter.view_type, 'viewType') // match viewType
+      const mq = JT.$getType(queryType, 'queryType') // match queryType
+      return { saveFilter, defaultSelectQueryType, queryType, mv, mq }
+    },
 
     /*
     * 根据配置渲染搜索项
@@ -113,17 +119,9 @@ export default {
     * */
     freshSearch(filters = null, clearKeys = null) { /* filters -> searchData */
       filters = filters || this.filters
-      const saveFilters = _local.get(this.filterKey)
 
       const searchQuery = filters.map(filter => {
-        const saveFilter = saveFilters?.find(f => f.key === filter.key)
-
-        const mv = JT.$getType(filter.view_type, 'viewType') // match viewType
-
-        const defaultSelectQueryType = saveFilter ? saveFilter.defaultSelectQueryType : ''
-        const queryType = typeof defaultSelectQueryType === 'number' ? defaultSelectQueryType : filter.query_type[0]
-
-        const mq = JT.$getType(queryType, 'queryType') // match queryType
+        const { saveFilter, defaultSelectQueryType, queryType, mv, mq } = this.getPreFilterInfo(filter)
 
         let value = ''; let option_type = ''
 
@@ -210,15 +208,13 @@ export default {
       }
       this.autoSearch()
     },
-    freshCacheQuery() { // 更新已选标签
-      const query = cloneDeep(this.searchQuery)
-      this.cacheSearchQuery = query
-      return query
-    },
     _getSearchQuery() {
       if (this.searchQuery) {
-        const query = this.freshCacheQuery()
-        return [...query]
+        const q = cloneDeep(this.searchQuery)
+        this.$nextTick(() => {
+          this.cacheSearchQuery = q
+        })
+        return q
       } else {
         return []
       }

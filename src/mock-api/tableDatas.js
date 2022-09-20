@@ -1,3 +1,5 @@
+// table数据格式示例
+
 export const data = [
   {
     'cp_id': 563,
@@ -155,4 +157,73 @@ export const data = [
       'icon': 'https://orion-test.oss-cn-shanghai.aliyuncs.com/img/icon/2022/05/7471a238aac1e9372b97dd831958f87a22059.jpg'
     }
   }
+]
+
+// 生成随机汉字
+function getRandomChineseWord(num = 1) {
+  const arr = []
+  for (let i = 0; i < num; i++) {
+    var _rsl = ''
+    const _randomUniCode = Math.floor(Math.random() * (40870 - 19968) + 19968).toString(16)
+    eval('_rsl=' + '"\\u' + _randomUniCode + '"')
+    arr.push(_rsl)
+  }
+  return arr.join('')
+}
+
+/* mockData 示例*/
+export const mockData = (function() {
+  return data.map(item => {
+    const { r_d } = item
+    /* 示例图片类型*/
+    const imgs = [
+      { resize_url: item.icon/* 缩略图*/, url: item.icon/* 大图*/ },
+      { resize_url: item.icon, url: item.icon },
+      { resize_url: item.icon, url: item.icon },
+      { resize_url: item.icon, url: item.icon }
+    ]
+
+    /* 示例日期类型*/
+    const date = { value: Date.now(), source_value: Date.now() }
+    const text = getRandomChineseWord(Math.round(Math.random() * 100))
+    const imgsJson = JSON.stringify(imgs)
+    const numVal = item.cp_id + parseInt(Math.random() * 100 + '')
+
+    return {
+      ...item,
+      r_d: {
+        ...r_d,
+        date,
+        text: { value: text, source_value: text },
+        images: { value: imgsJson, source_value: imgsJson },
+        json: { value: imgsJson, source_value: imgsJson },
+        num: { value: numVal, source_value: numVal }
+      },
+      /* 示例嵌套表格*/
+      n_d: {
+        'NEST_TABLE_ID': 'user_info'
+      },
+      /* 示例编辑表格*/
+      e_d: {
+        'form_id': ''
+      }
+    }
+  })
+}())
+
+// 创建合计数据
+export const mockSummary = (function() {
+  const r_d = {
+    num: { key: 'num', value: 0 }
+  }
+  mockData.forEach(data => {
+    r_d.num.value += data.num
+  })
+  return { r_d }
+}())
+
+export const pureData = [
+  { keyword: '词语1', num: 18, day: '2022-05-30', start: '00:00', end: '23:59', status: true },
+  { keyword: '词语2', num: 88, day: '2022-11-30', start: '00:00', end: '23:59', status: false },
+  { keyword: '词语3', num: 555, day: '2022-12-12', start: '00:00', end: '23:59', status: false }
 ]

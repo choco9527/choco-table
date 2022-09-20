@@ -1,20 +1,11 @@
 import { clone } from 'xe-utils'
 
-export function debounce(fn, delay = 200) {
-  // 防抖函数
-  let timer = null
-  const ctx = this
-  function run(...args) {
-    clearTimeout(timer)
-
-    timer = setTimeout(() => {
-      fn.call(ctx, args)
-    }, delay)
-  }
-  return run
-}
-
-export function isJson(str) {
+/**
+ * 判断字符串是否为json
+ * @param str {string}
+ * @returns {boolean}
+ */
+export function isJson(str = '') {
   try {
     JSON.parse(str)
   } catch (e) {
@@ -23,17 +14,21 @@ export function isJson(str) {
   return true
 }
 
-// 清除所有定时器
-export function clearAllTimer(window) {
+/**
+ * 清除页面内所有定时器
+ * @param win {window}
+ */
+export function clearAllTimer(win) {
+  win = win || window
   try {
     let id = setTimeout(() => { }, 0)
     let id2 = setInterval(() => { }, 9999)
     while (id > 0) {
-      window.clearTimeout(id)
+      win.clearTimeout(id)
       id--
     }
     while (id2 > 0) {
-      window.clearInterval(id2)
+      win.clearInterval(id2)
       id2--
     }
   } catch (e) {
@@ -41,6 +36,11 @@ export function clearAllTimer(window) {
   }
 }
 
+/**
+ * sleep
+ * @param time{number} 毫秒
+ * @returns {Promise<any>}
+ */
 export function sleep(time = 1000) {
   return new Promise(resolve => {
     const t = setTimeout(() => {
@@ -49,10 +49,23 @@ export function sleep(time = 1000) {
   })
 }
 
+/**
+ * 深拷贝
+ * @param obj
+ * @returns {Object}
+ */
 export function cloneDeep(obj) {
   return clone(obj, true)
 }
 
+/**
+ * 重试函数
+ * @param fn 执行主函数
+ * @param times 重试次数
+ * @param delay 重试延迟
+ * @param args 函数参数
+ * @returns {Promise<any>}
+ */
 export function promiseRetry({ fn = null, times = 1, delay = 0, args }) {
   if (!fn) return
   return new Promise((resolve, reject) => {
@@ -71,10 +84,15 @@ export function promiseRetry({ fn = null, times = 1, delay = 0, args }) {
 }
 
 /**
- * 带有缓存的 sessionStorage 方法
+ * 缓存方法
+ * _session提供sessionStorage
+ * _local提供localStorage
  */
 const _storage = function(type) {
-  if (['session', 'local'].includes(type) && sessionStorage && localStorage) {
+  if (!window) return
+  const _s = window && window.sessionStorage
+  const _l = window && window.localStorage
+  if (['session', 'local'].includes(type) && _s && _l) {
     return {
       // session存储,可设置过期时间
       set(key, value, expires = 0) {
@@ -82,7 +100,7 @@ const _storage = function(type) {
         if (expires) {
         // 记录何时将值存入缓存，毫秒级
           const data = Object.assign(params, { startTime: new Date().getTime() })
-          type === 'session' ? sessionStorage.setItem(key, JSON.stringify(data)) : localStorage.setItem(key, JSON.stringify(data))
+          type === 'session' ? _s.setItem(key, JSON.stringify(data)) : _l.setItem(key, JSON.stringify(data))
         } else {
           if (Object.prototype.toString.call(value) === '[object Object]') {
             value = JSON.stringify(value)
@@ -90,12 +108,12 @@ const _storage = function(type) {
           if (Object.prototype.toString.call(value) === '[object Array]') {
             value = JSON.stringify(value)
           }
-          type === 'session' ? sessionStorage.setItem(key, value) : localStorage.setItem(key, value)
+          type === 'session' ? _s.setItem(key, value) : _l.setItem(key, value)
         }
       },
       // 取出
       get(key) {
-        let item = type === 'session' ? sessionStorage.getItem(key) : localStorage.getItem(key)
+        let item = type === 'session' ? _s.getItem(key) : _l.getItem(key)
         try { // 解析出json
           item = JSON.parse(item)
         } catch (error) {
@@ -104,7 +122,7 @@ const _storage = function(type) {
         if (item && item.startTime) {
           const date = new Date().getTime()
           if (date - item.startTime > item.expires) {
-            type === 'session' ? sessionStorage.removeItem(key) : localStorage.removeItem(key)
+            type === 'session' ? _s.removeItem(key) : _l.removeItem(key)
             return false
           } else {
             return item.value
@@ -115,11 +133,11 @@ const _storage = function(type) {
       },
       // 删除
       remove(key) {
-        type === 'session' ? sessionStorage.removeItem(key) : localStorage.removeItem(key)
+        type === 'session' ? _s.removeItem(key) : _l.removeItem(key)
       },
       // 清除全部
       clear() {
-        type === 'session' ? sessionStorage.clear() : localStorage.clear()
+        type === 'session' ? _s.clear() : _l.clear()
       }
     }
   }
