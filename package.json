@@ -1,12 +1,15 @@
 {
   "name": "choco-table",
   "author": "CHOCO",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "vxe-table",
     "element-ui",
     "Vue",
     "table"
+  ],
+  "files": [
+    "lib","assets"
   ],
   "scripts": {
     "dev": "vue-cli-service serve --mode local --port 9529",
