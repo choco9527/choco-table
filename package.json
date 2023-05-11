@@ -9,7 +9,8 @@
     "table"
   ],
   "files": [
-    "lib","assets"
+    "lib",
+    "assets"
   ],
   "scripts": {
     "dev": "vue-cli-service serve --mode local --port 9529",

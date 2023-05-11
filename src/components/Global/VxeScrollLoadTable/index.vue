@@ -222,7 +222,7 @@ export default {
             this.pushListData()
           }
           count && count >= 0 && (this.total = parseInt(count))
-          summary && (this.summary = summary)
+          if (summary && !isEmpty(summary)) this.summary = summary
           expandList && (this.expandList = expandList)
         }
         this.listQuery.next_page_token = next_page_token
@@ -236,7 +236,7 @@ export default {
         console.log('Vxe-scroll-table Error:', error.message || error)
         this.data = []
         this.total = 0
-        this.summary = []
+        this.summary = null
         this.listLoading = false
       }
     },
