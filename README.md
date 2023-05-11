@@ -35,11 +35,6 @@ Vue.use(GlobalTable, options) // 加载全局配置
 ![assets/images/img.png](assets/images/img.png)
 ![assets/images/img2.png](assets/images/img2.png)
 
-##Options配置
-
-[前端表格设计](https://conf.umlife.net/pages/viewpage.action?pageId=106889620)
-[前端表格配置文档](https://conf.umlife.net/pages/viewpage.action?pageId=94019810)
-
 ## 示例项目
 ``` bash
 npm i
